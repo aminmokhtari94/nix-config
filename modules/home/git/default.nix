@@ -20,7 +20,7 @@
     userEmail = "amin.mokhtari94@gmail.com";
 
     signing = {
-      key = "0xEC93568F7E2AB312";
+      key = "EC93568F7E2AB312";
       signByDefault = true;
     };
 

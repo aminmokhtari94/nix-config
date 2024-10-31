@@ -1,22 +1,11 @@
 {config, pkgs, ... }: 
 {
-  imports = [
-    #../home/desktop
-    #../home/editor/nixvim
-    #../home/shell.nix
-    #../home/browser.nix
-  ];
-
   home = {
     enableNixpkgsReleaseCheck = false;
     username = "amin";
     homeDirectory = "/home/amin";
 #    # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
     stateVersion = "24.05";
-#    packages = with pkgs; [
-#      mpv
-#      docker-compose
-#    ];
   };
   # Nicely reload system units when changing configs
   #systemd.user.startServices = "sd-switch";
