@@ -55,9 +55,6 @@
   xdg.portal = {
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
-  hardware.opengl = {
-    enable = true;
-  };
   hardware.nvidia = {
     # Modesetting is required.
     modesetting.enable = true;
@@ -69,7 +66,7 @@
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
-    
+
   virtualisation.docker.enable = true;
   # virtualisation.docker.storageDriver = "btrfs";
 
@@ -109,13 +106,22 @@
     options = "--delete-older-than 30d";
   };
 
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.amin = {
+    isNormalUser = true;
+    hashedPasswordFile = config.sops.secrets.n550-amin-passwd.path;
+    extraGroups = [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    shell = pkgs.zsh;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAGlj5STbxgr0chPN3kzTPjSZYLBixUoEoBRWCwHqA8z amin@n550jv"
+    ];
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     usbutils
     lshw
-    blender
-    mongodb-compass
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

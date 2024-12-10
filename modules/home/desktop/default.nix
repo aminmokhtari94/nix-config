@@ -1,6 +1,6 @@
 { config, lib, pkgs, ...}:
 with lib;
-let 
+let
   cfg = config.default.desktop;
 in
 {
@@ -11,7 +11,7 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       # files & multimedia
-      gnome.nautilus
+      #nautilus
       mpv
       okular
       # text & font helper
