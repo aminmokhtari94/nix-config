@@ -39,6 +39,10 @@ in
           type = types.str;
           default = "1";
         };
+        transform = mkOption {
+          type = types.str;
+          default = "0";
+        };
         workspaces = mkOption {
           type = types.listOf types.str;
           example = [ "1" "4" ];

@@ -3,8 +3,8 @@
 {
   home.packages = with pkgs; [
         #(nerdfonts.override { fonts = [ "RobotoMono" "Iosevka" ]; })
-    nerd-fonts._0xproto
-    nerd-fonts.droid_sans_mono
+    nerd-fonts.iosevka
+    nerd-fonts.roboto-mono
     ibm-plex
     iosevka
     unzip

@@ -165,8 +165,9 @@ in
             let
               resolution = "${toString m.width}x${toString m.height}@${toString m.refreshRate}";
               position = "${toString m.x}x${toString m.y}";
+              transform = "transform, ${m.transform}";
             in
-            "${m.name},${if m.enabled then "${resolution},${position},${toString m.scale}" else "disable"}"
+            "${m.name},${if m.enabled then "${resolution},${position},${toString m.scale},${transform}" else "disable"}"
           )
           (config.monitors);
 
