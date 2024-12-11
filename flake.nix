@@ -59,7 +59,7 @@
 
       channels-config = {
         allowUnfree = true;
-	nvidia.acceptLicense = true;
+        nvidia.acceptLicense = true;
         permittedInsecurePackages = [
           "electron-27.3.11"
         ];

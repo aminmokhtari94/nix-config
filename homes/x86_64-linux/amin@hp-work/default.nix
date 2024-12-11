@@ -13,6 +13,8 @@
   default = {
     theme.name = "inspired";
     gpg.enable = false;
+    vscode.enable = true;
+    kube.enable = true;
     desktop = {
       enable = true;
       wayland.hyprland = {
