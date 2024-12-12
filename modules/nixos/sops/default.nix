@@ -11,7 +11,7 @@
       generateKey = true;
     };
 
-    secrets.n550-amin-passwd = { neededForUsers = true; };
+    secrets.amin-passwd = { neededForUsers = true; };
     secrets.wakatime-api-key = { };
   };
 }

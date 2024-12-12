@@ -38,6 +38,7 @@
     plugins = [
       { name = "fzf-tab"; src = "${pkgs.zsh-fzf-tab}/share/fzf-tab"; }
     ];
+    oh-my-zsh.plugins = [ "git" ];
     shellGlobalAliases = {
       E = "| entr -c";
       F = "| fzf";

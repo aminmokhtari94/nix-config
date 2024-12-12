@@ -109,7 +109,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.amin = {
     isNormalUser = true;
-    hashedPasswordFile = config.sops.secrets.n550-amin-passwd.path;
+    hashedPasswordFile = config.sops.secrets.amin-passwd.path;
     extraGroups = [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
