@@ -209,17 +209,11 @@ in
         };
 
         windowrulev2 = [
-          "workspace 1,class:kitty"
           "workspace 2,title:^(Mozilla Firefox)(.*)$"
-          "workspace 2,class:floorp"
           "workspace special:notes,title:^(kitty-default)"
           "workspace special:term,title:^(kitty-scratch)"
-          "workspace 3,class:Slack"
-          "workspace 3,class:WebCord"
-          "float,title:(GnuCash Tip Of The Day)"
           "float,title:(Firefox — Sharing Indicator)"
-          "float,title:(Floorp — Sharing Indicator)"
-          "float,title:galculator"
+          "float,title:Calculator"
           "float,title:kitty-float"
         ];
 

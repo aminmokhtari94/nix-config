@@ -15,6 +15,7 @@
     gpg.enable = false;
     vscode.enable = true;
     kube.enable = true;
+    v2ray.enable = true;
     desktop = {
       enable = true;
       wayland.hyprland = {
@@ -40,7 +41,7 @@
       scale = "1";
       transform = "1";
       refreshRate = 60;
-      workspaces = [ "1" "2" "3" ];
+      workspaces = [ "7" "8" "9" ];
       wallpaper = "~/Pictures/wallpaper.jpg";
     }
     {

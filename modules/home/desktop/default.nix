@@ -11,12 +11,19 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       # files & multimedia
-      #nautilus
+      nautilus
       mpv
       okular
       # text & font helper
       font-manager
       wofi-emoji
+
+      gnome-calculator
+      telegram-desktop
+
+      # deveopment
+      mongodb-compass
+      mqtt-explorer
     ];
   };
 }

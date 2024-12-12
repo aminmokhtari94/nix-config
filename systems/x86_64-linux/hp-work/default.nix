@@ -18,7 +18,7 @@
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
   networking.extraHosts = "
 172.16.100.40 api.kiz.ir emqx.kiz.ir asset.kiz.ir reg.kiz.ir minio.kiz.ir ops.kiz.ir api-v2.kiz.ir akhq.abrso.ir
-172.16.100.40 abrso.ir app.abrso.ir cms.abrso.ir next.abrso.ir api-next.abrso.ir api.abrso.ir emqx.abrso.ir
+172.16.100.40 abrso.ir app.abrso.ir cms.abrso.ir next.abrso.ir api-next.abrso.ir api.abrso.ir emqx.abrso.ir metabase.abrso.ir
 172.16.100.40 terabar.ir app.terabar.ir cms.terabar.ir influxdb.abrso.ir
 172.16.100.40 rahkarsanat.ir cms.rahkarsanat.ir taiga.rahkarsanat.ir git.kiz.ir
 172.16.100.41 acl.kiz.ir grpc.abrso.ir grpc.kiz.ir terabar.acl.kiz.ir lone.acl.kiz.ir abrso.acl.kiz.ir grpc.terabar.ir all.kiz.ir
@@ -112,10 +112,9 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  # environment.systemPackages = with pkgs; [
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #   wget
-  # ];
+  environment.systemPackages = with pkgs; [
+    wget
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
