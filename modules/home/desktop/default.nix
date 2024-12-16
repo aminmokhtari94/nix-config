@@ -24,6 +24,9 @@ in
       # deveopment
       mongodb-compass
       mqtt-explorer
+
+      blender
+      postman
     ];
   };
 }

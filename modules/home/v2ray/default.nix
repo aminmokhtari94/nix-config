@@ -10,9 +10,7 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-        v2raya
         nekoray
-        default.oblivion
     ];
   };
 }

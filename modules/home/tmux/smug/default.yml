@@ -8,5 +8,3 @@ windows:
   - name: " console"
     commands:
       - tmux link-window -s Notes -d
-
-

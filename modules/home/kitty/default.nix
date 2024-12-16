@@ -31,6 +31,7 @@
     };
 
     environment = {
+      TERM = "xterm-256color";
       THEME = "embark";
       TMUX_STATUSLINE = "neoline-embark";
       NVIM_STATUSLINE = "neoline";

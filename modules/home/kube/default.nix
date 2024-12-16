@@ -13,6 +13,7 @@ in
         kubectl
         k9s
         talosctl
+        fluxcd
     ];
   };
 }
