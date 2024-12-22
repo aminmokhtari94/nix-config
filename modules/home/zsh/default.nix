@@ -40,8 +40,10 @@
     ];
     oh-my-zsh = {
         enable = true;
-        plugins = [ "git" ];
+        plugins = [ "git" "sudo" ];
     };
+    syntaxHighlighting.enable = true;
+    enableAutosuggestions = true;
     shellGlobalAliases = {
       E = "| entr -c";
       F = "| fzf";

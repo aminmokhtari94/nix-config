@@ -47,6 +47,7 @@
       commit = {
         verbose = true;
       };
+      url."git@github.com:".insteadOf = "https://github.com/";
     };
   };
 

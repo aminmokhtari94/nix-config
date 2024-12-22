@@ -14,6 +14,7 @@ in
         k9s
         talosctl
         fluxcd
+        kubernetes-helm
     ];
   };
 }

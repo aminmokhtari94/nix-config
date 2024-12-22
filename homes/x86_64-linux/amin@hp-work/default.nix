@@ -16,6 +16,9 @@
     vscode.enable = true;
     kube.enable = true;
     v2ray.enable = true;
+    lang = {
+      go.enable = true;
+    };
     desktop = {
       enable = true;
       wayland.hyprland = {
