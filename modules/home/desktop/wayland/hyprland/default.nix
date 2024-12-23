@@ -293,9 +293,13 @@ in
           "$mainMod SHIFT, j, movewindow, d"
 
           "$mainMod CTRL, h, workspace, r-1"
+          "$mainMod CTRL, k, workspace, r-1"
           "$mainMod CTRL, l, workspace, r+1"
+          "$mainMod CTRL, j, workspace, r+1"
           "$mainMod CTRL SHIFT, h, movetoworkspace, r-1"
+          "$mainMod CTRL SHIFT, k, movetoworkspace, r-1"
           "$mainMod CTRL SHIFT, l, movetoworkspace, r+1"
+          "$mainMod CTRL SHIFT, j, movetoworkspace, r+1"
 
           #"$mainMod CTRL, k, swapwindow, u"
           #"$mainMod CTRL, j, swapwindow, d"

@@ -39,4 +39,3 @@ pkgs.iosevka.override {
   '';
   set = "IOCollins";
 }
-

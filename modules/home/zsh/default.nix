@@ -43,7 +43,6 @@
         plugins = [ "git" "sudo" ];
     };
     syntaxHighlighting.enable = true;
-    enableAutosuggestions = true;
     shellGlobalAliases = {
       E = "| entr -c";
       F = "| fzf";
