@@ -19,8 +19,8 @@
   };
 
   inputs = {
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     snowfall-lib = {
         url = "github:snowfallorg/lib";
@@ -44,7 +44,7 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "unstable";
     };
 
   };
@@ -69,6 +69,9 @@
       systems.modules.nixos = with inputs; [
         sops-nix.nixosModules.sops
       ];
+
+      # Override specific package from unstable
+      # packages.x86_64-linux.noto-fonts = inputs.unstable.packages.x86_64-linux.noto-fonts;
 
       outputs-builder = channels: {
           # Outputs in the outputs builder are transformed to support each system. This
