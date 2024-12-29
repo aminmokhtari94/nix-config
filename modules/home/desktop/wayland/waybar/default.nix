@@ -146,7 +146,7 @@ in
         #tray {
           padding: 0 4px;
         }
-      
+
         #tray * {
           padding: 0;
           margin: 0;

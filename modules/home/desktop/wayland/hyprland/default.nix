@@ -30,6 +30,7 @@ in
       neofetch
       libnotify
       playerctl
+      hyprland-qtutils
     ];
 
     programs.wofi.enable = true;
