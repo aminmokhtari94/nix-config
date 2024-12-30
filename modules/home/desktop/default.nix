@@ -27,6 +27,7 @@ in
 
       blender
       postman
+      winbox4
     ];
   };
 }

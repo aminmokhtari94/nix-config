@@ -19,7 +19,7 @@
       bold_font = "Berkeley Mono Bold";
       bold_italic_font = "Berkeley Mono Bold Italic";
       italic_font = "IOCollins Italic";
-      font_size = "13.0";
+      font_size = "11.0";
 
       # Terminal Settings
       allow_remote_control = "yes";

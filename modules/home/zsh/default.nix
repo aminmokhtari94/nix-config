@@ -51,7 +51,6 @@
       PPP = "wl-paste";
     };
     shellAliases = {
-      t = "task";
       cat = "bat --paging=never";
       mv = "mv -iv";
       cp = "cp -iv";

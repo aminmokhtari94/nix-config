@@ -9,10 +9,17 @@ in
   };
 
   config = mkIf cfg.enable {
+    programs.zsh = {
+      shellAliases = {
+        k = "kubectl";
+        t = "talosctl";
+      };
+    };
     home.packages = with pkgs; [
         kubectl
         k9s
         talosctl
+        istioctl
         fluxcd
         kubernetes-helm
     ];
