@@ -14,6 +14,8 @@ in
     };
     home.packages = with pkgs; [
             gopls
+            gnumake
+            buf
     ];
   };
 }
