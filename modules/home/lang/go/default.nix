@@ -17,5 +17,8 @@ in
             gnumake
             buf
     ];
+    home.sessionPath = [
+        "$HOME/go/bin"
+    ];
   };
 }

@@ -19,6 +19,7 @@
     vpn.enable = true;
     lang = {
       go.enable = true;
+      python.enable = true;
     };
     desktop = {
       enable = true;

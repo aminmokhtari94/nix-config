@@ -24,6 +24,7 @@ in
       # deveopment
       mongodb-compass
       mqtt-explorer
+      redisinsight
 
       blender
       postman

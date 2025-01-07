@@ -25,7 +25,7 @@ in
           layer = "top";
           modules-left = [ "hyprland/workspaces" "mpris" ];
           modules-center = [ "wlr/taskbar" ];
-          modules-right = [ "network#interface" "network#speed" "cpu" "temperature" "backlight" "battery" "clock" "custom/notification" "tray" ];
+          modules-right = [ "network#interface" "network#speed" "cpu" "temperature" "backlight" "battery" "clock" "custom/notification" "wireplumber" "tray" ];
 
           persistent_workspaces = {
             "1" = [ ];
@@ -98,6 +98,17 @@ in
             tooltip = false;
             on-click = "dunstctl set-paused toggle";
             restart-interval = 1;
+          };
+
+          wireplumber = {
+              format = "{icon} {volume}%";
+              format-muted = " ";
+              on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+              on-click-right = "pavucontrol -t 3";
+              on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+              on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+              format-icons = ["" "" "󰕾" ""];
+              max-volume = 140;
           };
 
           tray = {
