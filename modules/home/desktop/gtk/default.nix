@@ -1,19 +1,13 @@
 { lib, config, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.default.desktop.gtk;
-in
-{
-  options.default.desktop.gtk = with types; {
-    enable = mkEnableOption "gtk";
-  };
+let cfg = config.default.desktop.gtk;
+in {
+  options.default.desktop.gtk = with types; { enable = mkEnableOption "gtk"; };
 
   config = mkIf cfg.enable {
     dconf.settings = {
-      "org/gnome/desktop/interface" = {
-        color-scheme = "prefer-dark";
-      };
+      "org/gnome/desktop/interface" = { color-scheme = "prefer-dark"; };
     };
 
     gtk = {

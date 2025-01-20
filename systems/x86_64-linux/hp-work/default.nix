@@ -5,10 +5,9 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -16,28 +15,29 @@
 
   networking.networkmanager.enable = true;
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
-  networking.extraHosts = "
-172.16.100.40 api.kiz.ir emqx.kiz.ir asset.kiz.ir reg.kiz.ir minio.kiz.ir ops.kiz.ir api-v2.kiz.ir akhq.abrso.ir
-172.16.100.40 abrso.ir app.abrso.ir cms.abrso.ir next.abrso.ir api-next.abrso.ir api.abrso.ir emqx.abrso.ir metabase.abrso.ir
-172.16.100.40 terabar.ir app.terabar.ir cms.terabar.ir influxdb.abrso.ir
-172.16.100.40 rahkarsanat.ir cms.rahkarsanat.ir taiga.rahkarsanat.ir git.kiz.ir redpanda.kiz.ir grafana.prometheus.cluster.local
-172.16.100.41 acl.kiz.ir grpc.abrso.ir grpc.kiz.ir terabar.acl.kiz.ir lone.acl.kiz.ir abrso.acl.kiz.ir grpc.terabar.ir all.kiz.ir
-172.16.100.45 mqtt.abrso.ir
+  networking.extraHosts = ''
 
-172.16.100.214 k8s.c02.kiz.ir
+    172.16.100.40 api.kiz.ir emqx.kiz.ir asset.kiz.ir reg.kiz.ir minio.kiz.ir ops.kiz.ir api-v2.kiz.ir akhq.abrso.ir
+    172.16.100.40 abrso.ir app.abrso.ir cms.abrso.ir next.abrso.ir api-next.abrso.ir api.abrso.ir emqx.abrso.ir metabase.abrso.ir
+    172.16.100.40 terabar.ir app.terabar.ir cms.terabar.ir influxdb.abrso.ir
+    172.16.100.40 rahkarsanat.ir cms.rahkarsanat.ir taiga.rahkarsanat.ir git.kiz.ir redpanda.kiz.ir grafana.prometheus.cluster.local
+    172.16.100.41 acl.kiz.ir grpc.abrso.ir grpc.kiz.ir terabar.acl.kiz.ir lone.acl.kiz.ir abrso.acl.kiz.ir grpc.terabar.ir all.kiz.ir
+    172.16.100.45 mqtt.abrso.ir
 
-127.0.0.1 mongodb-0.mongodb-headless.kiz.svc.cluster.local
-127.0.0.1 mongodb-1.mongodb-headless.kiz.svc.cluster.local
-127.0.0.1 mongodb-2.mongodb-headless.kiz.svc.cluster.local
-127.0.0.1 mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
-127.0.0.1 mongo-psmdb-db-rs0-0.mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
-127.0.0.1 mongo-psmdb-db-rs0-1.mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
-127.0.0.1 mongo-psmdb-db-rs0-2.mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
+    172.16.100.214 k8s.c02.kiz.ir
 
-172.16.100.201 redpanda-0
-172.16.100.209 redpanda-1
-172.16.100.202 redpanda-2
-";
+    127.0.0.1 mongodb-0.mongodb-headless.kiz.svc.cluster.local
+    127.0.0.1 mongodb-1.mongodb-headless.kiz.svc.cluster.local
+    127.0.0.1 mongodb-2.mongodb-headless.kiz.svc.cluster.local
+    127.0.0.1 mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
+    127.0.0.1 mongo-psmdb-db-rs0-0.mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
+    127.0.0.1 mongo-psmdb-db-rs0-1.mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
+    127.0.0.1 mongo-psmdb-db-rs0-2.mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
+
+    172.16.100.201 redpanda-0
+    172.16.100.209 redpanda-1
+    172.16.100.202 redpanda-2
+  '';
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -59,7 +59,7 @@
       variant = "";
     };
   };
-#services.desktopManager.plasma6.enable= true;
+  #services.desktopManager.plasma6.enable= true;
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
@@ -70,9 +70,7 @@
   # needs to be install on NixOS Module
   # Without this, you may have issues with XDG Portals, or missing session files in your Display Manager.
   programs.hyprland.enable = true;
-  xdg.portal = {
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
+  xdg.portal = { extraPortals = [ pkgs.xdg-desktop-portal-gtk ]; };
 
   environment.shells = [ pkgs.zsh ];
   programs.zsh.enable = true;
@@ -101,7 +99,8 @@
   users.users.amin = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets.amin-passwd.path;
-    extraGroups = [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups =
+      [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAGlj5STbxgr0chPN3kzTPjSZYLBixUoEoBRWCwHqA8z amin@n550jv"
@@ -112,9 +111,7 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    wget
-  ];
+  environment.systemPackages = with pkgs; [ wget ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -130,7 +127,7 @@
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = true;
-	  # I'll disable this once I can connect.
+    # I'll disable this once I can connect.
   };
 
   # Open ports in the firewall.

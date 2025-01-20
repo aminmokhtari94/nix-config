@@ -1,7 +1,12 @@
 { inputs, pkgs, ... }:
 
 {
-  programs.neovim.plugins = [{ plugin = pkgs.vimUtils.buildVimPlugin { name = "embark-vim"; src = inputs.embark-vim; }; }];
+  programs.neovim.plugins = [{
+    plugin = pkgs.vimUtils.buildVimPlugin {
+      name = "embark-vim";
+      src = inputs.embark-vim;
+    };
+  }];
 
   xdg.configFile."nvim/plugin/embark.lua".text = ''
     vim.o.background = 'dark'
@@ -18,14 +23,23 @@
   programs.yazi.theme = {
     manager = {
       hovered = { bg = "#3E3859"; };
-      tab_active = { bg = "#A1EFD3"; fg = "#100E23"; };
-      tab_inactive = { bg = "#585273"; fg = "#CBE3E7"; };
+      tab_active = {
+        bg = "#A1EFD3";
+        fg = "#100E23";
+      };
+      tab_inactive = {
+        bg = "#585273";
+        fg = "#CBE3E7";
+      };
     };
 
     status = {
       separator_open = "";
       separator_close = "";
-      mode_normal = { fg = "#100E23"; bg = "#A1EFD3"; };
+      mode_normal = {
+        fg = "#100E23";
+        bg = "#A1EFD3";
+      };
     };
 
     input = {
@@ -49,7 +63,11 @@
   };
 
   programs.skim = {
-    defaultOptions = [ "--reverse" "--ansi" "--color=bg+:#1E1C31,border:#3E3859,fg:#8A889D,fg+:#CBE3E7,header:#78a8ff,hl:#FFE6B3,hl+:#FFE6B3,info:#91ddff,pointer:#D4BFFF,prompt:#A1EFD3,spinner:#D4BFFF" ];
+    defaultOptions = [
+      "--reverse"
+      "--ansi"
+      "--color=bg+:#1E1C31,border:#3E3859,fg:#8A889D,fg+:#CBE3E7,header:#78a8ff,hl:#FFE6B3,hl+:#FFE6B3,info:#91ddff,pointer:#D4BFFF,prompt:#A1EFD3,spinner:#D4BFFF"
+    ];
   };
 
   programs.bat = {
@@ -67,13 +85,12 @@
 
   programs.btop.settings.color_theme = "embark";
 
-  xdg.configFile."btop/themes/embark.theme".source = pkgs.fetchFromGitHub
-    {
-      owner = "embark-theme";
-      repo = "bashtop";
-      rev = "master";
-      sha256 = "sha256-HHoCVdCH4jCIK0JzoYagURcU722sBARtFkNeGPXuCNM=";
-    } + "/embark.theme";
+  xdg.configFile."btop/themes/embark.theme".source = pkgs.fetchFromGitHub {
+    owner = "embark-theme";
+    repo = "bashtop";
+    rev = "master";
+    sha256 = "sha256-HHoCVdCH4jCIK0JzoYagURcU722sBARtFkNeGPXuCNM=";
+  } + "/embark.theme";
 
   programs.starship.settings = {
     format = "$character$jobs$directory$git_branch$git_status ";
@@ -88,13 +105,9 @@
       format = "[   $path ](bg:#2D2B40 fg:bright-white)[](fg:#2D2B40)";
     };
 
-    git_branch = {
-      format = "[  $branch ](fg:bright-white)";
-    };
+    git_branch = { format = "[  $branch ](fg:bright-white)"; };
 
-    git_status = {
-      style = "bold purple";
-    };
+    git_status = { style = "bold purple"; };
 
     jobs = {
       symbol = " 󰠜 ";

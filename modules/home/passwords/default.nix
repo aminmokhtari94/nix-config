@@ -1,15 +1,20 @@
 { lib, config, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.default.passwords;
-in
-{
+let cfg = config.default.passwords;
+in {
   options.default.passwords = with types; {
     enable = mkEnableOption "password management";
 
     browsers = mkOption {
-      type = types.listOf (types.enum [ "brave" "chrome" "chromium" "firefox" "librewolf" "vivaldi" ]);
+      type = types.listOf (types.enum [
+        "brave"
+        "chrome"
+        "chromium"
+        "firefox"
+        "librewolf"
+        "vivaldi"
+      ]);
       default = [ "firefox" "brave" ];
       example = [ "firefox" ];
       description = "Which browsers to install browserpass for";
@@ -22,8 +27,8 @@ in
       browsers = [ "firefox" "brave" ];
     };
 
-    xdg.dataFile."password-store/.extensions/fzf.bash".source = pkgs.fetchFromGitHub
-      {
+    xdg.dataFile."password-store/.extensions/fzf.bash".source =
+      pkgs.fetchFromGitHub {
         owner = "ficoos";
         repo = "pass-fzf";
         rev = "4a703e72c0887f2012de8e791e725181d1ce18d8";

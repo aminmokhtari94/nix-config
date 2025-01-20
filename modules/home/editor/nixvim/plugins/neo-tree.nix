@@ -1,14 +1,14 @@
 {
   programs.nixvim = {
-  keymaps = [
+    keymaps = [
       {
-        mode = ["n"];
+        mode = [ "n" ];
         key = "<leader>e";
         action = "<cmd>Neotree toggle<cr>";
-        options = {desc = "Open/Close Neotree";};
+        options = { desc = "Open/Close Neotree"; };
       }
       {
-        mode = ["n"];
+        mode = [ "n" ];
         key = "<leader>o";
         action.__raw = ''
           function()
@@ -18,10 +18,10 @@
               vim.cmd.Neotree "focus"
             end
           end
-       '';
-        options = {desc = "Focus Neotree";};
+        '';
+        options = { desc = "Focus Neotree"; };
       }
-  ];
+    ];
 
     plugins.neo-tree = {
       enable = true;

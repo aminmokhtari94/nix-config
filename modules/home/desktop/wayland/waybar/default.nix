@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.default.desktop.wayland.waybar;
-in
-{
+let cfg = config.default.desktop.wayland.waybar;
+in {
   options.default.desktop.wayland.waybar = with types; {
     enable = mkEnableOption "waybar";
   };
@@ -17,7 +15,9 @@ in
     programs.waybar = {
       enable = true;
       systemd.enable = true;
-      package = pkgs.waybar.overrideAttrs (oldAttrs: { mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ]; });
+      package = pkgs.waybar.overrideAttrs (oldAttrs: {
+        mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+      });
       settings = {
         mainBar = {
           start_hidden = false;
@@ -25,7 +25,18 @@ in
           layer = "top";
           modules-left = [ "hyprland/workspaces" "mpris" ];
           modules-center = [ "wlr/taskbar" ];
-          modules-right = [ "network#interface" "network#speed" "cpu" "temperature" "backlight" "battery" "clock" "custom/notification" "wireplumber" "tray" ];
+          modules-right = [
+            "network#interface"
+            "network#speed"
+            "cpu"
+            "temperature"
+            "backlight"
+            "battery"
+            "clock"
+            "custom/notification"
+            "wireplumber"
+            "tray"
+          ];
 
           persistent_workspaces = {
             "1" = [ ];
@@ -45,7 +56,8 @@ in
           };
 
           mpris = {
-            format = "{status_icon}<span weight='bold'>{artist}</span> | {title}";
+            format =
+              "{status_icon}<span weight='bold'>{artist}</span> | {title}";
             status-icons = {
               playing = "󰎈 ";
               paused = "󰏤 ";
@@ -53,9 +65,7 @@ in
             };
           };
 
-          "wlr/taskbar" = {
-            on-click = "activate";
-          };
+          "wlr/taskbar" = { on-click = "activate"; };
 
           "network#interface" = {
             format-ethernet = "󰣶 {ifname}";
@@ -68,9 +78,7 @@ in
             format = "⇡{bandwidthUpBits} ⇣{bandwidthDownBits}";
           };
 
-          cpu = {
-            format = " {usage}% 󱐌{avg_frequency}";
-          };
+          cpu = { format = " {usage}% 󱐌{avg_frequency}"; };
 
           temperature = {
             format = "{icon} {temperatureC} °C";
@@ -101,14 +109,14 @@ in
           };
 
           wireplumber = {
-              format = "{icon} {volume}%";
-              format-muted = " ";
-              on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
-              on-click-right = "pavucontrol -t 3";
-              on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
-              on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
-              format-icons = ["" "" "󰕾" ""];
-              max-volume = 140;
+            format = "{icon} {volume}%";
+            format-muted = " ";
+            on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+            on-click-right = "pavucontrol -t 3";
+            on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+            on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+            format-icons = [ "" "" "󰕾" "" ];
+            max-volume = 140;
           };
 
           tray = {

@@ -1,10 +1,9 @@
-{config, pkgs, ... }: 
-{
+{ config, pkgs, ... }: {
   home = {
     enableNixpkgsReleaseCheck = false;
     username = "amin";
     homeDirectory = "/home/amin";
-#    # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
+    # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
     stateVersion = "24.05";
   };
   # Nicely reload system units when changing configs
@@ -26,20 +25,16 @@
     };
   };
 
-  keyboard = {
-    options = "grp:alt_shift_toggle";
-  };
+  keyboard = { options = "grp:alt_shift_toggle"; };
 
-  monitors = [
-    {
-      name = "eDP-1";
-      width = 1920;
-      height = 1080;
-      scale = "1";
-      refreshRate = 60;
-      workspaces = [ "1" "2" "3" "4" "5" "6" ];
-      wallpaper = "~/Pictures/wallpaper.jpg";
-    }
-  ];
+  monitors = [{
+    name = "eDP-1";
+    width = 1920;
+    height = 1080;
+    scale = "1";
+    refreshRate = 60;
+    workspaces = [ "1" "2" "3" "4" "5" "6" ];
+    wallpaper = "~/Pictures/wallpaper.jpg";
+  }];
 
 }

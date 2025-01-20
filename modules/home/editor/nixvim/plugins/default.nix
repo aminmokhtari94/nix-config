@@ -8,6 +8,7 @@
     ./lualine.nix
     ./markdown-preview.nix
     ./neorg.nix
+    ./none-ls.nix
     ./neo-tree.nix
     ./startify.nix
     ./tagbar.nix
@@ -32,6 +33,10 @@
 
       nvim-autopairs.enable = true;
 
+      wakatime.enable = true;
+
+      nix.enable = true;
+
       colorizer = {
         enable = true;
         settings.user_default_options.names = false;
@@ -43,13 +48,8 @@
         enable = true;
         settings = {
           highlight = true;
-          ft_blocklist = [
-            "checkhealth"
-            "floaterm"
-            "lspinfo"
-            "neo-tree"
-            "TelescopePrompt"
-          ];
+          ft_blocklist =
+            [ "checkhealth" "floaterm" "lspinfo" "neo-tree" "TelescopePrompt" ];
         };
       };
     };

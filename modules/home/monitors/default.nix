@@ -1,9 +1,7 @@
 { lib, ... }:
 
-let
-  inherit (lib) mkOption types;
-in
-{
+let inherit (lib) mkOption types;
+in {
   options.monitors = mkOption {
     type = types.listOf (types.submodule {
       options = {
@@ -48,9 +46,7 @@ in
           example = [ "1" "4" ];
           default = [ ];
         };
-        wallpaper = mkOption {
-          type = types.str;
-        };
+        wallpaper = mkOption { type = types.str; };
       };
     });
     default = [ ];

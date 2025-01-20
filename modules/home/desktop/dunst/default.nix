@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 with lib;
-let
-  cfg = config.default.desktop.dunst;
-in
-{
+let cfg = config.default.desktop.dunst;
+in {
   options.default.desktop.dunst = with types; {
     enable = mkEnableOption "dunst";
   };
@@ -32,9 +30,7 @@ in
           follow = "mouse";
         };
 
-        urgency_low = {
-          background = "#2D2B40";
-        };
+        urgency_low = { background = "#2D2B40"; };
 
         urgency_normal = {
           background = "#2D2B40";
@@ -57,12 +53,14 @@ in
 
     xdg.configFile."dunst/play_critical.sh" = {
       executable = true;
-      text = "${pkgs.mpv}/bin/mpv ${pkgs.kdePackages.ocean-sound-theme}/share/sounds/ocean/stereo/dialog-question.oga";
+      text =
+        "${pkgs.mpv}/bin/mpv ${pkgs.kdePackages.ocean-sound-theme}/share/sounds/ocean/stereo/dialog-question.oga";
     };
 
     xdg.configFile."dunst/play_normal.sh" = {
       executable = true;
-      text = "${pkgs.mpv}/bin/mpv ${pkgs.kdePackages.ocean-sound-theme}/share/sounds/ocean/stereo/desktop-login.oga";
+      text =
+        "${pkgs.mpv}/bin/mpv ${pkgs.kdePackages.ocean-sound-theme}/share/sounds/ocean/stereo/desktop-login.oga";
     };
   };
 }

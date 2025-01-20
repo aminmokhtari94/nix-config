@@ -2,18 +2,17 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
-{
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+{ config, pkgs, inputs, ... }: {
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.luks.devices."luks-6bf56ee3-51d4-47af-a530-30462a94be73".device = "/dev/disk/by-uuid/6bf56ee3-51d4-47af-a530-30462a94be73";
+  boot.initrd.luks.devices."luks-6bf56ee3-51d4-47af-a530-30462a94be73".device =
+    "/dev/disk/by-uuid/6bf56ee3-51d4-47af-a530-30462a94be73";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -41,7 +40,7 @@
       variant = "";
     };
   };
-#services.desktopManager.plasma6.enable= true;
+  #services.desktopManager.plasma6.enable= true;
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
@@ -52,9 +51,7 @@
   # needs to be install on NixOS Module
   # Without this, you may have issues with XDG Portals, or missing session files in your Display Manager.
   programs.hyprland.enable = true;
-  xdg.portal = {
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
+  xdg.portal = { extraPortals = [ pkgs.xdg-desktop-portal-gtk ]; };
   hardware.nvidia = {
     # Modesetting is required.
     modesetting.enable = true;
@@ -110,7 +107,8 @@
   users.users.amin = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets.amin-passwd.path;
-    extraGroups = [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups =
+      [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAGlj5STbxgr0chPN3kzTPjSZYLBixUoEoBRWCwHqA8z amin@n550jv"
@@ -119,10 +117,7 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    usbutils
-    lshw
-  ];
+  environment.systemPackages = with pkgs; [ usbutils lshw ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

@@ -49,7 +49,7 @@
       "ctrl+alt+period" = "send_text current pass fzf\r";
       "ctrl+alt+t" = "send_text all sudo nixos-rebuild switch\\r";
       "ctrl+alt+r" = "send_text all zk runbooks\r";
-      "ctrl+alt+c" = "send_text all zk cast\u0020";
+      "ctrl+alt+c" = "send_text all zk castu0020";
     };
 
     extraConfig = ''

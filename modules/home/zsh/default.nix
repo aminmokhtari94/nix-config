@@ -2,7 +2,7 @@
 
 {
   home.packages = with pkgs; [
-        #(nerdfonts.override { fonts = [ "RobotoMono" "Iosevka" ]; })
+    #(nerdfonts.override { fonts = [ "RobotoMono" "Iosevka" ]; })
     nerd-fonts.iosevka
     nerd-fonts.roboto-mono
     ibm-plex
@@ -19,10 +19,7 @@
 
   programs.ripgrep = {
     enable = true;
-    arguments = [
-      "--colors=match:bg:yellow"
-      "--colors=match:fg:black"
-    ];
+    arguments = [ "--colors=match:bg:yellow" "--colors=match:fg:black" ];
   };
 
   programs.bat.enable = true;
@@ -32,15 +29,34 @@
     autosuggestion.enable = true;
     enableCompletion = true;
     autocd = true;
-    cdpath = [ "." "/home/amin" "/home/amin/Public" "/home/amin/Documents" "/home/amin/Notes" ];
+    cdpath = [
+      "."
+      "/home/amin"
+      "/home/amin/Public"
+      "/home/amin/Documents"
+      "/home/amin/Notes"
+    ];
     defaultKeymap = "viins";
     dotDir = ".config/zsh";
     plugins = [
-      { name = "fzf-tab"; src = "${pkgs.zsh-fzf-tab}/share/fzf-tab"; }
+      {
+        name = "fzf-tab";
+        src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+      }
+      {
+        name = "zsh-nix-shell";
+        file = "nix-shell.plugin.zsh";
+        src = pkgs.fetchFromGitHub {
+          owner = "chisui";
+          repo = "zsh-nix-shell";
+          rev = "v0.8.0";
+          sha256 = "1lzrn0n4fxfcgg65v0qhnj7wnybybqzs4adz7xsrkgmcsr0ii8b7";
+        };
+      }
     ];
     oh-my-zsh = {
-        enable = true;
-        plugins = [ "git" "sudo" ];
+      enable = true;
+      plugins = [ "git" "sudo" ];
     };
     syntaxHighlighting.enable = true;
     shellGlobalAliases = {
@@ -198,7 +214,5 @@
   #  git = true;
   #};
 
-  programs.btop = {
-    enable = true;
-  };
+  programs.btop = { enable = true; };
 }

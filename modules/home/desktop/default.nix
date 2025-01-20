@@ -1,15 +1,12 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 with lib;
-let
-  cfg = config.default.desktop;
-in
-{
-  options.default.desktop = with types; {
-    enable = mkEnableOption "desktop";
-  };
+let cfg = config.default.desktop;
+in {
+  options.default.desktop = with types; { enable = mkEnableOption "desktop"; };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      default.wallpaper-manager
       # files & multimedia
       nautilus
       mpv

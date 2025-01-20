@@ -4,31 +4,30 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "rtsx_usb_sdmmc" ];
+  boot.initrd.availableKernelModules =
+    [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "rtsx_usb_sdmmc" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/c456145d-65cb-4d84-aa3e-552d35029f3a";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/c456145d-65cb-4d84-aa3e-552d35029f3a";
+    fsType = "ext4";
+  };
 
-  boot.initrd.luks.devices."luks-ba7afb69-878c-43c1-b309-f8e17fe90997".device = "/dev/disk/by-uuid/ba7afb69-878c-43c1-b309-f8e17fe90997";
+  boot.initrd.luks.devices."luks-ba7afb69-878c-43c1-b309-f8e17fe90997".device =
+    "/dev/disk/by-uuid/ba7afb69-878c-43c1-b309-f8e17fe90997";
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/D5B3-08D4";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/D5B3-08D4";
+    fsType = "vfat";
+    options = [ "fmask=0077" "dmask=0077" ];
+  };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/717c6efb-2c03-46a6-afb3-e61b4387b3ea"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/717c6efb-2c03-46a6-afb3-e61b4387b3ea"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -39,7 +38,9 @@
   # networking.interfaces.wlp4s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
+  hardware.cpu.intel.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.nvidia.package =
+    config.boot.kernelPackages.nvidiaPackages.legacy_470;
 
 }

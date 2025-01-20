@@ -1,10 +1,8 @@
 { lib, config, pkgs, ... }:
 
 with lib;
-let
-  cfg = config.default.desktop.wayland.hyprland;
-in
-{
+let cfg = config.default.desktop.wayland.hyprland;
+in {
   options.default.desktop.wayland.hyprland = with types; {
     enable = mkEnableOption "hyprland";
 
@@ -26,7 +24,6 @@ in
       grim
       grimblast
 
-      swaybg
       neofetch
       libnotify
       playerctl
@@ -40,59 +37,69 @@ in
     services.hypridle = {
       enable = true;
       settings = {
-          general = {
-            after_sleep_cmd = "hyprctl dispatch dpms on";
-            ignore_dbus_inhibit = false;
-            lock_cmd = "pidof hyprlock || hyprlock";
-          };
+        general = {
+          after_sleep_cmd = "hyprctl dispatch dpms on";
+          before_sleep_cmd = "hypr-kbd-layout-reset ; hyprlock --immediate";
+          ignore_dbus_inhibit = false;
+          lock_cmd = "pidof hyprlock || hyprlock";
+        };
 
-          listener = [
-            {
-              timeout = 300;
-              on-timeout = "hyprlock";
-            }
-            {
-              timeout = 360;
-              on-timeout = "hyprctl dispatch dpms off";
-              on-resume = "hyprctl dispatch dpms on";
-            }
-          ];
+        listener = [
+          {
+            timeout = 300;
+            on-timeout = "loginctl lock-session";
+          }
+          {
+            timeout = 360;
+            on-timeout = "hyprctl dispatch dpms off";
+            on-resume = "hyprctl dispatch dpms on";
+          }
+        ];
       };
     };
     programs.hyprlock = {
       enable = true;
       settings = {
-          general = {
-            disable_loading_bar = true;
-            grace = 15;
-            hide_cursor = true;
-            no_fade_in = false;
-            ignore_empty_input = true;
-          };
+        general = {
+          disable_loading_bar = true;
+          grace = 15;
+          hide_cursor = true;
+          no_fade_in = false;
+          ignore_empty_input = true;
+        };
 
-          background = [
-            {
-              path = "screenshot";
-              blur_passes = 3;
-              blur_size = 8;
-            }
-          ];
+        background = [{
+          path = "screenshot";
+          blur_passes = 3;
+          blur_size = 8;
+        }];
 
-          input-field = [
-            {
-              size = "200, 50";
-              position = "0, -80";
-              monitor = "";
-              dots_center = true;
-              fade_on_empty = false;
-              font_color = "rgb(202, 211, 245)";
-              inner_color = "rgb(91, 96, 120)";
-              outer_color = "rgb(24, 25, 38)";
-              outline_thickness = 5;
-              placeholder_text = "Password...";
-              shadow_passes = 2;
-            }
-          ];
+        input-field = [{
+          size = "200, 50";
+          position = "0, -80";
+          monitor = "";
+          dots_center = true;
+          fade_on_empty = false;
+          font_color = "rgb(202, 211, 245)";
+          inner_color = "rgb(91, 96, 120)";
+          outer_color = "rgb(24, 25, 38)";
+          outline_thickness = 5;
+          placeholder_text = "Password...";
+          shadow_passes = 2;
+        }];
+      };
+    };
+
+    services.hyprpaper = {
+      enable = true;
+      settings = {
+        ipc = "on";
+        splash = false;
+        splash_offset = 2.0;
+
+        preload = (map (m: m.wallpaper) config.monitors);
+
+        wallpaper = (map (m: "${m.name},${m.wallpaper}") config.monitors);
       };
     };
 
@@ -106,18 +113,13 @@ in
       enable = true;
       xwayland.enable = true;
       settings = {
-        exec-once = [
-          "hyprctl setcursor Bibata-Modern-Ice 22"
-          "[workspace 2 silent] floorp"
-          "kitty"
-        ] ++ (map (m: "swaybg --output ${m.name} --image ${m.wallpaper} --mode fill") config.monitors)
-        ++ cfg.autostart;
+        exec-once =
+          [ "hyprpaper" "hyprctl setcursor Bibata-Modern-Ice 22" "kitty" ]
+          ++ cfg.autostart;
 
-        workspace = lib.lists.flatten (map
-          (m:
-            map (w: "${w}, monitor:${m.name}") (m.workspaces)
-          )
-          (config.monitors));
+        workspace = lib.lists.flatten
+          (map (m: map (w: "${w}, monitor:${m.name}") (m.workspaces))
+            (config.monitors));
 
         env = [
           "XCURSOR_SIZE,24"
@@ -148,17 +150,16 @@ in
           preserve_split = true;
         };
 
-        master = {
-          orientation = "master";
-        };
+        master = { orientation = "master"; };
 
         decoration = {
           rounding = 5;
           blur = {
             enabled = true;
-            size = 3;
+            size = 5;
             passes = 1;
             new_optimizations = true;
+            ignore_opacity = false;
           };
           #drop_shadow = true;
           #shadow_range = 4;
@@ -181,13 +182,11 @@ in
         misc = {
           disable_hyprland_logo = true;
           disable_splash_rendering = true;
-	  mouse_move_enables_dpms = true;
-	  key_press_enables_dpms = true;
+          mouse_move_enables_dpms = true;
+          key_press_enables_dpms = true;
         };
 
-        xwayland = {
-          force_zero_scaling = true;
-        };
+        xwayland = { force_zero_scaling = true; };
 
         input = {
           kb_layout = "us,ir";
@@ -220,23 +219,23 @@ in
           }
         ];
 
-        monitor = map
-          (m:
-            let
-              resolution = "${toString m.width}x${toString m.height}@${toString m.refreshRate}";
-              position = "${toString m.x}x${toString m.y}";
-              transform = "transform, ${m.transform}";
-            in
-            "${m.name},${if m.enabled then "${resolution},${position},${toString m.scale},${transform}" else "disable"}"
-          )
-          (config.monitors);
+        monitor = map (m:
+          let
+            resolution = "${toString m.width}x${toString m.height}@${
+                toString m.refreshRate
+              }";
+            position = "${toString m.x}x${toString m.y}";
+            transform = "transform, ${m.transform}";
+          in "${m.name},${
+            if m.enabled then
+              "${resolution},${position},${toString m.scale},${transform}"
+            else
+              "disable"
+          }") (config.monitors);
 
         animations = {
           enabled = true;
-          bezier = [
-            "overshot,0.05,0.9,0.1,1.1"
-            "overshot,0.13,0.99,0.29,1."
-          ];
+          bezier = [ "overshot,0.05,0.9,0.1,1.1" "overshot,0.13,0.99,0.29,1." ];
           animation = [
             "windows,1,7,overshot,slide"
             "border,1,10,default"
@@ -252,6 +251,7 @@ in
           "float,title:(Firefox — Sharing Indicator)"
           "float,title:Calculator"
           "float,title:kitty-float"
+          "opacity 0.9 0.9,class:^(kitty)$"
         ];
 
         "$mainMod" = "SUPER";
@@ -346,10 +346,13 @@ in
           ", XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +10"
           ", XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +10"
 
+          "$mainMod CTRL, w, exec, wallpaper-manager download"
+
           "$mainMod, bracketright, focusmonitor, r"
           "$mainMod, bracketleft, focusmonitor, l"
 
           ", Pause, exec, hyprlock"
+          "CTRL SHIFT, Pause, exec, hyprlock --immediate & systemctl suspend"
           "$mainMod ALT CTRL, equal, exec, dunstctl set-paused toggle"
           "$mainMod ALT CTRL, bracketright, exec, systemctl reboot"
 
@@ -363,7 +366,7 @@ in
           "$mainMod, mouse:272, movewindow"
           "$mainMod, mouse:273, resizewindow"
         ];
-        };
+      };
     };
   };
 }

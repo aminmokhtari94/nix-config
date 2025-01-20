@@ -1,9 +1,7 @@
 { pkgs, config, lib, ... }:
 
-let
-  tmux = pkgs.tmux;
-in
-{
+let tmux = pkgs.tmux;
+in {
 
   programs.zsh = {
     shellAliases = {
@@ -13,10 +11,7 @@ in
     };
   };
 
-  home.packages = with pkgs; [
-    smug
-    imagemagick
-  ];
+  home.packages = with pkgs; [ smug imagemagick ];
 
   programs.tmux = {
     enable = true;
@@ -44,7 +39,11 @@ in
         extraConfig = ''
           set -g @fuzzback-popup 1
           set -g @fuzzback-popup-size '90%'
-          set -g @fuzzback-fzf-colors '${lib.strings.concatStringsSep "," (lib.attrsets.mapAttrsToList (name: value: name + ":" + value) config.programs.fzf.colors)}'
+          set -g @fuzzback-fzf-colors '${
+            lib.strings.concatStringsSep ","
+            (lib.attrsets.mapAttrsToList (name: value: name + ":" + value)
+              config.programs.fzf.colors)
+          }'
         '';
       }
     ];
@@ -74,6 +73,9 @@ in
     #######################################################################
     # General
     #######################################################################
+    set-option -g prefix C-a
+    unbind-key C-a
+    bind-key C-a send-prefix
     bind ! kill-server
     bind -n S-Up set-option status
     bind -n S-Down set-option status
@@ -85,7 +87,7 @@ in
     bind-key -T copy-mode-vi C-y send-keys -X rectangle-toggle
     bind-key -T copy-mode-vi Escape send-keys -X cancel
     bind-key C-r choose-buffer
-    
+
     #######################################################################
     # Panes
     #######################################################################
@@ -96,7 +98,13 @@ in
     bind K resize-pane -U 10
     bind L resize-pane -R 10
     bind o kill-pane -a
-    
+    bind -n C-h run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys C-h) || tmux select-pane -L"
+    bind -n C-j run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys C-j) || tmux select-pane -D"
+    bind -n C-k run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys C-k) || tmux select-pane -U"
+    bind -n C-l run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys C-l) || tmux select-pane -R"
+    bind -n 'C-\' run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys 'C-\\') || tmux select-pane -l"
+    bind C-l send-keys 'C-l'
+
     #######################################################################
     # Windows
     #######################################################################
@@ -105,16 +113,14 @@ in
     bind h previous-window
     bind l next-window
     bind > display-popup -E -w 50% -h 50%
-    
+
     #######################################################################
     # Clients
     #######################################################################
     bind j switch-client -p
     bind k switch-client -n
     bind BSpace switch-client -l
-    bind C-d switch-client -t Delta
-    bind C-h new-window -n  dijo
-    
+
     #######################################################################
     # Layers
     #######################################################################
@@ -130,4 +136,3 @@ in
     recursive = true;
   };
 }
-

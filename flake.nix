@@ -8,9 +8,7 @@
       # "https://hyprland.cachix.org"
     ];
 
-    extraSubstituters = [
-      "https://nix-community.cachix.org"
-    ];
+    extraSubstituters = [ "https://nix-community.cachix.org" ];
 
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -23,8 +21,8 @@
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     snowfall-lib = {
-        url = "github:snowfallorg/lib";
-        inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:snowfallorg/lib";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     home-manager = {
@@ -61,22 +59,18 @@
       channels-config = {
         allowUnfree = true;
         nvidia.acceptLicense = true;
-        permittedInsecurePackages = [
-          "electron-27.3.11"
-        ];
+        permittedInsecurePackages = [ "electron-27.3.11" ];
       };
 
-      systems.modules.nixos = with inputs; [
-        sops-nix.nixosModules.sops
-      ];
+      systems.modules.nixos = with inputs; [ sops-nix.nixosModules.sops ];
 
       # Override specific package from unstable
       # packages.x86_64-linux.noto-fonts = inputs.unstable.packages.x86_64-linux.noto-fonts;
 
       outputs-builder = channels: {
-          # Outputs in the outputs builder are transformed to support each system. This
-          # entry will be turned into multiple different outputs like `formatter.x86_64-linux.*`.
-          formatter = channels.nixpkgs.alejandra;
+        # Outputs in the outputs builder are transformed to support each system. This
+        # entry will be turned into multiple different outputs like `formatter.x86_64-linux.*`.
+        formatter = channels.nixpkgs.alejandra;
       };
     };
 }
