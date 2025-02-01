@@ -43,9 +43,13 @@
           nil_ls.enable = true; # Nix
           dockerls.enable = true; # Docker
           bashls.enable = true; # Bash
-          clangd.enable = true; # C/C++
+          buf_ls.enable = true; # Protobuf
           # csharp_ls.enable = true; # C#
           yamlls.enable = true; # YAML
+          clangd = { # C/C++
+            enable = true;
+            filetypes = [ "c" "cpp" "cc" "mpp" "ixx" ];
+          };
           ltex = {
             enable = true;
             settings = {
