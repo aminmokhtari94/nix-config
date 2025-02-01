@@ -192,6 +192,7 @@ in {
           kb_layout = "us,ir";
           kb_variant = config.keyboard.variant;
           kb_options = config.keyboard.options;
+          numlock_by_default = true;
           sensitivity = 0.15;
           follow_mouse = 1;
           touchpad = {
@@ -245,13 +246,27 @@ in {
         };
 
         windowrulev2 = [
-          "workspace 2,title:^(Mozilla Firefox)(.*)$"
           "workspace special:notes,title:^(kitty-default)"
           "workspace special:term,title:^(kitty-scratch)"
-          "float,title:(Firefox — Sharing Indicator)"
+
+          "opacity 0.9 0.9,class:^(kitty)$"
+
           "float,title:Calculator"
           "float,title:kitty-float"
-          "opacity 0.9 0.9,class:^(kitty)$"
+          "float,class:^(org.kde.dolphin)$,title:^(Progress Dialog — Dolphin)$"
+          "float,class:^(org.kde.dolphin)$,title:^(Copying — Dolphin)$"
+          "float,title:(Firefox — Sharing Indicator)"
+          "float,class:^(firefox)$,title:^(Picture-in-Picture)$"
+          "float,class:^(firefox)$,title:^(Library)$"
+          "float,class:^(vlc)$"
+          "float,class:^(org.pulseaudio.pavucontrol)$"
+          "float,class:^(blueman-manager)$"
+          "float,class:^(nm-applet)$"
+          "float,class:^(nm-connection-editor)$"
+          "float,class:^(org.kde.polkit-kde-authentication-agent-1)$"
+          "float,class:org.telegram.desktop"
+
+          "size 500 900, class:org.telegram.desktop"
         ];
 
         "$mainMod" = "SUPER";
