@@ -9,12 +9,14 @@
     iosevka
     unzip
     jq
+    yq
     miller
     entr
     fd
     md-tangle
     dateutils
     flyctl
+    busybox
   ];
 
   programs.ripgrep = {

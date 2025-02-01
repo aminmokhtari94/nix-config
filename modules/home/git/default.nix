@@ -21,7 +21,7 @@
 
     signing = {
       key = "EC93568F7E2AB312";
-      signByDefault = true;
+      signByDefault = false;
     };
 
     ignores = [ ".direnv" ".vim" ];

@@ -99,8 +99,12 @@
   users.users.amin = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets.amin-passwd.path;
-    extraGroups =
-      [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [
+      "wheel"
+      "docker"
+      "dialout"
+      "networkmanager"
+    ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAGlj5STbxgr0chPN3kzTPjSZYLBixUoEoBRWCwHqA8z amin@n550jv"

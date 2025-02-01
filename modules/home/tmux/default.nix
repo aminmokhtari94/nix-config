@@ -5,6 +5,8 @@ in {
 
   programs.zsh = {
     shellAliases = {
+      s =
+        "smug start $(smug list | fzf --height=10 --reverse --no-sort --prompt='Select session: ')";
       mux = "${tmux}/bin/tmux";
       muxa = "${tmux}/bin/tmux a";
       muxk = "${tmux}/bin/tmux kill-server";
@@ -73,19 +75,17 @@ in {
     #######################################################################
     # General
     #######################################################################
-    set-option -g prefix C-a
-    unbind-key C-a
-    bind-key C-a send-prefix
+    #set-option -g prefix C-a
+    #unbind-key C-a
+    #bind-key C-a send-prefix
     bind ! kill-server
     bind -n S-Up set-option status
     bind -n S-Down set-option status
-    bind Escape copy-mode
     bind-key p paste-buffer
     bind-key -T copy-mode-vi v send-keys -X begin-selection
     bind-key -T copy-mode-vi V send-keys -X select-line
     bind-key -T copy-mode-vi y send-keys -X copy-selection
     bind-key -T copy-mode-vi C-y send-keys -X rectangle-toggle
-    bind-key -T copy-mode-vi Escape send-keys -X cancel
     bind-key C-r choose-buffer
 
     #######################################################################
@@ -98,11 +98,11 @@ in {
     bind K resize-pane -U 10
     bind L resize-pane -R 10
     bind o kill-pane -a
-    bind -n C-h run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys C-h) || tmux select-pane -L"
-    bind -n C-j run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys C-j) || tmux select-pane -D"
-    bind -n C-k run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys C-k) || tmux select-pane -U"
-    bind -n C-l run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys C-l) || tmux select-pane -R"
-    bind -n 'C-\' run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)vim$' && tmux send-keys 'C-\\') || tmux select-pane -l"
+    bind -n C-h run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)n*vim$' && tmux send-keys C-h) || tmux select-pane -L"
+    bind -n C-j run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)n*vim$' && tmux send-keys C-j) || tmux select-pane -D"
+    bind -n C-k run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)n*vim$' && tmux send-keys C-k) || tmux select-pane -U"
+    bind -n C-l run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)n*vim$' && tmux send-keys C-l) || tmux select-pane -R"
+    bind -n 'C-\' run "(tmux display-message -p '#{pane_current_command}' | grep -iqE '(^|\/)n*vim$' && tmux send-keys 'C-\\') || tmux select-pane -l"
     bind C-l send-keys 'C-l'
 
     #######################################################################
@@ -120,6 +120,7 @@ in {
     bind j switch-client -p
     bind k switch-client -n
     bind BSpace switch-client -l
+    bind -n M-s display-popup -E "smug list | fzf --height=10 --reverse --no-sort --prompt='Select session: '| xargs -I {} smug start {} --attach"
 
     #######################################################################
     # Layers

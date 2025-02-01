@@ -10,7 +10,7 @@
   #systemd.user.startServices = "sd-switch";
 
   default = {
-    theme.name = "inspired";
+    theme.name = "embarl";
     gpg.enable = false;
     vscode.enable = true;
     kube.enable = true;
