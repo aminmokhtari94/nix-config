@@ -18,6 +18,7 @@ in {
       istioctl
       fluxcd
       kubernetes-helm
+      kind
     ];
   };
 }
