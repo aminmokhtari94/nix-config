@@ -12,19 +12,21 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
+  boot.kernel.sysctl = { "net.ipv4.ip_forward" = true; };
   networking.networkmanager.enable = true;
   networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
   networking.extraHosts = ''
 
-    172.16.100.40 api.kiz.ir emqx.kiz.ir asset.kiz.ir reg.kiz.ir minio.kiz.ir ops.kiz.ir api-v2.kiz.ir akhq.abrso.ir
-    172.16.100.40 abrso.ir app.abrso.ir cms.abrso.ir next.abrso.ir api-next.abrso.ir api.abrso.ir emqx.abrso.ir metabase.abrso.ir
-    172.16.100.40 terabar.ir app.terabar.ir cms.terabar.ir influxdb.abrso.ir
-    172.16.100.40 rahkarsanat.ir cms.rahkarsanat.ir taiga.rahkarsanat.ir git.kiz.ir redpanda.kiz.ir grafana.prometheus.cluster.local
-    172.16.100.41 acl.kiz.ir grpc.abrso.ir grpc.kiz.ir terabar.acl.kiz.ir lone.acl.kiz.ir abrso.acl.kiz.ir grpc.terabar.ir all.kiz.ir
-    172.16.100.45 mqtt.abrso.ir
+    # 172.16.100.40 api.kiz.ir emqx.kiz.ir asset.kiz.ir reg.kiz.ir minio.kiz.ir ops.kiz.ir api-v2.kiz.ir akhq.abrso.ir
+    # 172.16.100.40 abrso.ir app.abrso.ir cms.abrso.ir next.abrso.ir api-next.abrso.ir api.abrso.ir emqx.abrso.ir metabase.abrso.ir
+    # 172.16.100.40 terabar.ir app.terabar.ir cms.terabar.ir influxdb.abrso.ir
+    # 172.16.100.40 rahkarsanat.ir cms.rahkarsanat.ir taiga.rahkarsanat.ir git.kiz.ir redpanda.kiz.ir
+    # 172.16.100.41 acl.kiz.ir grpc.abrso.ir grpc.kiz.ir terabar.acl.kiz.ir lone.acl.kiz.ir abrso.acl.kiz.ir grpc.terabar.ir all.kiz.ir
+    # 172.16.100.45 mqtt.abrso.ir
 
-    172.16.100.214 k8s.c02.kiz.ir
+    172.16.100.205 k8s.c02.kiz.ir
+    # 185.177.158.57 k8s.c02.kiz.ir
+    172.16.100.40  grafana.prometheus.cluster.local
 
     127.0.0.1 mongodb-0.mongodb-headless.kiz.svc.cluster.local
     127.0.0.1 mongodb-1.mongodb-headless.kiz.svc.cluster.local
@@ -136,6 +138,30 @@
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 22 2080 2081 ];
+  #networking.enableIPv4Forwarding = true;
+  networking.nat = {
+    enable = true;
+    externalInterface = "wg-rs";
+    internalInterfaces = [ "eno1" ];
+  };
+  # networking.nftables.enable = true;
+  # networking.nftables.ruleset = ''
+  #   table inet filter {
+  #     chain forward {
+  #       type filter hook forward priority 0;
+  #       policy drop;  # Default deny forwarding
+  #       iifname "eno1" oifname "wg-rs" accept;
+  #       iifname "wg-rs" oifname "eno1" accept;
+  #     }
+  #   }
+  #   table ip nat {
+  #     chain postrouting {
+  #       type nat hook postrouting priority 100;
+  #       oifname "wg-rs" masquerade;
+  #     }
+  #   }
+  # '';
+
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

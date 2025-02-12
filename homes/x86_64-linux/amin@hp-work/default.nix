@@ -64,7 +64,7 @@
       scale = "1";
       refreshRate = 60;
       workspaces = [ "4" "5" "6" ];
-      wallpaper = "~/Pictures/wallpaperDP-2.jpg";
+      wallpaper = "~/Pictures/wallpaper-DP-2.jpg";
     }
   ];
 

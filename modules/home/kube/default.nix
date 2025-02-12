@@ -19,6 +19,7 @@ in {
       fluxcd
       kubernetes-helm
       kind
+      mirrord
     ];
   };
 }
