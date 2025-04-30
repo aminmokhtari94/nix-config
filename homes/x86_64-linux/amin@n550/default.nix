@@ -10,8 +10,12 @@
   #systemd.user.startServices = "sd-switch";
 
   default = {
-    theme.name = "inspired";
-    gpg.enable = true;
+    theme.name = "embarl";
+    gpg.enable = false;
+    vscode.enable = true;
+    kube.enable = true;
+    v2ray.enable = true;
+    vpn.enable = true;
     desktop = {
       enable = true;
       wayland.hyprland = {
