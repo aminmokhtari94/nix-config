@@ -8,7 +8,7 @@ in {
 
   config = mkIf cfg.enable {
     programs.go = { enable = true; };
-    home.packages = with pkgs; [ gopls gnumake buf ];
+    home.packages = with pkgs; [ gopls gnumake buf gcc ];
     home.sessionPath = [ "$HOME/go/bin" ];
   };
 }

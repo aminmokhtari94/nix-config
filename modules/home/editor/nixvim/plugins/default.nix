@@ -1,4 +1,4 @@
-{
+{ pkgs, ... }: {
   imports = [
     ./barbar.nix
     ./comment.nix
@@ -14,14 +14,33 @@
     ./tagbar.nix
     ./telescope.nix
     ./treesitter.nix
-    ./vimtex.nix # inria
   ];
 
   programs.nixvim = {
-    colorschemes.gruvbox.enable = true;
+
+    extraPlugins = [
+      (pkgs.vimUtils.buildVimPlugin {
+        pname = "sonokai";
+        version = "v0.3.3";
+        src = pkgs.fetchFromGitHub {
+          owner = "sainnhe";
+          repo = "sonokai";
+          rev = "v0.3.3"; # You can use a tag or commit hash
+          sha256 = "sha256-QZQzflOC6cbFt7cwqnZ+y1kKWRWq05ty0x3aj6xuBTY=";
+        };
+      })
+    ];
+
+    extraConfigLua = ''
+      vim.cmd("colorscheme sonokai")
+    '';
 
     plugins = {
       web-devicons.enable = true;
+
+      # colorful-menu.enable = true;
+
+      which-key.enable = true;
 
       gitsigns = {
         enable = true;
@@ -30,6 +49,8 @@
           change.text = "~";
         };
       };
+
+      fugitive = { enable = true; };
 
       nvim-autopairs.enable = true;
 

@@ -15,11 +15,13 @@ in {
       kubectl
       k9s
       talosctl
+      kustomize
       istioctl
       fluxcd
       kubernetes-helm
       kind
-      mirrord
+      kubebuilder
+      kn
     ];
   };
 }

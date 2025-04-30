@@ -74,6 +74,16 @@ in {
           blur_size = 8;
         }];
 
+        label = {
+          text = "$LAYOUT";
+          color = "rgba(200, 200, 200, 1.0)";
+          font_size = 14;
+          font_family = "Noto Sans";
+          position = "0, 10";
+          halign = "center";
+          valign = "bottom";
+        };
+
         input-field = [{
           size = "200, 50";
           position = "0, -80";

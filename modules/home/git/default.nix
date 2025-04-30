@@ -14,6 +14,8 @@
     extensions = with pkgs; [ gh-dash ];
   };
 
+  programs.lazygit = { enable = true; };
+
   programs.git = {
     enable = true;
     userName = "Amin Mokhtart";
