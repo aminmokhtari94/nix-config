@@ -2,7 +2,6 @@
 
 {
   home.packages = with pkgs; [
-    #(nerdfonts.override { fonts = [ "RobotoMono" "Iosevka" ]; })
     nerd-fonts.iosevka
     nerd-fonts.roboto-mono
     ibm-plex
@@ -99,7 +98,7 @@
     # how to see where a package ends up in the store
     # source ${pkgs.asdf-vm.outPath}/bin/asdf
 
-    initExtraBeforeCompInit = ''
+    initContent = ''
       setopt AUTO_PUSHD           # Push the old directory onto the stack on cd
       setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack
       setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd
@@ -107,8 +106,7 @@
       setopt CDABLE_VARS          # Change directory to a path stored in a variable
       setopt EXTENDED_GLOB        # Use extended globbing syntax
       KEYTIMEOUT=5
-    '';
-    initExtra = ''
+
       autoload -Uz edit-command-line
       zle -N edit-command-line
       bindkey -M viins '^f' edit-command-line

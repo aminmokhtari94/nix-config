@@ -29,6 +29,7 @@
           sha256 = "sha256-QZQzflOC6cbFt7cwqnZ+y1kKWRWq05ty0x3aj6xuBTY=";
         };
       })
+      pkgs.vimPlugins.lazygit-nvim
     ];
 
     extraConfigLua = ''
