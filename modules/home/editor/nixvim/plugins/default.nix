@@ -14,7 +14,6 @@
   ];
 
   programs.nixvim = {
-    lz-n.enabled = true;
 
     extraPlugins = [
       (pkgs.vimUtils.buildVimPlugin {
@@ -36,6 +35,7 @@
 
     plugins = {
       web-devicons.enable = true;
+      lz-n.enable = true;
 
       colorful-menu.enable = true;
 
