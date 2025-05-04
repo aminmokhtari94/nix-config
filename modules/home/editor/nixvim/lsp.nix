@@ -1,11 +1,20 @@
 {
   programs.nixvim = {
     plugins = {
-      lsp-format = {
-        enable = true;
-        autoLoad = true;
-        lspServersToEnable = "all";
-      };
+      # lsp-format = {
+      #   enable = true;
+      #   autoLoad = true;
+      #   lspServersToEnable = "all";
+      # };
+
+      # none-ls = {
+      #   enable = true;
+      #   enableLspFormat = true;
+      #   sources.formatting = {
+      #     buf.enable = true;
+      #     nixfmt.enable = true;
+      #   };
+      # };
 
       lsp = {
         enable = true;

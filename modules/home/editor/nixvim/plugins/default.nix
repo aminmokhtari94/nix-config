@@ -1,15 +1,12 @@
 { pkgs, ... }: {
   imports = [
-    ./barbar.nix
     ./comment.nix
+    ./conform.nix
+    ./dressing.nix
     ./floaterm.nix
-    ./harpoon.nix
-    ./lsp.nix
-    ./lualine.nix
     ./markdown-preview.nix
-    ./neorg.nix
-    ./none-ls.nix
     ./neo-tree.nix
+    ./neorg.nix
     ./startify.nix
     ./tagbar.nix
     ./telescope.nix
@@ -17,6 +14,7 @@
   ];
 
   programs.nixvim = {
+    lz-n.enabled = true;
 
     extraPlugins = [
       (pkgs.vimUtils.buildVimPlugin {
@@ -39,7 +37,9 @@
     plugins = {
       web-devicons.enable = true;
 
-      # colorful-menu.enable = true;
+      colorful-menu.enable = true;
+
+      noice = { enable = true; };
 
       which-key.enable = true;
 

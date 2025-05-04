@@ -12,7 +12,7 @@
     };
 
     plugins.neorg = {
-      enable = true;
+      enable = false;
 
       settings.load = {
         "core.defaults".__empty = null;
@@ -37,7 +37,7 @@
         };
 
         "core.concealer".__empty = null;
-        "core.completion".config.engine = "nvim-cmp";
+        # "core.completion".config.engine = "nvim-cmp";
         "core.qol.toc".config.close_after_use = true;
       };
     };
