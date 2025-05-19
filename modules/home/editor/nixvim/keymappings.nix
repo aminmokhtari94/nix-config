@@ -19,7 +19,7 @@
         Y = "y$";
 
         # back and fourth between the two most recent files
-        "<C-c>" = ":b#<CR>";
+        # "<C-c>" = ":b#<CR>";
 
         # close by Ctrl+x
         "<C-x>" = ":close<CR>";

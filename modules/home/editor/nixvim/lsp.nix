@@ -1,20 +1,68 @@
 {
   programs.nixvim = {
     plugins = {
-      # lsp-format = {
-      #   enable = true;
-      #   autoLoad = true;
-      #   lspServersToEnable = "all";
-      # };
+      lsp-format = {
+        enable = true;
+        # autoLoad = true;
+        lspServersToEnable = "all";
+      };
 
-      # none-ls = {
-      #   enable = true;
-      #   enableLspFormat = true;
-      #   sources.formatting = {
-      #     buf.enable = true;
-      #     nixfmt.enable = true;
-      #   };
-      # };
+      none-ls = {
+        enable = true;
+        # enableLspFormat = true;
+        settings = {
+          enableLspFormat = false;
+          updateInInsert = false;
+          onAttach = ''
+            function(client, bufnr)
+                if client.supports_method "textDocument/formatting" then
+                  vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
+                  vim.api.nvim_create_autocmd("BufWritePre", {
+                    group = augroup,
+                    buffer = bufnr,
+                    callback = function()
+                      vim.lsp.buf.format { bufnr = bufnr }
+                    end,
+                  })
+                end
+              end
+          '';
+        };
+        sources = {
+          # code_actions = {
+          #   gitsigns.enable = true;
+          #   statix.enable = true;
+          # };
+          # diagnostics = {
+          #   checkstyle = { enable = true; };
+          #   statix = { enable = true; };
+          # };
+          formatting = {
+            nixfmt = { enable = true; };
+            buf.enable = true;
+            prettier = {
+              enable = true;
+              disableTsServerFormatter = true;
+              settings = ''
+                {
+                  extra_args = { "--no-semi", "--single-quote" },
+                }
+              '';
+            };
+            # alejandra = { enable = false; };
+            # google_java_format = { enable = true; };
+            # stylua = { enable = true; };
+            # black = {
+            #   enable = true;
+            #   settings = ''
+            #     {
+            #       extra_args = { "--fast" },
+            #     }
+            #   '';
+            # };
+          };
+        };
+      };
 
       lsp = {
         enable = true;
@@ -46,7 +94,18 @@
           # astro.enable = true; # AstroJS
           # phpactor.enable = true; # PHP
           # svelte.enable = false; # Svelte
-          vuels.enable = false; # Vue
+          # Vue
+          volar = {
+            enable = true;
+            filetypes = [
+              "typescript"
+              "javascript"
+              "javascriptreact"
+              "typescriptreact"
+              "vue"
+            ];
+          };
+          eslint.enable = true; # ESLint
           pyright.enable = true; # Python
           marksman.enable = true; # Markdown
           nil_ls.enable = true; # Nix
@@ -97,6 +156,117 @@
           };
         };
       };
+
+      trouble = {
+        enable = true;
+        settings = { auto_close = true; };
+      };
+
+      lspsaga = {
+        enable = true;
+        beacon = { enable = true; };
+        ui = {
+          border =
+            "rounded"; # One of none, single, double, rounded, solid, shadow
+          codeAction = "💡"; # Can be any symbol you want 💡
+        };
+        hover = {
+          openCmd = "!floorp"; # Choose your browser
+          openLink = "gx";
+        };
+        diagnostic = {
+          borderFollow = true;
+          diagnosticOnlyCurrent = false;
+          showCodeAction = true;
+        };
+        symbolInWinbar = {
+          enable = true; # Breadcrumbs
+        };
+        codeAction = {
+          extendGitSigns = false;
+          showServerName = true;
+          onlyInCursor = true;
+          numShortcut = true;
+          keys = {
+            exec = "<CR>";
+            quit = [ "<Esc>" "q" ];
+          };
+        };
+        lightbulb = {
+          enable = false;
+          sign = false;
+          virtualText = true;
+        };
+        implement = { enable = false; };
+        rename = {
+          autoSave = false;
+          keys = {
+            exec = "<CR>";
+            quit = [ "<C-k>" "<Esc>" ];
+            select = "x";
+          };
+        };
+        outline = {
+          autoClose = true;
+          autoPreview = true;
+          closeAfterJump = true;
+          layout = "normal"; # normal or float
+          winPosition = "right"; # left or right
+          keys = {
+            jump = "e";
+            quit = "q";
+            toggleOrJump = "o";
+          };
+        };
+        scrollPreview = {
+          scrollDown = "<C-f>";
+          scrollUp = "<C-b>";
+        };
+      };
     };
+
+    keymaps = [
+      {
+        mode = "n";
+        key = "<leader>x";
+        action = "+diagnostics/quickfix";
+      }
+      {
+        mode = "n";
+        key = "<leader>xx";
+        action = "<cmd>Trouble diagnostics toggle<cr>";
+        options = {
+          silent = true;
+          desc = "Diagnostics (Trouble)";
+        };
+      }
+      {
+        mode = "n";
+        key = "<leader>xX";
+        action = "<cmd>Trouble diagnostics toggle filter.buf=0<cr>";
+        options = {
+          silent = true;
+          desc = "Buffer Diagnostics (Trouble)";
+        };
+      }
+      {
+        mode = "n";
+        key = "<leader>xt";
+        action = "<cmd>Trouble todo<cr>";
+        options = {
+          silent = true;
+          desc = "Todo (Trouble)";
+        };
+      }
+      {
+        mode = "n";
+        key = "<leader>xQ";
+        action = "<cmd>Trouble qflist toggle<cr>";
+        options = {
+          silent = true;
+          desc = "Quickfix List (Trouble)";
+        };
+      }
+    ];
   };
 }
