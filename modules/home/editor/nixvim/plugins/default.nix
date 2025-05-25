@@ -2,6 +2,7 @@
   imports = [
     ./comment.nix
     ./conform.nix
+    ./dadbod.nix
     ./dressing.nix
     ./floaterm.nix
     ./markdown-preview.nix

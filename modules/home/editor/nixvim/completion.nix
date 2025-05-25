@@ -18,6 +18,7 @@
       blink-copilot.enable = false;
       blink-emoji.enable = true;
       blink-ripgrep.enable = true;
+      vim-dadbod-completion.enable = true;
       blink-cmp = {
         enable = true;
         setupLspCapabilities = true;
@@ -42,6 +43,7 @@
               "spell"
               "ripgrep"
             ];
+            per_filetype = { sql = [ "snippets" "dadbod" "buffer" ]; };
             providers = {
               ripgrep = {
                 name = "Ripgrep";
@@ -64,6 +66,11 @@
                 score_offset = 1;
               };
               lsp.score_offset = 4;
+              dadbod = {
+                name = "Dadbod";
+                module = "vim_dadbod_completion.blink";
+                score_offset = 2;
+              };
               copilot = {
                 name = "copilot";
                 module = "blink-copilot";
