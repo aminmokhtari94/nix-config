@@ -119,7 +119,7 @@
             filetypes = [ "c" "cpp" "cc" "mpp" "ixx" ];
           };
           ltex = {
-            enable = true;
+            enable = false;
             settings = {
               enabled =
                 [ "astro" "html" "latex" "markdown" "text" "tex" "gitcommit" ];
@@ -150,7 +150,7 @@
 
           # Rust
           rust_analyzer = {
-            enable = true;
+            enable = false;
             installRustc = true;
             installCargo = true;
           };

@@ -56,7 +56,7 @@
           python = [ "black" ];
           lua = [ "stylua" ];
           nix = [ "nixfmt" ];
-          rust = [ "rustfmt" ];
+          # rust = [ "rustfmt" ];
           # liquidsoap = [ "liquidsoap-prettier" ];
           yaml = [ "yamllint" "yamlfmt" ];
           # terragrunt = [ "hcl" ];
