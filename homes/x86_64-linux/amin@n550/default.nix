@@ -16,6 +16,7 @@
     kube.enable = true;
     v2ray.enable = true;
     vpn.enable = true;
+    lang = { go.enable = true; };
     desktop = {
       enable = true;
       wayland.hyprland = {
