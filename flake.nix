@@ -17,7 +17,7 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     snowfall-lib = {
@@ -59,7 +59,7 @@
       channels-config = {
         allowUnfree = true;
         nvidia.acceptLicense = true;
-        permittedInsecurePackages = [ "electron-27.3.11" ];
+        permittedInsecurePackages = [ ];
       };
 
       systems.modules.nixos = with inputs; [ sops-nix.nixosModules.sops ];

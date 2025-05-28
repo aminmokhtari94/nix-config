@@ -10,7 +10,7 @@ in {
       # files & multimedia
       nautilus
       mpv
-      okular
+      # kdePackages.okular
       # text & font helper
       font-manager
       wofi-emoji

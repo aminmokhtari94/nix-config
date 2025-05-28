@@ -20,8 +20,8 @@
           rev = "cf16fc15ede8411dd2f5b7f909f3027ea54a10b9";
           hash = "sha256-kIStYRQyoxe2e9pGE0Ie4xV04sGKEBbaZXvS7CT5DQ0=";
         };
+        doCheck = false;
       })
-      pkgs.vimPlugins.lazygit-nvim
     ];
 
     extraConfigLua = ''
