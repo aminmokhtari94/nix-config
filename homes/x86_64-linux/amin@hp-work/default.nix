@@ -24,7 +24,7 @@
       enable = true;
       wayland.hyprland = {
         enable = true;
-        autostart = [ ];
+        autostart = [ "nekoray" ];
       };
       gtk.enable = true;
       wayland.waybar.enable = true;

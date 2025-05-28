@@ -1,15 +1,13 @@
 { pkgs, ... }: {
   imports = [
-    ./barbar.nix
     ./comment.nix
+    ./conform.nix
+    ./dadbod.nix
+    ./dressing.nix
     ./floaterm.nix
-    ./harpoon.nix
-    ./lsp.nix
-    ./lualine.nix
     ./markdown-preview.nix
-    ./neorg.nix
-    ./none-ls.nix
     ./neo-tree.nix
+    ./neorg.nix
     ./startify.nix
     ./tagbar.nix
     ./telescope.nix
@@ -38,8 +36,11 @@
 
     plugins = {
       web-devicons.enable = true;
+      lz-n.enable = true;
 
-      # colorful-menu.enable = true;
+      colorful-menu.enable = true;
+
+      noice = { enable = true; };
 
       which-key.enable = true;
 

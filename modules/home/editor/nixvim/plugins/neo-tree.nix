@@ -30,6 +30,16 @@
       window = {
         width = 30;
         autoExpandWidth = true;
+        mappings = {
+          l = "open";
+          h = "close_node";
+        };
+      };
+      filesystem = {
+        followCurrentFile = {
+          enabled = true;
+          leaveDirsOpen = true;
+        };
       };
     };
   };

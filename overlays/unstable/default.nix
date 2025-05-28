@@ -1,5 +1,5 @@
 { channels, ... }:
 
 final: prev: {
-  inherit (channels.unstable) nerd-fonts talosctl vscode formats;
+  inherit (channels.unstable) nerd-fonts talosctl vscode formats vimPlugins;
 }

@@ -19,7 +19,7 @@
       bold_font = "Berkeley Mono Bold";
       bold_italic_font = "Berkeley Mono Bold Italic";
       italic_font = "IOCollins Italic";
-      font_size = "11.0";
+      font_size = "10.0";
 
       # Terminal Settings
       allow_remote_control = "yes";
@@ -41,8 +41,8 @@
       "ctrl+alt+l" = "set_background_opacity +0.05";
       "ctrl+alt+h" = "set_background_opacity -0.05";
       "ctrl+alt+enter" = "set_background_opacity default";
-      "ctrl+alt+k" = "change_font_size current +2.0";
-      "ctrl+alt+j" = "change_font_size current -2.0";
+      "ctrl+alt+k" = "change_font_size current +1.0";
+      "ctrl+alt+j" = "change_font_size current -1.0";
       "ctrl+alt+z" = "change_font_size current 18.0";
       "ctrl+alt+u" = "change_font_size all 0";
       "ctrl+alt+backspace" = "change_font_size all 0";
