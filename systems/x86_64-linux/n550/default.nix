@@ -122,11 +122,15 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  # Enable automatic garbage collection for store paths older than 7 days.
   nix.gc = {
     automatic = true;
     dates = "monthly";
-    options = "--delete-older-than 30d";
+    options = "--delete-older-than 7d";
   };
+
+  # Enable automatic store optimization.
+  nix.optimise.automatic = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.amin = {

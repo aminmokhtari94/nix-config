@@ -84,11 +84,15 @@
     #media-session.enable = true;
   };
 
+  # Enable automatic garbage collection for store paths older than 7 days.
   nix.gc = {
     automatic = true;
     dates = "monthly";
-    options = "--delete-older-than 30d";
+    options = "--delete-older-than 7d";
   };
+
+  # Enable automatic store optimization.
+  nix.optimise.automatic = true;
 
   users.users.amin = {
     isNormalUser = true;
