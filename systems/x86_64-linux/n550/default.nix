@@ -130,7 +130,7 @@
   };
 
   # Enable automatic store optimization.
-  nix.optimise.automatic = true;
+  # nix.optimise.automatic = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.amin = {

@@ -92,7 +92,7 @@
   };
 
   # Enable automatic store optimization.
-  nix.optimise.automatic = true;
+  # nix.optimise.automatic = true;
 
   users.users.amin = {
     isNormalUser = true;
