@@ -1,20 +1,7 @@
 {
   description = "Amin Mokhtari's Nixos config flake and home-manager";
 
-  nixConfig = {
-    experimental-features = [ "nix-command" "flakes" ];
-    substituters = [
-      "https://cache.nixos.org"
-      # "https://hyprland.cachix.org"
-    ];
-
-    extraSubstituters = [ "https://nix-community.cachix.org" ];
-
-    extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      #"hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-    ];
-  };
+  nixConfig = { experimental-features = [ "nix-command" "flakes" ]; };
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
