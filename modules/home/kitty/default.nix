@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ default.io-collins ];
+  # home.packages = with pkgs; [ default.io-collins ];
 
   programs.kitty = {
     enable = true;

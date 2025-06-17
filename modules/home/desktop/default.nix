@@ -10,10 +10,10 @@ in {
       # files & multimedia
       nautilus
       mpv
-      # kdePackages.okular
+
       # text & font helper
-      font-manager
-      wofi-emoji
+      # font-manager
+      # wofi-emoji
 
       gnome-calculator
       telegram-desktop
@@ -22,8 +22,6 @@ in {
       mongodb-compass
       mqtt-explorer
       redisinsight
-
-      blender
       postman
       winbox4
     ];
