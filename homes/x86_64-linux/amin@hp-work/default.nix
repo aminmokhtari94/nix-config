@@ -23,9 +23,11 @@
     };
     desktop = {
       enable = true;
-      wayland.hyprland = {
-        enable = true;
-        autostart = [ "nekoray" ];
+      wayland = {
+        hyprland = {
+          enable = true;
+          autostart = [ "nekoray" ];
+        };
       };
       gtk.enable = true;
       wayland.waybar.enable = true;
