@@ -13,7 +13,7 @@
     theme.name = "embarl";
     gpg.enable = false;
     vscode.enable = true;
-    cursor.enable = true;
+    cursor.enable = false;
     kube.enable = true;
     v2ray.enable = true;
     vpn.enable = true;

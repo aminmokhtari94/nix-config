@@ -151,8 +151,12 @@
     SUBSYSTEM=="usb", ATTR{idVendor}=="0925", ATTR{idProduct}=="3881", MODE="0666"
   '';
 
+  networking.proxy.default = "http://localhost:2080";
+  networking.proxy.noProxy =
+    "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
+
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 2080 2081 3000 ];
+  networking.firewall.allowedTCPPorts = [ 22 2080 2081 3000 8081 ];
   #networking.enableIPv4Forwarding = true;
   networking.nat = {
     enable = true;
