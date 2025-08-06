@@ -1,7 +1,4 @@
-{ config, lib, ... }:
-with lib;
-let cfg = config.default.docker;
-in {
+{ ... }: {
   virtualisation.docker = {
     enable = true;
     # storageDriver = "btrfs";

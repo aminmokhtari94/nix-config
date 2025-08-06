@@ -114,7 +114,8 @@
           buf_ls.enable = true; # Protobuf
           # csharp_ls.enable = true; # C#
           yamlls.enable = true; # YAML
-          clangd = { # C/C++
+          clangd = {
+            # C/C++
             enable = true;
             filetypes = [ "c" "cpp" "cc" "mpp" "ixx" ];
           };
@@ -138,21 +139,23 @@
               # };
             };
           };
-          gopls = { # Golang
+          gopls = {
+            # Golang
             enable = true;
             autostart = true;
           };
 
-          lua_ls = { # Lua
+          lua_ls = {
+            # Lua
             enable = true;
             settings.telemetry.enable = false;
           };
 
           # Rust
           rust_analyzer = {
-            enable = false;
-            installRustc = true;
-            installCargo = true;
+            enable = true;
+            installRustc = false;
+            installCargo = false;
           };
         };
       };

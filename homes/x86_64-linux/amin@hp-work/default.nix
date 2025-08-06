@@ -15,7 +15,7 @@
     vscode.enable = true;
     cursor.enable = false;
     kube.enable = true;
-    v2ray.enable = true;
+    # v2ray.enable = true;
     vpn.enable = true;
     lang = {
       go.enable = true;

@@ -143,6 +143,8 @@ in {
           "MOZ_ENABLE_WAYLAND,1"
           "GDK_SCALE,1"
           "GDK_BACKEND,wayland,x11"
+          "DEFAULT_FILE_MANAGER,thunar"
+          "XDG_FILE_MANAGER,thunar"
         ];
 
         general = {
