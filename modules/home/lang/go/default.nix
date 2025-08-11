@@ -3,7 +3,7 @@ with lib;
 let cfg = config.default.lang.go;
 in {
   options.default.lang.go = with types; {
-    enable = mkEnableOption "Golang Language support";
+    enable = mkEnableOption "Golang language support";
   };
 
   config = mkIf cfg.enable {

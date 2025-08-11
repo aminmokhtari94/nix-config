@@ -37,6 +37,10 @@
       inputs.nixpkgs.follows = "unstable";
     };
 
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "unstable";
+    };
   };
 
   # Snowfall Lib is a library that makes it easy to manage your Nix flake by imposing an opinionated file structure.
@@ -54,7 +58,10 @@
         permittedInsecurePackages = [ ];
       };
 
-      systems.modules.nixos = with inputs; [ sops-nix.nixosModules.sops ];
+      systems.modules.nixos = with inputs; [
+        sops-nix.nixosModules.sops
+        disko.nixosModules.disko
+      ];
 
       # Override specific package from unstable
       # packages.x86_64-linux.noto-fonts = inputs.unstable.packages.x86_64-linux.noto-fonts;
