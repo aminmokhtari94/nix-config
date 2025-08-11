@@ -31,7 +31,8 @@
     # 172.16.100.41 acl.kiz.ir grpc.abrso.ir grpc.kiz.ir terabar.acl.kiz.ir lone.acl.kiz.ir abrso.acl.kiz.ir grpc.terabar.ir all.kiz.ir
     # 172.16.100.45 mqtt.abrso.ir
 
-    172.16.100.205 k8s.c02.kiz.ir
+    # 172.16.100.205 k8s.c02.kiz.ir
+    185.177.158.57 k8s.c02.kiz.ir kasm.cluster.local
     # 185.177.158.57 k8s.c02.kiz.ir
     172.16.100.40  grafana.prometheus.cluster.local
 
@@ -46,6 +47,7 @@
     172.16.100.201 redpanda-0
     172.16.100.209 redpanda-1
     172.16.100.202 redpanda-2
+    172.18.0.10 employee.default.kiz.local
   '';
 
   # Set your time zone.
@@ -91,6 +93,7 @@
 
   virtualisation.docker.enable = true;
   # virtualisation.docker.storageDriver = "btrfs";
+  virtualisation.libvirtd.enable = true;
 
   # Enable sound with pipewire.
   # hardware.pulseaudio.enable = false;
@@ -136,8 +139,12 @@
   users.users.amin = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets.amin-passwd.path;
-    extraGroups =
-      [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [
+      "wheel"
+      "docker"
+      "networkmanager"
+      "libvirtd"
+    ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAGlj5STbxgr0chPN3kzTPjSZYLBixUoEoBRWCwHqA8z amin@n550jv"
@@ -146,7 +153,13 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [ usbutils lshw ];
+  environment.systemPackages = with pkgs; [
+    usbutils
+    lshw
+    virt-manager
+    qemu
+    libvirt
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -179,7 +192,7 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 2080 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
