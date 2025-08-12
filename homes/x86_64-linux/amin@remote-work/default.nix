@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ ... }: {
   home = {
     enableNixpkgsReleaseCheck = false;
     username = "amin";
@@ -10,14 +10,10 @@
   default = {
     theme.name = "embarl";
     gpg.enable = false;
-    vscode.enable = false;
-    cursor.enable = false;
     kube.enable = true;
-    # v2ray.enable = true;
-    vpn.enable = false;
     lang = {
       go.enable = true;
-      python.enable = true;
+      python.enable = false;
     };
     desktop = { enable = false; };
   };

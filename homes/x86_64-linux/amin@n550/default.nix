@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ ... }: {
   home = {
     enableNixpkgsReleaseCheck = false;
     username = "amin";
@@ -12,21 +12,25 @@
   default = {
     theme.name = "embarl";
     gpg.enable = false;
-    vscode.enable = true;
     kube.enable = true;
-    # v2ray.enable = true;
+    v2ray.enable = true;
     vpn.enable = true;
     lang = { go.enable = true; };
     desktop = {
       enable = true;
-      wayland.hyprland = {
-        enable = true;
-        autostart = [ ];
+      wayland = {
+        hyprland = {
+          enable = true;
+          autostart = [ "nekoray" ];
+        };
       };
+      browser.enable = true;
+      kitty.enable = true;
       gtk.enable = true;
       wayland.waybar.enable = true;
       dunst.enable = true;
       nm-applet.enable = true;
+      editor = { vscode.enable = true; };
     };
   };
 
