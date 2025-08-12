@@ -1,9 +1,16 @@
 keys:
-  - &amin_n550 age1dk40kh8vwhk7lf5qhwmsfh2twmj7gdrkynx20lh4lmar0z4kvqgshkm289
-  - &amin_hp_work age1l64ytzuq5es89e4lgsvrj6tnhcgdq04wpfctj07xkdrc08utzchqg5l4pk
+  - users:
+      - &amin age16aftwyj928j8j6n2shuugdesppaz5p0r5evgg8888k0ygg70u4qsf7jc37
+  - hosts:
+      - &n550 age1dk40kh8vwhk7lf5qhwmsfh2twmj7gdrkynx20lh4lmar0z4kvqgshkm289
+      - &hp_work age19ntyr90hwka356y4malera78wytrl6wr6eacwqppyu86eh4p6pdst4qkn4
+      - &remote_work age125lr8v7xkvv7el6uk7hr75czqsk7m7px7sz9xcgtjy3mjd8lgcaqcwpxsg
 creation_rules:
-  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+  # - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+  - path_regex: secrets/default.yaml$
     key_groups:
-    - age:
-      - *amin_n550
-      - *amin_hp_work
+      - age:
+          - *amin
+          - *n550
+          - *hp_work
+          - *remote_work

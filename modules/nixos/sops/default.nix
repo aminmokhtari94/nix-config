@@ -3,7 +3,7 @@
 {
   sops = {
     defaultSopsFile = ../../../secrets/default.yaml;
-    #validateSopsFiles = false;
+    validateSopsFiles = true;
 
     age = {
       sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];

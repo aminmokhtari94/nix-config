@@ -8,18 +8,24 @@
         partitions = {
           boot = {
             size = "1G";
-            type = "EF02";
+            type = "EF00"; # EFI System Partition
             content = {
               type = "filesystem";
               format = "vfat";
               mountpoint = "/boot";
             };
           };
-          root = {
+          luksroot = {
             size = "100%";
             content = {
-              type = "lvm_pv";
-              vg = "vgroot";
+              type = "luks";
+              name = "cryptroot";
+              extraOpenArgs = [ "--allow-discards" ];
+              keyFile = null; # prompt at boot
+              content = {
+                type = "lvm_pv";
+                vg = "vgroot";
+              };
             };
           };
         };
@@ -32,11 +38,17 @@
       content = {
         type = "gpt";
         partitions = {
-          homepv = {
+          lukshome = {
             size = "100%";
             content = {
-              type = "lvm_pv";
-              vg = "vghome";
+              type = "luks";
+              name = "crypthome";
+              extraOpenArgs = [ "--allow-discards" ];
+              keyFile = null;
+              content = {
+                type = "lvm_pv";
+                vg = "vghome";
+              };
             };
           };
         };

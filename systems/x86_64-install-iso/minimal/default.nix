@@ -15,6 +15,6 @@
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAGlj5STbxgr0chPN3kzTPjSZYLBixUoEoBRWCwHqA8z amin@n550jv"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5LdF5nCTvyc7vVkcBo+KLdPChPjccy4735AfKKfSaC work301"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5LdF5nCTvyc7vVkcBo+KLdPChPjccy4735AfKKfSaC amin@hp-work"
   ];
 }
