@@ -31,14 +31,14 @@
 
           sources = {
             default = [
-              "buffer"
               "lsp"
-              "path"
+              "buffer"
               "snippets"
+              "path"
               # Community
               # "copilot"
-              "dictionary"
-              "emoji"
+              # "dictionary"
+              # "emoji"
               # "git"
               "spell"
               "ripgrep"
@@ -55,48 +55,48 @@
                 module = "blink-cmp-spell";
                 score_offset = 1;
               };
-              dictionary = {
-                name = "Dict";
-                module = "blink-cmp-dictionary";
-                min_keyword_length = 3;
-              };
-              emoji = {
-                name = "Emoji";
-                module = "blink-emoji";
-                score_offset = 1;
-              };
+              # dictionary = {
+              #   name = "Dict";
+              #   module = "blink-cmp-dictionary";
+              #   min_keyword_length = 3;
+              # };
+              # emoji = {
+              #   name = "Emoji";
+              #   module = "blink-emoji";
+              #   score_offset = 1;
+              # };
               lsp.score_offset = 4;
               dadbod = {
                 name = "Dadbod";
                 module = "vim_dadbod_completion.blink";
                 score_offset = 2;
               };
-              copilot = {
-                name = "copilot";
-                module = "blink-copilot";
-                async = false;
-                score_offset = 100;
-              };
-              git = {
-                name = "Git";
-                module = "blink-cmp-git";
-                enabled = false;
-                score_offset = 100;
-                should_show_items.__raw = ''
-                  function()
-                    return vim.o.filetype == 'gitcommit' or vim.o.filetype == 'markdown'
-                  end
-                '';
-                opts = {
-                  git_centers = {
-                    github = {
-                      issue = {
-                        on_error.__raw = "function(_,_) return true end";
-                      };
-                    };
-                  };
-                };
-              };
+              # copilot = {
+              #   name = "copilot";
+              #   module = "blink-copilot";
+              #   async = false;
+              #   score_offset = 100;
+              # };
+              # git = {
+              #   name = "Git";
+              #   module = "blink-cmp-git";
+              #   enabled = false;
+              #   score_offset = 100;
+              #   should_show_items.__raw = ''
+              #     function()
+              #       return vim.o.filetype == 'gitcommit' or vim.o.filetype == 'markdown'
+              #     end
+              #   '';
+              #   opts = {
+              #     git_centers = {
+              #       github = {
+              #         issue = {
+              #           on_error.__raw = "function(_,_) return true end";
+              #         };
+              #       };
+              #     };
+              #   };
+              # };
             };
           };
 

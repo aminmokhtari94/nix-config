@@ -19,10 +19,10 @@ in {
       telegram-desktop
 
       # deveopment
-      mongodb-compass
-      mqtt-explorer
-      redisinsight
-      postman
+      # mongodb-compass
+      # mqtt-explorer
+      # redisinsight
+      # postman
       winbox4
     ];
   };
