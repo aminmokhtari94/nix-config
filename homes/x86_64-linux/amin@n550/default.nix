@@ -13,7 +13,6 @@
     theme.name = "embarl";
     gpg.enable = false;
     kube.enable = true;
-    v2ray.enable = true;
     vpn.enable = true;
     lang = { go.enable = true; };
     desktop = {
