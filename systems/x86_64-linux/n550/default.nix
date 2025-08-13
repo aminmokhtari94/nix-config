@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }: {
+{ config, pkgs, ... }: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -191,6 +191,16 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+
+  programs.ssh = {
+    extraConfig = ''
+      Host remote-work
+        HostName 172.16.100.229
+        User amin
+        SendEnv TERM
+        SetEnv TERM=xterm-256color
+    '';
+  };
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 2080 ];
