@@ -92,8 +92,6 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  virtualisation.docker.enable = true;
-  # virtualisation.docker.storageDriver = "btrfs";
   virtualisation.libvirtd.enable = true;
 
   # Enable sound with pipewire.

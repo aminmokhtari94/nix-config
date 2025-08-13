@@ -5,7 +5,7 @@
     ./disk-config.nix
   ];
   boot.loader.grub = {
-    devices = [ "/dev/sda" ];
+    devices = [ "nodev" ];
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
@@ -22,7 +22,14 @@
   environment.shells = [ pkgs.zsh ];
   programs.zsh.enable = true;
 
-  virtualisation.docker.enable = true;
+  # networking.proxy.default = "http://172.16.100.59:2081";
+  # networking.proxy.noProxy =
+  #   "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
+  # environment.variables = {
+  #   https_proxy = "http://172.16.100.59:2081";
+  #   no_proxy =
+  #     "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
+  # };
 
   users.users.amin = {
     isNormalUser = true;

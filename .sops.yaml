@@ -4,7 +4,7 @@ keys:
   - hosts:
       - &n550 age1dk40kh8vwhk7lf5qhwmsfh2twmj7gdrkynx20lh4lmar0z4kvqgshkm289
       - &hp_work age19ntyr90hwka356y4malera78wytrl6wr6eacwqppyu86eh4p6pdst4qkn4
-      - &remote_work age1slcm6gewfmdxppnpd9f6remky3fy6gsn8l8scral7kuvsnj58dfs5p79eg
+      - &remote_work age1w9wfp2z6hnnt3yjy733eejy5qv894ml243z4ywyp3txpwvcfmdhqr4rnz5
 creation_rules:
   # - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
   - path_regex: secrets/default.yaml$
