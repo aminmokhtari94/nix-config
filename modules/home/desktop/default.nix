@@ -2,28 +2,31 @@
 with lib;
 let cfg = config.default.desktop;
 in {
-  options.default.desktop = with types; { enable = mkEnableOption "desktop"; };
+  options.default.desktop = with types; {
+    enable = mkEnableOption "desktop";
 
+    apps = mkOption {
+      type = listOf str;
+      default = [ ];
+      description = "List of desktop applications ";
+    };
+  };
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      default.wallpaper-manager
-      # files & multimedia
-      nautilus
-      mpv
+    home.packages = with pkgs;
+      [
+        default.wallpaper-manager
+        # files & multimedia
+        nautilus
+        mpv
 
-      # text & font helper
-      # font-manager
-      # wofi-emoji
+        # text & font helper
+        # font-manager
+        # wofi-emoji
 
-      gnome-calculator
-      telegram-desktop
+        gnome-calculator
+        telegram-desktop
 
-      # deveopment
-      # mongodb-compass
-      # mqtt-explorer
-      # redisinsight
-      # postman
-      winbox4
-    ];
+        winbox4
+      ] ++ cfg.apps;
   };
 }

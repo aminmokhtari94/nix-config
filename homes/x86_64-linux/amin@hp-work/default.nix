@@ -1,4 +1,4 @@
-{ ... }: {
+{ pkgs, ... }: {
   home = {
     enableNixpkgsReleaseCheck = false;
     username = "amin";
@@ -20,6 +20,7 @@
     };
     desktop = {
       enable = true;
+      apps = with pkgs; [ mongodb-compass mqtt-explorer redisinsight postman ];
       wayland = {
         hyprland = {
           enable = true;

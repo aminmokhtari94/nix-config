@@ -4,6 +4,7 @@
     ./conform.nix
     ./dadbod.nix
     ./dressing.nix
+    ./dbtpal.nix
     ./floaterm.nix
     ./markdown-preview.nix
     ./neo-tree.nix
@@ -23,11 +24,10 @@
         src = pkgs.fetchFromGitHub {
           owner = "sainnhe";
           repo = "sonokai";
-          rev = "v0.3.3"; # You can use a tag or commit hash
+          rev = "v0.3.3";
           sha256 = "sha256-QZQzflOC6cbFt7cwqnZ+y1kKWRWq05ty0x3aj6xuBTY=";
         };
       })
-      pkgs.vimPlugins.lazygit-nvim
     ];
 
     extraConfigLua = ''
@@ -51,8 +51,8 @@
           change.text = "~";
         };
       };
-
       fugitive = { enable = true; };
+      # lazygit.enble = true;
 
       nvim-autopairs.enable = true;
 
