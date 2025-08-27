@@ -6,7 +6,7 @@ in {
     enable = mkEnableOption "desktop";
 
     apps = mkOption {
-      type = listOf str;
+      type = listOf package;
       default = [ ];
       description = "List of desktop applications ";
     };
