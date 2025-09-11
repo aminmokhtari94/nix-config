@@ -176,17 +176,18 @@
 
       lspkind = {
         enable = false;
-
-        cmp = {
-          enable = false;
-          menu = {
-            nvim_lsp = "[LSP]";
-            nvim_lua = "[api]";
-            path = "[path]";
-            luasnip = "[snip]";
-            buffer = "[buffer]";
-            neorg = "[neorg]";
-            nixpkgs_maintainers = "[nixpkgs]";
+        settings = {
+          cmp = {
+            enable = false;
+            menu = {
+              nvim_lsp = "[LSP]";
+              nvim_lua = "[api]";
+              path = "[path]";
+              luasnip = "[snip]";
+              buffer = "[buffer]";
+              neorg = "[neorg]";
+              nixpkgs_maintainers = "[nixpkgs]";
+            };
           };
         };
       };

@@ -20,7 +20,12 @@
     };
     desktop = {
       enable = true;
-      apps = with pkgs; [ mongodb-compass mqtt-explorer redisinsight postman ];
+      apps = with pkgs; [
+        mongodb-compass
+        postman
+        mqtt-explorer
+        # redisinsight
+      ];
       wayland = {
         hyprland = {
           enable = true;
