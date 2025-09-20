@@ -44,16 +44,6 @@
 
       which-key.enable = true;
 
-      gitsigns = {
-        enable = true;
-        settings.signs = {
-          add.text = "+";
-          change.text = "~";
-        };
-      };
-      fugitive = { enable = true; };
-      # lazygit.enble = true;
-
       nvim-autopairs.enable = true;
 
       wakatime.enable = true;

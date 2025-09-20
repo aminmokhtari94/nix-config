@@ -23,7 +23,7 @@
       apps = with pkgs; [
         mongodb-compass
         postman
-        mqtt-explorer
+        # default.mqtt-explorer
         # redisinsight
       ];
       wayland = {

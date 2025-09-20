@@ -18,17 +18,24 @@
   programs.nix-ld.enable = true;
 
   networking.networkmanager.enable = true;
-  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
+  services.dnsmasq = {
+    enable = true;
+
+    settings = {
+      address = [
+        "/cluster.local/127.0.0.1"
+        "/kiz.local/172.18.0.9"
+        "/panel.kiz.ir/172.18.0.9"
+      ];
+      no-resolv = true;
+      server = [ "1.1.1.1" "8.8.8.8" ];
+    };
+  };
+
   networking.extraHosts = ''
-
     172.16.100.205 k8s.c02.kiz.ir
-    172.16.100.40  grafana.prometheus.cluster.local
+    172.16.100.40 grafana.prometheus.cluster.local
     172.16.100.41 acl.kiz.ir grpc.abrso.ir grpc.kiz.ir terabar.acl.kiz.ir lone.acl.kiz.ir abrso.acl.kiz.ir grpc.terabar.ir all.kiz.ir
-
-    127.0.0.1 mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
-    127.0.0.1 mongo-psmdb-db-rs0-0.mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
-    127.0.0.1 mongo-psmdb-db-rs0-1.mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
-    127.0.0.1 mongo-psmdb-db-rs0-2.mongo-psmdb-db-rs0.kiz-db.svc.cluster.local
 
     172.16.100.201 redpanda-0
     172.16.100.209 redpanda-1
