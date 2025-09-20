@@ -34,6 +34,27 @@
   #     "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
   # };
 
+  services.dnsmasq = {
+    enable = true;
+
+    settings = {
+      address = [
+        "/cluster.local/127.0.0.1"
+        "/kiz.local/172.18.0.9"
+        "/panel.kiz.ir/172.18.0.9"
+      ];
+      no-resolv = true;
+      server = [ "1.1.1.1" "8.8.8.8" ];
+    };
+  };
+
+  networking.networkmanager.enable = true;
+  networking.resolvconf.enable = true;
+
+  networking.extraHosts = ''
+    172.16.100.205 k8s.c02.kiz.ir
+  '';
+
   users.users.amin = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets.amin-passwd.path;
@@ -45,6 +66,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5LdF5nCTvyc7vVkcBo+KLdPChPjccy4735AfKKfSaC work301"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsmJzyqZ3jvdz0C8AyMzkBwAXxcLAk12+P0+5Su1n/h phone_termius"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINby0+z+P0CzDer9jtyW6ppjTXwYV4g7pIum4MPsWkkZ phone_termux"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG1ldhcO45HmHAgGyi7KQkTetKdBCqlrtifK37Ez726A amin@worklaptop"
     ];
   };
 
