@@ -4,6 +4,7 @@
     ./autocommands.nix
     ./buffer.nix
     ./completion.nix
+    ./git.nix
     ./keymappings.nix
     ./lsp.nix
     ./options.nix
