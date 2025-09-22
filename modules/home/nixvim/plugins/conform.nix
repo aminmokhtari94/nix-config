@@ -12,7 +12,7 @@
       settings = {
         format_on_save = {
           lspFallback = true;
-          timeoutMs = 500;
+          # timeoutMs = 500;
         };
         notify_on_error = true;
 
@@ -56,6 +56,7 @@
           python = [ "black" ];
           lua = [ "stylua" ];
           nix = [ "nixfmt" ];
+          go = [ "gofmt" "goimports" ];
           # rust = [ "rustfmt" ];
           # liquidsoap = [ "liquidsoap-prettier" ];
           yaml = [ "yamllint" "yamlfmt" ];

@@ -7,63 +7,6 @@
         lspServersToEnable = "all";
       };
 
-      none-ls = {
-        enable = true;
-        # enableLspFormat = true;
-        settings = {
-          enableLspFormat = false;
-          updateInInsert = false;
-          onAttach = ''
-            function(client, bufnr)
-                if client.supports_method "textDocument/formatting" then
-                  vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
-                  vim.api.nvim_create_autocmd("BufWritePre", {
-                    group = augroup,
-                    buffer = bufnr,
-                    callback = function()
-                      vim.lsp.buf.format { bufnr = bufnr }
-                    end,
-                  })
-                end
-              end
-          '';
-        };
-        sources = {
-          # code_actions = {
-          #   gitsigns.enable = true;
-          #   statix.enable = true;
-          # };
-          # diagnostics = {
-          #   checkstyle = { enable = true; };
-          #   statix = { enable = true; };
-          # };
-          formatting = {
-            nixfmt = { enable = true; };
-            buf.enable = true;
-            prettier = {
-              enable = true;
-              disableTsServerFormatter = true;
-              settings = ''
-                {
-                  extra_args = { "--no-semi", "--single-quote" },
-                }
-              '';
-            };
-            # alejandra = { enable = false; };
-            # google_java_format = { enable = true; };
-            # stylua = { enable = true; };
-            # black = {
-            #   enable = true;
-            #   settings = ''
-            #     {
-            #       extra_args = { "--fast" },
-            #     }
-            #   '';
-            # };
-          };
-        };
-      };
-
       lsp = {
         enable = true;
 
@@ -81,7 +24,6 @@
             gt = "type_definition";
             gi = "implementation";
             K = "hover";
-            gr = "rename";
             "<F2>" = "rename";
           };
         };
@@ -117,13 +59,26 @@
           clangd = {
             # C/C++
             enable = true;
-            filetypes = [ "c" "cpp" "cc" "mpp" "ixx" ];
+            filetypes = [
+              "c"
+              "cpp"
+              "cc"
+              "mpp"
+              "ixx"
+            ];
           };
           ltex = {
             enable = false;
             settings = {
-              enabled =
-                [ "astro" "html" "latex" "markdown" "text" "tex" "gitcommit" ];
+              enabled = [
+                "astro"
+                "html"
+                "latex"
+                "markdown"
+                "text"
+                "tex"
+                "gitcommit"
+              ];
               completionEnabled = true;
               language = "en-US de-DE nl";
               # dictionary = {
@@ -162,16 +117,19 @@
 
       trouble = {
         enable = true;
-        settings = { auto_close = true; };
+        settings = {
+          auto_close = true;
+        };
       };
 
       lspsaga = {
         enable = true;
         settings = {
-          beacon = { enable = true; };
+          beacon = {
+            enable = true;
+          };
           ui = {
-            border =
-              "rounded"; # One of none, single, double, rounded, solid, shadow
+            border = "rounded"; # One of none, single, double, rounded, solid, shadow
             codeAction = "💡"; # Can be any symbol you want 💡
           };
           hover = {
@@ -193,7 +151,10 @@
             numShortcut = true;
             keys = {
               exec = "<CR>";
-              quit = [ "<Esc>" "q" ];
+              quit = [
+                "<Esc>"
+                "q"
+              ];
             };
           };
           lightbulb = {
@@ -201,12 +162,17 @@
             sign = false;
             virtualText = true;
           };
-          implement = { enable = false; };
+          implement = {
+            enable = false;
+          };
           rename = {
             autoSave = false;
             keys = {
               exec = "<CR>";
-              quit = [ "<C-k>" "<Esc>" ];
+              quit = [
+                "<C-k>"
+                "<Esc>"
+              ];
               select = "x";
             };
           };

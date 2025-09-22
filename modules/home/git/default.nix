@@ -48,6 +48,8 @@
       pull = { ff = "only"; };
       commit = { verbose = true; };
       url."git@github.com:".insteadOf = "https://github.com/";
+      url."git@git.kiz.ir:".insteadOf = "https://git.kiz.ir/";
+      credential.helper = "store";
     };
   };
 
