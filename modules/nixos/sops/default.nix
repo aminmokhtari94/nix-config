@@ -11,7 +11,13 @@
       generateKey = true;
     };
 
-    secrets.amin-passwd = { neededForUsers = true; };
+    secrets.amin-passwd = {
+      neededForUsers = true;
+    };
     secrets.wakatime-api-key = { };
+    secrets.smug-kiz-operator = {
+      owner = "amin";
+      path = "/home/amin/.config/smug/kiz-operator.yml";
+    };
   };
 }
