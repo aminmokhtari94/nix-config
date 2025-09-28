@@ -8,7 +8,7 @@
   };
 
   default = {
-    theme.name = "embarl";
+    theme.name = "inspored";
     gpg.enable = false;
     kube.enable = true;
     lang = {
