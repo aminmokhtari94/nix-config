@@ -13,7 +13,9 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernel.sysctl = { "net.ipv4.ip_forward" = true; };
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = true;
+  };
 
   programs.nix-ld.enable = true;
 
@@ -24,11 +26,14 @@
     settings = {
       address = [
         "/cluster.local/127.0.0.1"
-        "/kiz.local/172.18.0.9"
-        "/panel.kiz.ir/172.18.0.9"
+        "/kiz.local/172.18.0.90"
+        # "/panel.kiz.ir/172.16.100.90"
       ];
       no-resolv = true;
-      server = [ "1.1.1.1" "8.8.8.8" ];
+      server = [
+        "1.1.1.1"
+        "8.8.8.8"
+      ];
     };
   };
 
@@ -73,7 +78,9 @@
   # needs to be install on NixOS Module
   # Without this, you may have issues with XDG Portals, or missing session files in your Display Manager.
   programs.hyprland.enable = true;
-  xdg.portal = { extraPortals = [ pkgs.xdg-desktop-portal-gtk ]; };
+  xdg.portal = {
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
 
   environment.shells = [ pkgs.zsh ];
   programs.zsh.enable = true;
@@ -120,7 +127,9 @@
 
   # programs.firefox.enable = true;
 
-  default.v2ray = { enable = true; };
+  default.v2ray = {
+    enable = true;
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -174,7 +183,13 @@
   #   "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 2080 2081 3000 8081 ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    2080
+    2081
+    3000
+    8081
+  ];
   #networking.enableIPv4Forwarding = true;
   networking.nat = {
     enable = true;

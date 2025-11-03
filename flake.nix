@@ -1,7 +1,12 @@
 {
   description = "Amin Mokhtari's Nixos config flake and home-manager";
 
-  nixConfig = { experimental-features = [ "nix-command" "flakes" ]; };
+  nixConfig = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+  };
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
@@ -41,11 +46,18 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "unstable";
     };
+
+    android-nixpkgs = {
+      url = "github:tadfisher/android-nixpkgs";
+      inputs.nixpkgs.follows = "unstable";
+    };
+
   };
 
   # Snowfall Lib is a library that makes it easy to manage your Nix flake by imposing an opinionated file structure.
   # https://snowfall.org/guides/lib/quickstart/
-  outputs = inputs:
+  outputs =
+    inputs:
     inputs.snowfall-lib.mkFlake {
       inherit inputs;
       src = ./.;
