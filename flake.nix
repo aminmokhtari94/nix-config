@@ -51,6 +51,10 @@
       url = "github:tadfisher/android-nixpkgs";
       inputs.nixpkgs.follows = "unstable";
     };
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "unstable";
+    };
 
   };
 

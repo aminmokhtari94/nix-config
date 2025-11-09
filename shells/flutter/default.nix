@@ -11,7 +11,9 @@ let
       cmdline-tools-latest
       platform-tools
       build-tools-34-0-0
-      platforms-android-34
+      platforms-android-35
+      ndk-26-3-11579264
+      cmake-3-22-1
     ]
   );
 in
@@ -20,7 +22,6 @@ mkShell {
     android-sdk
     gradle
     openjdk
-    nodejs
-    pnpm
+    flutter
   ];
 }
