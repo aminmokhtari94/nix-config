@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  home.packages = [ pkgs.devenv ];
+  # home.packages = [ pkgs.devenv ];
 
   nix.extraOptions = ''
     extra-substituters = https://devenv.cachix.org

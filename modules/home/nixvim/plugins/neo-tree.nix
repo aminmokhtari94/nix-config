@@ -5,7 +5,9 @@
         mode = [ "n" ];
         key = "<leader>e";
         action = "<cmd>Neotree toggle<cr>";
-        options = { desc = "Open/Close Neotree"; };
+        options = {
+          desc = "Open/Close Neotree";
+        };
       }
       {
         mode = [ "n" ];
@@ -19,26 +21,30 @@
             end
           end
         '';
-        options = { desc = "Focus Neotree"; };
+        options = {
+          desc = "Focus Neotree";
+        };
       }
     ];
 
     plugins.neo-tree = {
       enable = true;
 
-      closeIfLastWindow = true;
-      window = {
-        width = 30;
-        autoExpandWidth = true;
-        mappings = {
-          l = "open";
-          h = "close_node";
+      settings = {
+        close_if_last_window = true;
+        window = {
+          width = 30;
+          autoExpandWidth = true;
+          mappings = {
+            l = "open";
+            h = "close_node";
+          };
         };
-      };
-      filesystem = {
-        followCurrentFile = {
-          enabled = true;
-          leaveDirsOpen = true;
+        filesystem = {
+          follow_current_file = {
+            enabled = true;
+            leave_dirs_open = true;
+          };
         };
       };
     };

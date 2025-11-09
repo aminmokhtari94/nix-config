@@ -20,7 +20,10 @@
 
   programs.ripgrep = {
     enable = true;
-    arguments = [ "--colors=match:bg:yellow" "--colors=match:fg:black" ];
+    arguments = [
+      "--colors=match:bg:yellow"
+      "--colors=match:fg:black"
+    ];
   };
 
   programs.bat.enable = true;
@@ -38,7 +41,7 @@
       "/home/amin/Notes"
     ];
     defaultKeymap = "viins";
-    dotDir = ".config/zsh";
+    dotDir = config.xdg.configHome;
     plugins = [
       {
         name = "fzf-tab";
@@ -57,7 +60,10 @@
     ];
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "sudo" ];
+      plugins = [
+        "git"
+        "sudo"
+      ];
     };
     syntaxHighlighting.enable = true;
     shellGlobalAliases = {
@@ -195,7 +201,10 @@
     changeDirWidgetOptions = [
       "--preview '${pkgs.eza}/bin/eza --tree --icons --color=always --level 3 --git-ignore {}'"
     ];
-    defaultOptions = [ "--reverse" "--ansi" ];
+    defaultOptions = [
+      "--reverse"
+      "--ansi"
+    ];
   };
 
   #programs.skim = {
@@ -214,5 +223,7 @@
   #  git = true;
   #};
 
-  programs.btop = { enable = true; };
+  programs.btop = {
+    enable = true;
+  };
 }
