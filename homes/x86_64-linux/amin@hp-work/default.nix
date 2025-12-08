@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   home = {
     enableNixpkgsReleaseCheck = false;
     username = "amin";
@@ -16,6 +17,7 @@
     vpn.enable = true;
     lang = {
       go.enable = true;
+      nodejs.enable = true;
       python.enable = true;
     };
     desktop = {
@@ -45,7 +47,9 @@
     };
   };
 
-  keyboard = { options = "grp:alt_shift_toggle"; };
+  keyboard = {
+    options = "grp:alt_shift_toggle";
+  };
 
   monitors = [
     {
@@ -55,7 +59,11 @@
       scale = "1";
       transform = "1";
       refreshRate = 60;
-      workspaces = [ "7" "8" "9" ];
+      workspaces = [
+        "7"
+        "8"
+        "9"
+      ];
       wallpaper = "~/Pictures/wallpaper-DP-3.jpg";
     }
     {
@@ -65,7 +73,11 @@
       x = 1080;
       scale = "1";
       refreshRate = 60;
-      workspaces = [ "1" "2" "3" ];
+      workspaces = [
+        "1"
+        "2"
+        "3"
+      ];
       wallpaper = "~/Pictures/wallpaper-DP-1.jpg";
     }
     {
@@ -75,7 +87,11 @@
       x = 3000;
       scale = "1";
       refreshRate = 60;
-      workspaces = [ "4" "5" "6" ];
+      workspaces = [
+        "4"
+        "5"
+        "6"
+      ];
       wallpaper = "~/Pictures/wallpaper-DP-2.jpg";
     }
   ];
