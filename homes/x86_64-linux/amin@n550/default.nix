@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   home = {
     enableNixpkgsReleaseCheck = false;
     username = "amin";
@@ -14,13 +15,15 @@
     gpg.enable = false;
     kube.enable = true;
     vpn.enable = true;
-    lang = { go.enable = true; };
+    lang = {
+      go.enable = true;
+    };
     desktop = {
       enable = true;
       wayland = {
         hyprland = {
           enable = true;
-          autostart = [ "nekoray" ];
+          autostart = [ "throne" ];
         };
       };
       browser.enable = true;
@@ -29,20 +32,33 @@
       wayland.waybar.enable = true;
       dunst.enable = true;
       nm-applet.enable = true;
-      editor = { vscode.enable = true; };
+      editor = {
+        vscode.enable = true;
+      };
     };
   };
 
-  keyboard = { options = "grp:alt_shift_toggle"; };
+  keyboard = {
+    options = "grp:alt_shift_toggle";
+  };
 
-  monitors = [{
-    name = "eDP-1";
-    width = 1920;
-    height = 1080;
-    scale = "1";
-    refreshRate = 60;
-    workspaces = [ "1" "2" "3" "4" "5" "6" ];
-    wallpaper = "~/Pictures/wallpaper.jpg";
-  }];
+  monitors = [
+    {
+      name = "eDP-1";
+      width = 1920;
+      height = 1080;
+      scale = "1";
+      refreshRate = 60;
+      workspaces = [
+        "1"
+        "2"
+        "3"
+        "4"
+        "5"
+        "6"
+      ];
+      wallpaper = "~/Pictures/wallpaper.jpg";
+    }
+  ];
 
 }

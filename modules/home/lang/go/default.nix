@@ -43,5 +43,10 @@ in
       # ];
 
     };
+    xdg.configFile."go/env".text = ''
+      GONOSUMDB=github.com/RahkarSanat/*,git.kiz.ir/*
+      GOPRIVATE=git.kiz.ir/*
+    '';
+    xdg.configFile."go/env".force = true;
   };
 }

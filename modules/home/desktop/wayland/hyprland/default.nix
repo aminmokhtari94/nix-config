@@ -1,8 +1,15 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.default.desktop.wayland.hyprland;
-in {
+let
+  cfg = config.default.desktop.wayland.hyprland;
+in
+{
   options.default.desktop.wayland.hyprland = with types; {
     enable = mkEnableOption "hyprland";
 
@@ -68,11 +75,13 @@ in {
           ignore_empty_input = true;
         };
 
-        background = [{
-          path = "screenshot";
-          blur_passes = 3;
-          blur_size = 8;
-        }];
+        background = [
+          {
+            path = "screenshot";
+            blur_passes = 3;
+            blur_size = 8;
+          }
+        ];
 
         label = {
           text = "$LAYOUT";
@@ -84,19 +93,21 @@ in {
           valign = "bottom";
         };
 
-        input-field = [{
-          size = "200, 50";
-          position = "0, -80";
-          monitor = "";
-          dots_center = true;
-          fade_on_empty = false;
-          font_color = "rgb(202, 211, 245)";
-          inner_color = "rgb(91, 96, 120)";
-          outer_color = "rgb(24, 25, 38)";
-          outline_thickness = 5;
-          placeholder_text = "Password...";
-          shadow_passes = 2;
-        }];
+        input-field = [
+          {
+            size = "200, 50";
+            position = "0, -80";
+            monitor = "";
+            dots_center = true;
+            fade_on_empty = false;
+            font_color = "rgb(202, 211, 245)";
+            inner_color = "rgb(91, 96, 120)";
+            outer_color = "rgb(24, 25, 38)";
+            outline_thickness = 5;
+            placeholder_text = "Password...";
+            shadow_passes = 2;
+          }
+        ];
       };
     };
 
@@ -122,14 +133,20 @@ in {
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland.enable = true;
+      # set the Hyprland and XDPH packages to null to use the ones from the NixOS module
+      package = null;
+      portalPackage = null;
       settings = {
-        exec-once =
-          [ "hyprpaper" "hyprctl setcursor Bibata-Modern-Ice 22" "kitty" ]
-          ++ cfg.autostart;
+        exec-once = [
+          "hyprpaper"
+          "hyprctl setcursor Bibata-Modern-Ice 22"
+          "kitty"
+        ]
+        ++ cfg.autostart;
 
-        workspace = lib.lists.flatten
-          (map (m: map (w: "${w}, monitor:${m.name}") (m.workspaces))
-            (config.monitors));
+        workspace = lib.lists.flatten (
+          map (m: map (w: "${w}, monitor:${m.name}") (m.workspaces)) (config.monitors)
+        );
 
         env = [
           "XCURSOR_SIZE,24"
@@ -162,7 +179,9 @@ in {
           preserve_split = true;
         };
 
-        master = { orientation = "master"; };
+        master = {
+          orientation = "master";
+        };
 
         decoration = {
           rounding = 5;
@@ -198,7 +217,9 @@ in {
           key_press_enables_dpms = true;
         };
 
-        xwayland = { force_zero_scaling = true; };
+        xwayland = {
+          force_zero_scaling = true;
+        };
 
         input = {
           kb_layout = "us,ir";
@@ -214,9 +235,10 @@ in {
         };
 
         gestures = {
-          workspace_swipe = true;
-          workspace_swipe_distance = 200;
-          workspace_swipe_forever = true;
+          # TODO fix swipe
+          # workspace_swipe = true;
+          # workspace_swipe_distance = 200;
+          # workspace_swipe_forever = true;
         };
 
         device = [
@@ -232,23 +254,24 @@ in {
           }
         ];
 
-        monitor = map (m:
+        monitor = map (
+          m:
           let
-            resolution = "${toString m.width}x${toString m.height}@${
-                toString m.refreshRate
-              }";
+            resolution = "${toString m.width}x${toString m.height}@${toString m.refreshRate}";
             position = "${toString m.x}x${toString m.y}";
             transform = "transform, ${m.transform}";
-          in "${m.name},${
-            if m.enabled then
-              "${resolution},${position},${toString m.scale},${transform}"
-            else
-              "disable"
-          }") (config.monitors);
+          in
+          "${m.name},${
+            if m.enabled then "${resolution},${position},${toString m.scale},${transform}" else "disable"
+          }"
+        ) (config.monitors);
 
         animations = {
           enabled = true;
-          bezier = [ "overshot,0.05,0.9,0.1,1.1" "overshot,0.13,0.99,0.29,1." ];
+          bezier = [
+            "overshot,0.05,0.9,0.1,1.1"
+            "overshot,0.13,0.99,0.29,1"
+          ];
           animation = [
             "windows,1,7,overshot,slide"
             "border,1,10,default"

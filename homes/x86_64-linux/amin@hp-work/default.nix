@@ -31,7 +31,7 @@
       wayland = {
         hyprland = {
           enable = true;
-          autostart = [ "nekoray" ];
+          autostart = [ "throne" ];
         };
       };
       browser.enable = true;
