@@ -189,6 +189,7 @@
     2081
     3000
     8081
+    8443
   ];
   #networking.enableIPv4Forwarding = true;
   networking.nat = {

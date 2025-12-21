@@ -322,7 +322,7 @@ in
           "$mainMod, e, exec, kitty --title='kitty-float' --override initial_window_width=80c --override initial_window_height=20c qke"
 
           "$mainMod, n, exec, nautilus"
-          "$mainMod, t, exec, telegram-desktop"
+          "$mainMod, t, exec, Telegram"
           "$mainMod, P, pseudo, # dwindle"
           "$mainMod, s, togglespecialworkspace, notes"
           "$mainMod SHIFT, S, movetoworkspace, special:notes"

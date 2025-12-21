@@ -23,7 +23,7 @@
       wayland = {
         hyprland = {
           enable = true;
-          autostart = [ "throne" ];
+          autostart = [ "Throne" ];
         };
       };
       browser.enable = true;
