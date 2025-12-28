@@ -16,6 +16,10 @@ in
   config = mkIf cfg.enable {
     programs.go = {
       enable = true;
+      env = {
+        GONOSUMDB = "github.com/RahkarSanat/*,git.kiz.ir/*";
+        GOPRIVATE = "github.com/RahkarSanat/*,git.kiz.ir/*";
+      };
     };
     home.packages = with pkgs; [
       gopls
@@ -43,10 +47,5 @@ in
       # ];
 
     };
-    xdg.configFile."go/env".text = ''
-      GONOSUMDB=github.com/RahkarSanat/*,git.kiz.ir/*
-      GOPRIVATE=git.kiz.ir/*
-    '';
-    xdg.configFile."go/env".force = true;
   };
 }

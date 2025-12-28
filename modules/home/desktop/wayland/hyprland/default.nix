@@ -54,7 +54,7 @@ in
         listener = [
           {
             timeout = 300;
-            on-timeout = "loginctl lock-session";
+            on-timeout = "hyprlock --grace 15";
           }
           {
             timeout = 360;
@@ -69,7 +69,6 @@ in
       settings = {
         general = {
           disable_loading_bar = true;
-          grace = 15;
           hide_cursor = true;
           no_fade_in = false;
           ignore_empty_input = true;
@@ -401,7 +400,7 @@ in
           "$mainMod, bracketright, focusmonitor, r"
           "$mainMod, bracketleft, focusmonitor, l"
 
-          ", Pause, exec, hyprlock"
+          ", Pause, exec, hyprlock --grace 5"
           "CTRL SHIFT, Pause, exec, hyprlock --immediate & systemctl suspend"
           "$mainMod ALT CTRL, equal, exec, dunstctl set-paused toggle"
           "$mainMod ALT CTRL, bracketright, exec, systemctl reboot"
