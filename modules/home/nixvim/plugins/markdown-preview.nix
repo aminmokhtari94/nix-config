@@ -9,10 +9,12 @@
       };
     };
 
-    files."after/ftplugin/markdown.lua".keymaps = [{
-      mode = "n";
-      key = "<leader>m";
-      action = ":MarkdownPreview<cr>";
-    }];
+    files."after/ftplugin/markdown.lua".keymaps = [
+      {
+        mode = "n";
+        key = "<leader>m";
+        action = ":MarkdownPreview<cr>";
+      }
+    ];
   };
 }

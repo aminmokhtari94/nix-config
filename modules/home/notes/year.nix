@@ -39,4 +39,3 @@ writeShellScriptBin "dyear" ''
     nvim $FILEPATH
   fi
 ''
-

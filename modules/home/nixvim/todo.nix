@@ -7,18 +7,20 @@
 
     match.TODO = "TODO";
 
-    keymaps = [{
-      mode = "n";
-      key = "<C-t>";
-      action.__raw = ''
-        function()
-          require('telescope.builtin').live_grep({
-            default_text="TODO",
-            initial_mode="normal"
-          })
-        end
-      '';
-      options.silent = true;
-    }];
+    keymaps = [
+      {
+        mode = "n";
+        key = "<C-t>";
+        action.__raw = ''
+          function()
+            require('telescope.builtin').live_grep({
+              default_text="TODO",
+              initial_mode="normal"
+            })
+          end
+        '';
+        options.silent = true;
+      }
+    ];
   };
 }

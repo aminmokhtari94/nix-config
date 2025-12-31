@@ -1,13 +1,24 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.default.desktop.gtk;
-in {
-  options.default.desktop.gtk = with types; { enable = mkEnableOption "gtk"; };
+let
+  cfg = config.default.desktop.gtk;
+in
+{
+  options.default.desktop.gtk = with types; {
+    enable = mkEnableOption "gtk";
+  };
 
   config = mkIf cfg.enable {
     dconf.settings = {
-      "org/gnome/desktop/interface" = { color-scheme = "prefer-dark"; };
+      "org/gnome/desktop/interface" = {
+        color-scheme = "prefer-dark";
+      };
     };
 
     gtk = {
@@ -15,7 +26,12 @@ in {
       theme = {
         name = "Colloid-Teal-Dark";
         package = pkgs.colloid-gtk-theme.override {
-          themeVariants = [ "purple" "teal" "grey" "green" ];
+          themeVariants = [
+            "purple"
+            "teal"
+            "grey"
+            "green"
+          ];
           tweaks = [ "black" ];
         };
       };
@@ -28,7 +44,14 @@ in {
       iconTheme = {
         name = "Colloid-dracula-dark";
         package = pkgs.colloid-icon-theme.override {
-          colorVariants = [ "default" "purple" "teal" "grey" "green" "pink" ];
+          colorVariants = [
+            "default"
+            "purple"
+            "teal"
+            "grey"
+            "green"
+            "pink"
+          ];
           schemeVariants = [ "dracula" ];
         };
       };

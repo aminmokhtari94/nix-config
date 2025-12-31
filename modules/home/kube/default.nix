@@ -1,8 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-let cfg = config.default.kube;
-in {
-  options.default.kube = with types; { enable = mkEnableOption "kube"; };
+let
+  cfg = config.default.kube;
+in
+{
+  options.default.kube = with types; {
+    enable = mkEnableOption "kube";
+  };
 
   config = mkIf cfg.enable {
     programs.zsh = {

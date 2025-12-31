@@ -1,4 +1,11 @@
-{ modulesPath, lib, pkgs, config, ... }@args: {
+{
+  modulesPath,
+  lib,
+  pkgs,
+  config,
+  ...
+}@args:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -20,7 +27,10 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  environment.systemPackages = map lib.lowPrio [ pkgs.curl pkgs.gitMinimal ];
+  environment.systemPackages = map lib.lowPrio [
+    pkgs.curl
+    pkgs.gitMinimal
+  ];
 
   environment.shells = [ pkgs.zsh ];
   programs.zsh.enable = true;
@@ -44,7 +54,10 @@
         "/panel.kiz.ir/172.18.0.9"
       ];
       no-resolv = true;
-      server = [ "1.1.1.1" "8.8.8.8" ];
+      server = [
+        "1.1.1.1"
+        "8.8.8.8"
+      ];
     };
   };
 
@@ -58,8 +71,11 @@
   users.users.amin = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets.amin-passwd.path;
-    extraGroups =
-      [ "wheel" "docker" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [
+      "wheel"
+      "docker"
+      "networkmanager"
+    ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAGlj5STbxgr0chPN3kzTPjSZYLBixUoEoBRWCwHqA8z amin@n550jv"

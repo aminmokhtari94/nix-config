@@ -137,7 +137,11 @@
         };
         ui-select = {
           enable = true;
-          settings = { specific_opts = { codeactions = true; }; };
+          settings = {
+            specific_opts = {
+              codeactions = true;
+            };
+          };
         };
       };
     };

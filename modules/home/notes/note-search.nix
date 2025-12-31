@@ -5,7 +5,8 @@ let
   bat = pkgs.bat;
   fzf = pkgs.fzf;
 
-in pkgs.writeShellScriptBin "note-search" ''
+in
+pkgs.writeShellScriptBin "note-search" ''
   rm -f /tmp/rg-fzf-{r,f}
   RG_PREFIX="${rg}/bin/rg -l --color=always --smart-case "
   INITIAL_QUERY="''${*:-}"

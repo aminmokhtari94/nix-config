@@ -1,19 +1,28 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
-let tmux = pkgs.tmux;
-in {
+let
+  tmux = pkgs.tmux;
+in
+{
 
   programs.zsh = {
     shellAliases = {
-      s =
-        "smug start $(smug list | fzf --height=10 --reverse --no-sort --prompt='Select session: ')";
+      s = "smug start $(smug list | fzf --height=10 --reverse --no-sort --prompt='Select session: ')";
       mux = "${tmux}/bin/tmux";
       muxa = "${tmux}/bin/tmux a";
       muxk = "${tmux}/bin/tmux kill-server";
     };
   };
 
-  home.packages = with pkgs; [ smug imagemagick ];
+  home.packages = with pkgs; [
+    smug
+    imagemagick
+  ];
 
   programs.tmux = {
     enable = true;
@@ -42,9 +51,9 @@ in {
           set -g @fuzzback-popup 1
           set -g @fuzzback-popup-size '90%'
           set -g @fuzzback-fzf-colors '${
-            lib.strings.concatStringsSep ","
-            (lib.attrsets.mapAttrsToList (name: value: name + ":" + value)
-              config.programs.fzf.colors)
+            lib.strings.concatStringsSep "," (
+              lib.attrsets.mapAttrsToList (name: value: name + ":" + value) config.programs.fzf.colors
+            )
           }'
         '';
       }

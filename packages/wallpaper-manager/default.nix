@@ -1,7 +1,13 @@
-{ writeShellScriptBin, curl, wofi }:
+{
+  writeShellScriptBin,
+  curl,
+  wofi,
+}:
 
-let wallpaperDir = "$HOME/Pictures";
-in writeShellScriptBin "wallpaper-manager" ''
+let
+  wallpaperDir = "$HOME/Pictures";
+in
+writeShellScriptBin "wallpaper-manager" ''
   mkdir -p ${wallpaperDir}
   DP=$(hyprctl monitors | awk '/Monitor/{monitor=$2} /focused: yes/{print monitor}')
   if [[ "$1" == "download" ]]; then

@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   home = {
     enableNixpkgsReleaseCheck = false;
     username = "amin";
@@ -15,6 +16,8 @@
       go.enable = true;
       python.enable = false;
     };
-    desktop = { enable = false; };
+    desktop = {
+      enable = false;
+    };
   };
 }

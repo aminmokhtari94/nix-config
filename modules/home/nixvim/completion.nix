@@ -1,12 +1,16 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   programs.nixvim = {
-    opts.completeopt = [ "menu" "menuone" "noselect" ];
+    opts.completeopt = [
+      "menu"
+      "menuone"
+      "noselect"
+    ];
 
-    extraPlugins = with pkgs.vimPlugins;
-      [
-        # blink-cmp-copilot
-        blink-ripgrep-nvim
-      ];
+    extraPlugins = with pkgs.vimPlugins; [
+      # blink-cmp-copilot
+      blink-ripgrep-nvim
+    ];
 
     plugins = {
       luasnip.enable = true;
@@ -24,10 +28,16 @@
         setupLspCapabilities = true;
 
         settings = {
-          keymap = { preset = "super-tab"; };
-          signature = { enabled = true; };
+          keymap = {
+            preset = "super-tab";
+          };
+          signature = {
+            enabled = true;
+          };
 
-          snippets = { preset = "luasnip"; };
+          snippets = {
+            preset = "luasnip";
+          };
 
           sources = {
             default = [
@@ -43,7 +53,13 @@
               "spell"
               "ripgrep"
             ];
-            per_filetype = { sql = [ "snippets" "dadbod" "buffer" ]; };
+            per_filetype = {
+              sql = [
+                "snippets"
+                "dadbod"
+                "buffer"
+              ];
+            };
             providers = {
               ripgrep = {
                 name = "Ripgrep";
@@ -158,12 +174,20 @@
                 ];
               };
             };
-            trigger = { show_in_snippet = false; };
+            trigger = {
+              show_in_snippet = false;
+            };
             documentation = {
               auto_show = true;
-              window = { border = "single"; };
+              window = {
+                border = "single";
+              };
             };
-            accept = { auto_brackets = { enabled = false; }; };
+            accept = {
+              auto_brackets = {
+                enabled = false;
+              };
+            };
           };
         };
       };
@@ -172,7 +196,9 @@
     # ================ cmp plugin (disabled) ==============
     plugins = {
 
-      cmp-spell = { enable = false; };
+      cmp-spell = {
+        enable = false;
+      };
 
       lspkind = {
         enable = false;
@@ -196,8 +222,7 @@
         enable = false;
 
         settings = {
-          snippet.expand =
-            "function(args) require('luasnip').lsp_expand(args.body) end";
+          snippet.expand = "function(args) require('luasnip').lsp_expand(args.body) end";
 
           mapping = {
             "<C-d>" = "cmp.mapping.scroll_docs(-4)";
@@ -205,8 +230,7 @@
             "<C-Space>" = "cmp.mapping.complete()";
             "<C-e>" = "cmp.mapping.close()";
             "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
-            "<S-Tab>" =
-              "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+            "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
             "<CR>" = "cmp.mapping.confirm({ select = true })";
           };
 

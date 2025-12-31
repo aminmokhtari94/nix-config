@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   imports = [
     ./comment.nix
     ./conform.nix
@@ -40,9 +41,13 @@
 
       colorful-menu.enable = true;
 
-      noice = { enable = true; };
+      noice = {
+        enable = true;
+      };
 
       which-key.enable = true;
+
+      tmux-navigator.enable = true;
 
       nvim-autopairs.enable = true;
 
@@ -61,8 +66,13 @@
         enable = true;
         settings = {
           highlight = true;
-          ft_blocklist =
-            [ "checkhealth" "floaterm" "lspinfo" "neo-tree" "TelescopePrompt" ];
+          ft_blocklist = [
+            "checkhealth"
+            "floaterm"
+            "lspinfo"
+            "neo-tree"
+            "TelescopePrompt"
+          ];
         };
       };
     };

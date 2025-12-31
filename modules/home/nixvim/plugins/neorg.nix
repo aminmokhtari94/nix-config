@@ -3,12 +3,14 @@
     files."after/ftplugin/norg.lua" = {
       localOpts.conceallevel = 1;
 
-      keymaps = [{
-        mode = "n";
-        key = "<C-g>";
-        action = ":Neorg toc<CR>";
-        options.silent = true;
-      }];
+      keymaps = [
+        {
+          mode = "n";
+          key = "<C-g>";
+          action = ":Neorg toc<CR>";
+          options.silent = true;
+        }
+      ];
     };
 
     plugins.neorg = {

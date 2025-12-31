@@ -1,8 +1,16 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.default.theme;
-in {
+let
+  cfg = config.default.theme;
+in
+{
   config = mkIf (cfg.name == "embark") {
     # programs.neovim.plugins = [{
     #   plugin = pkgs.vimUtils.buildVimPlugin {

@@ -1,8 +1,15 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.default.gpg;
-in {
+let
+  cfg = config.default.gpg;
+in
+{
   options.default.gpg = with types; {
     enable = mkEnableOption "gpg";
 
@@ -22,15 +29,19 @@ in {
   config = mkIf cfg.enable {
     programs.gpg = {
       enable = true;
-      publicKeys = [{
-        source = ./amin-n550.asc;
-        trust = 5;
-      }];
+      publicKeys = [
+        {
+          source = ./amin-n550.asc;
+          trust = 5;
+        }
+      ];
       settings = {
         throw-keyids = true;
         no-autostart = !cfg.autostart;
       };
-      scdaemonSettings = { disable-ccid = true; };
+      scdaemonSettings = {
+        disable-ccid = true;
+      };
     };
 
     services.gpg-agent = {

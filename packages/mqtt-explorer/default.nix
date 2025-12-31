@@ -1,14 +1,18 @@
-{ lib, fetchurl, appimageTools, }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "mqtt-explorer";
   version = "0.4.0-beta.6";
   src = fetchurl {
-    url =
-      "https://github.com/thomasnordquist/MQTT-Explorer/releases/download/v${version}/MQTT-Explorer-${version}.AppImage";
+    url = "https://github.com/thomasnordquist/MQTT-Explorer/releases/download/v${version}/MQTT-Explorer-${version}.AppImage";
     sha256 = "sha256-zEosMda2vtq+U+Lrvl6DExvT5cGPbDz0eJo7GRlVzVA=";
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''

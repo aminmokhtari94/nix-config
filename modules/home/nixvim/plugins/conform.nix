@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   programs.nixvim = {
     extraPackages = with pkgs; [ shfmt ];
     plugins.conform-nvim = {
@@ -56,10 +57,16 @@
           python = [ "black" ];
           lua = [ "stylua" ];
           nix = [ "nixfmt" ];
-          go = [ "gofmt" "goimports" ];
+          go = [
+            "gofmt"
+            "goimports"
+          ];
           # rust = [ "rustfmt" ];
           # liquidsoap = [ "liquidsoap-prettier" ];
-          yaml = [ "yamllint" "yamlfmt" ];
+          yaml = [
+            "yamllint"
+            "yamlfmt"
+          ];
           # terragrunt = [ "hcl" ];
           bash = [ "shfmt" ];
           sh = [ "shfmt" ];

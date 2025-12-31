@@ -1,7 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-let cfg = config.default.desktop;
-in {
+let
+  cfg = config.default.desktop;
+in
+{
   options.default.desktop = with types; {
     enable = mkEnableOption "desktop";
 
@@ -12,7 +19,8 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    home.packages = with pkgs;
+    home.packages =
+      with pkgs;
       [
         default.wallpaper-manager
         # files & multimedia
@@ -27,6 +35,7 @@ in {
         telegram-desktop
 
         winbox4
-      ] ++ cfg.apps;
+      ]
+      ++ cfg.apps;
   };
 }

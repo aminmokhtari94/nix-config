@@ -1,14 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.default.desktop.wayland.waybar;
-in {
+let
+  cfg = config.default.desktop.wayland.waybar;
+in
+{
   options.default.desktop.wayland.waybar = with types; {
     enable = mkEnableOption "waybar";
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.noto-fonts pkgs.playerctl ];
+    home.packages = [
+      pkgs.noto-fonts
+      pkgs.playerctl
+    ];
 
     services.playerctld.enable = true;
 
@@ -23,7 +33,10 @@ in {
           start_hidden = false;
           margin = "0";
           layer = "top";
-          modules-left = [ "hyprland/workspaces" "mpris" ];
+          modules-left = [
+            "hyprland/workspaces"
+            "mpris"
+          ];
           modules-center = [ "wlr/taskbar" ];
           modules-right = [
             "network#interface"
@@ -56,8 +69,7 @@ in {
           };
 
           mpris = {
-            format =
-              "{status_icon}<span weight='bold'>{artist}</span> | {title}";
+            format = "{status_icon}<span weight='bold'>{artist}</span> | {title}";
             status-icons = {
               playing = "󰎈 ";
               paused = "󰏤 ";
@@ -65,7 +77,9 @@ in {
             };
           };
 
-          "wlr/taskbar" = { on-click = "activate"; };
+          "wlr/taskbar" = {
+            on-click = "activate";
+          };
 
           "network#interface" = {
             format-ethernet = "󰣶 {ifname}";
@@ -78,22 +92,38 @@ in {
             format = "⇡{bandwidthUpBits} ⇣{bandwidthDownBits}";
           };
 
-          cpu = { format = " {usage}% 󱐌{avg_frequency}"; };
+          cpu = {
+            format = " {usage}% 󱐌{avg_frequency}";
+          };
 
           temperature = {
             format = "{icon} {temperatureC} °C";
-            format-icons = [ "" "" "" "󰈸" ];
+            format-icons = [
+              ""
+              ""
+              ""
+              "󰈸"
+            ];
           };
 
           backlight = {
             format = "{icon} {percent}%";
-            format-icons = [ "󰃜" "󰃛" "󰃚 " ];
+            format-icons = [
+              "󰃜"
+              "󰃛"
+              "󰃚 "
+            ];
           };
 
           battery = {
             format-critical = "{icon} {capacity}%";
             format = "{icon} {capacity}%";
-            format-icons = [ "󰁺" "󰁾" "󰂀" "󱟢" ];
+            format-icons = [
+              "󰁺"
+              "󰁾"
+              "󰂀"
+              "󱟢"
+            ];
           };
 
           clock = {
@@ -115,7 +145,12 @@ in {
             on-click-right = "pavucontrol -t 3";
             on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
             on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
-            format-icons = [ "" "" "󰕾" "" ];
+            format-icons = [
+              ""
+              ""
+              "󰕾"
+              ""
+            ];
             max-volume = 140;
           };
 

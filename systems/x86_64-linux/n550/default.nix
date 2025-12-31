@@ -2,7 +2,8 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -22,7 +23,10 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
+  networking.nameservers = [
+    "1.1.1.1"
+    "9.9.9.9"
+  ];
   networking.extraHosts = ''
 
     # 172.16.100.40 api.kiz.ir emqx.kiz.ir asset.kiz.ir reg.kiz.ir minio.kiz.ir ops.kiz.ir api-v2.kiz.ir akhq.abrso.ir
@@ -79,7 +83,9 @@
   # needs to be install on NixOS Module
   # Without this, you may have issues with XDG Portals, or missing session files in your Display Manager.
   programs.hyprland.enable = true;
-  xdg.portal = { extraPortals = [ pkgs.xdg-desktop-portal-gtk ]; };
+  xdg.portal = {
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
   hardware.nvidia = {
     # Modesetting is required.
     modesetting.enable = true;
@@ -150,7 +156,9 @@
     ];
   };
 
-  default.v2ray = { enable = true; };
+  default.v2ray = {
+    enable = true;
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

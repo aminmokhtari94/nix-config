@@ -1,7 +1,9 @@
 { lib, config, ... }:
 
-let inherit (lib) mkOption types;
-in {
+let
+  inherit (lib) mkOption types;
+in
+{
   options.keyboard = mkOption {
     type = types.submodule {
       options = {
