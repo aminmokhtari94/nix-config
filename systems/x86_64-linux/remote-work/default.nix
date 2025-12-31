@@ -63,6 +63,15 @@
 
   networking.networkmanager.enable = true;
   networking.resolvconf.enable = true;
+  networking.firewall.enable = false;
+  networking.firewall.allowedTCPPorts = [
+    22
+    2080
+    2081
+    3000
+    8081
+    5027
+  ];
 
   networking.extraHosts = ''
     172.16.100.205 k8s.c02.kiz.ir

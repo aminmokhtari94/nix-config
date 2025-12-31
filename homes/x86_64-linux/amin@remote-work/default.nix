@@ -19,5 +19,8 @@
     desktop = {
       enable = false;
     };
+    agent = {
+      claude.enable = true;
+    };
   };
 }
