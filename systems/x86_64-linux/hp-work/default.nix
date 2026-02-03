@@ -27,11 +27,17 @@
       address = [
         "/cluster.local/127.0.0.1"
         "/kiz.local/172.18.0.90"
-        # "/panel.kiz.ir/172.16.100.90"
+        # "/kiz.ir/185.177.158.57"
+        # "/abrso.ir/185.177.158.57"
+        # "/rahkarsanat.ir/185.177.158.57"
+        # "/terabar.ir/185.177.158.57"
+        # "/ezztrip.com/185.177.158.57"
       ];
       no-resolv = true;
       server = [
-        "1.1.1.1"
+        "217.218.127.127"
+        "217.218.155.155"
+        "5.202.100.100"
         "8.8.8.8"
       ];
     };
@@ -42,9 +48,12 @@
     172.16.100.40 grafana.prometheus.cluster.local
     172.16.100.41 acl.kiz.ir grpc.abrso.ir grpc.kiz.ir terabar.acl.kiz.ir lone.acl.kiz.ir abrso.acl.kiz.ir grpc.terabar.ir all.kiz.ir
 
-    172.16.100.201 redpanda-0
-    172.16.100.209 redpanda-1
-    172.16.100.202 redpanda-2
+    172.16.100.49 redpanda-0
+    172.16.100.56 redpanda-1
+    172.16.100.57 redpanda-2
+    172.16.100.49 lp-redpanda-0
+    172.16.100.56 lp-redpanda-1
+    172.16.100.57 lp-redpanda-2
   '';
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -190,6 +199,8 @@
     3000
     8081
     8443
+    27017
+    5201
   ];
   #networking.enableIPv4Forwarding = true;
   networking.nat = {

@@ -45,6 +45,9 @@
         cursor.enable = false;
       };
     };
+    agent = {
+      claude.enable = true;
+    };
   };
 
   keyboard = {
