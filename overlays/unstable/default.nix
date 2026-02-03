@@ -8,5 +8,6 @@ final: prev: {
     formats
     vimPlugins
     throne
+    claude-code-bin
     ;
 }
