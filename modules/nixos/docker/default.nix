@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   virtualisation.docker = {
     enable = true;
@@ -11,4 +11,7 @@
     };
     extraOptions = "--iptables"; # --insecure-registry localhost:5000
   };
+  environment.systemPackages = with pkgs; [
+    docker-buildx
+  ];
 }

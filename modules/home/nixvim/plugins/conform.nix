@@ -68,6 +68,8 @@
             "yamlfmt"
           ];
           # terragrunt = [ "hcl" ];
+          c = [ "clang-format" ];
+          cpp = [ "clang-format" ];
           bash = [ "shfmt" ];
           sh = [ "shfmt" ];
         };

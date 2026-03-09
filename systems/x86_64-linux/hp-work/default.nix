@@ -19,7 +19,22 @@
 
   programs.nix-ld.enable = true;
 
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    plugins = with pkgs; [
+      networkmanager-fortisslvpn
+      networkmanager-iodine
+      networkmanager-l2tp
+      networkmanager-openconnect
+      networkmanager-openvpn
+      networkmanager-sstp
+      networkmanager-strongswan
+      networkmanager-vpnc
+    ];
+  };
+
+  systemd.services.NetworkManager.environment.STRONGSWAN_DISABLE_INTEGRITY_CHECK = "1";
+
   services.dnsmasq = {
     enable = true;
 
@@ -142,7 +157,10 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [ wget ];
+  environment.systemPackages = with pkgs; [
+    wget
+    corkscrew
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -201,6 +219,7 @@
     8443
     27017
     5201
+    5202
   ];
   #networking.enableIPv4Forwarding = true;
   networking.nat = {

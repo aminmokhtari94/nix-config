@@ -56,6 +56,11 @@
       inputs.nixpkgs.follows = "unstable";
     };
 
+    nixpkgs-esp-dev = {
+      url = "github:mirrexagon/nixpkgs-esp-dev";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   # Snowfall Lib is a library that makes it easy to manage your Nix flake by imposing an opinionated file structure.

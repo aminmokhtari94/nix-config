@@ -19,6 +19,8 @@
       go.enable = true;
       nodejs.enable = true;
       python.enable = true;
+      cpp.enable = true;
+      esp-idf.enable = true;
     };
     desktop = {
       enable = true;
