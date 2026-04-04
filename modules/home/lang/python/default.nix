@@ -13,5 +13,10 @@ in
     enable = mkEnableOption "Python language support";
   };
 
-  config = mkIf cfg.enable { home.packages = with pkgs; [ python314 ]; };
+  config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      python314
+      uv
+    ];
+  };
 }

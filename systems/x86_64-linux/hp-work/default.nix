@@ -42,11 +42,6 @@
       address = [
         "/cluster.local/127.0.0.1"
         "/kiz.local/172.18.0.90"
-        # "/kiz.ir/185.177.158.57"
-        # "/abrso.ir/185.177.158.57"
-        # "/rahkarsanat.ir/185.177.158.57"
-        # "/terabar.ir/185.177.158.57"
-        # "/ezztrip.com/185.177.158.57"
       ];
       no-resolv = true;
       server = [

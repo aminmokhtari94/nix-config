@@ -9,5 +9,6 @@ final: prev: {
     vimPlugins
     throne
     claude-code-bin
+    telegram-desktop
     ;
 }

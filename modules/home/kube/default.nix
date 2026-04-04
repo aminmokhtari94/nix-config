@@ -31,6 +31,7 @@ in
       kind
       kubebuilder
       kn
+      rclone
     ];
   };
 }
