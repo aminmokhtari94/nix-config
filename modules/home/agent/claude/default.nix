@@ -15,7 +15,10 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      claude-code-bin
+      claude-code
+      nodejs
+      bun
+      openspec
     ];
   };
 }
