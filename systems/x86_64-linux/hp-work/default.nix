@@ -17,8 +17,6 @@
     "net.ipv4.ip_forward" = true;
   };
 
-  programs.nix-ld.enable = true;
-
   networking.networkmanager = {
     enable = true;
     plugins = with pkgs; [
@@ -56,7 +54,6 @@
   networking.extraHosts = ''
     172.16.100.205 k8s.c02.kiz.ir
     172.16.100.40 grafana.prometheus.cluster.local
-    172.16.100.41 acl.kiz.ir grpc.abrso.ir grpc.kiz.ir terabar.acl.kiz.ir lone.acl.kiz.ir abrso.acl.kiz.ir grpc.terabar.ir all.kiz.ir
 
     172.16.100.49 redpanda-0
     172.16.100.56 redpanda-1
@@ -101,7 +98,10 @@
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
+  programs.nix-ld.enable = true;
+
   environment.shells = [ pkgs.zsh ];
+  environment.localBinInPath = true;
   programs.zsh.enable = true;
 
   security.rtkit.enable = true;

@@ -33,7 +33,10 @@
     pkgs.corkscrew
   ];
 
+  programs.nix-ld.enable = true;
+
   environment.shells = [ pkgs.zsh ];
+  environment.localBinInPath = true;
   programs.zsh.enable = true;
 
   # networking.proxy.default = "http://172.16.100.59:2081";
