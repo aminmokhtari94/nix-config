@@ -56,7 +56,6 @@
         "/cluster.local/127.0.0.1"
         "/kiz.local/172.18.0.9"
         "/panel.kiz.ir/172.18.0.9"
-        "/wenex.tech/10.16.1.202"
       ];
       no-resolv = true;
       server = [
