@@ -17,6 +17,24 @@
     "net.ipv4.ip_forward" = true;
   };
 
+  fileSystems."/mnt/backup" = {
+    device = "/dev/disk/by-uuid/f76361dc-2c6e-4f71-928f-13ab8a504513";
+    fsType = "ext4";
+    options = [
+      "defaults"
+      "nofail"
+    ];
+  };
+
+  fileSystems."/var/lib/docker" = {
+    device = "/dev/disk/by-uuid/78a48736-9c99-4aa5-9b6d-f845bff08f6e";
+    fsType = "ext4";
+    options = [
+      "defaults"
+      "nofail"
+    ];
+  };
+
   networking.networkmanager = {
     enable = true;
     plugins = with pkgs; [

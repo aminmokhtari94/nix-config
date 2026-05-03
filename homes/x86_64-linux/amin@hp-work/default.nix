@@ -46,6 +46,7 @@
         vscode.enable = true;
         cursor.enable = false;
       };
+      wine.enable = true;
     };
     agent = {
       claude.enable = true;
