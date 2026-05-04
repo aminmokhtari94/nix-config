@@ -8,6 +8,8 @@
 with lib;
 let
   cfg = config.default.desktop.wayland.hyprland;
+  theme = config.default.theme;
+  p = theme.palette;
 in
 {
   options.default.desktop.wayland.hyprland = with types; {
@@ -164,11 +166,11 @@ in
         ];
 
         general = {
-          gaps_in = 2;
-          gaps_out = 6;
+          gaps_in = 4;
+          gaps_out = 8;
           border_size = 2;
-          "col.active_border" = "rgb(F48FB1) rgb(78A8FF) 45deg";
-          "col.inactive_border" = "rgba(585272aa)";
+          "col.active_border" = "rgb(${p.accent}) rgb(${p.accent2}) 45deg";
+          "col.inactive_border" = "rgba(${p.surfaceAlt}aa)";
           layout = "dwindle";
           resize_on_border = true;
         };
@@ -183,13 +185,14 @@ in
         };
 
         decoration = {
-          rounding = 5;
+          rounding = theme.rounding;
           blur = {
             enabled = true;
-            size = 5;
-            passes = 1;
+            size = 6;
+            passes = 2;
             new_optimizations = true;
             ignore_opacity = false;
+            xray = true;
           };
           #drop_shadow = true;
           #shadow_range = 4;
@@ -268,14 +271,18 @@ in
         animations = {
           enabled = true;
           bezier = [
-            "overshot,0.05,0.9,0.1,1.1"
-            "overshot,0.13,0.99,0.29,1"
+            "overshot, ${theme.animationsBezier}"
+            "smooth, 0.13, 0.99, 0.29, 1"
+            "wind, 0.05, 0.9, 0.1, 1.05"
           ];
           animation = [
-            "windows,1,7,overshot,slide"
-            "border,1,10,default"
-            "fade,1,10,default"
-            "workspaces,1,7,overshot,slidevert"
+            "windows, 1, 6, wind, slide"
+            "windowsIn, 1, 6, wind, slide"
+            "windowsOut, 1, 5, smooth, popin 80%"
+            "border, 1, 10, default"
+            "borderangle, 1, 30, smooth, loop"
+            "fade, 1, 8, smooth"
+            "workspaces, 1, 6, overshot, slidevert"
           ];
         };
 
@@ -308,11 +315,11 @@ in
           "$mainMod, Return, exec, kitty"
           "$mainMod, q, killactive,"
           "$mainMod SHIFT, q, exit,"
-          "$mainMod SHIFT, b, exec, ${pkgs.killall}/bin/killall -SIGUSR1 .waybar-wrapped"
+          "$mainMod SHIFT, b, exec, ${pkgs.procps}/bin/pkill -SIGUSR1 -x .waybar-wrapped || ${pkgs.procps}/bin/pkill -SIGUSR1 -x ironbar"
           "$mainMod, f, fullscreen, 0"
           "$mainMod, m, fullscreen, 1"
           "$mainMod SHIFT, t, togglefloating,"
-          "$mainMod, d, exec, wofi --show drun -I"
+          "$mainMod, d, exec, fuzzel"
           "ALT, e, exec, wofi-emoji"
 
           "$mainMod, r, exec, kitty --title='kitty-float' --override initial_window_width=100c --override initial_window_height=1c --hold"
@@ -331,7 +338,7 @@ in
           "$mainMod SHIFT, TAB, changegroupactive, b"
           "$mainMod, z, focuswindow, title:kitty-journal"
           "$mainMod, period, exec, zsh -c 'wl-paste >> $JOURNALS/$(date +%Y-%m-%d).md && notify-send \"pasted into $(date +%Y-%m-%d).md!\"'"
-          "$mainMod, v, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
+          "$mainMod, v, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
 
           "$mainMod, h, movefocus, l"
           "$mainMod, l, movefocus, r"

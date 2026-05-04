@@ -39,7 +39,19 @@
       browser.enable = true;
       kitty.enable = true;
       gtk.enable = true;
-      wayland.waybar.enable = true;
+      wayland.waybar.enable = false;
+      wayland.ironbar = {
+        enable = true;
+        desktop = true; # drop battery/network modules
+      };
+      wayland.launcher = {
+        enable = true;
+        backend = "fuzzel";
+      };
+      wayland.shaders = {
+        enable = true;
+        style = "vignette"; # try "crt" or "warm"
+      };
       dunst.enable = true;
       nm-applet.enable = true;
       editor = {
