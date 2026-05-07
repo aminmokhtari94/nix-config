@@ -10,6 +10,50 @@ let
   cfg = config.default.desktop.wayland.hyprland;
   theme = config.default.theme;
   p = theme.palette;
+
+  screenshot = pkgs.writeShellApplication {
+    name = "screenshot";
+    runtimeInputs = with pkgs; [
+      grim
+      slurp
+      wl-clipboard
+      libnotify
+      jq
+      hyprland
+      coreutils
+    ];
+    text = ''
+      mode="''${1:-area}"
+      dir="$HOME/Pictures/Screenshots"
+      mkdir -p "$dir"
+      file="$dir/$(date +%Y%m%d_%H%M%S).png"
+
+      case "$mode" in
+        area)
+          if ! geom=$(slurp -d); then
+            notify-send -a Screenshot "Screenshot cancelled"
+            exit 0
+          fi
+          grim -g "$geom" "$file"
+          ;;
+        screen)
+          grim "$file"
+          ;;
+        active)
+          geom=$(hyprctl activewindow -j \
+            | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
+          grim -g "$geom" "$file"
+          ;;
+        *)
+          echo "usage: screenshot {area|screen|active}" >&2
+          exit 1
+          ;;
+      esac
+
+      wl-copy --type image/png < "$file"
+      notify-send -a Screenshot -i "$file" "Screenshot saved" "$file"
+    '';
+  };
 in
 {
   options.default.desktop.wayland.hyprland = with types; {
@@ -31,7 +75,7 @@ in
       # ScreenShot
       slurp
       grim
-      grimblast
+      screenshot
 
       neofetch
       libnotify
@@ -412,10 +456,9 @@ in
           "$mainMod ALT CTRL, equal, exec, dunstctl set-paused toggle"
           "$mainMod ALT CTRL, bracketright, exec, systemctl reboot"
 
-          "CTRL, Print, exec, grimblast copy area"
-          "CTRL SHIFT, Print, exec, grimblast save area"
-          "ALT CTRL SHIFT, Print, exec, grimblast copy active"
-          ", Print, exec, grimblast copy output"
+          ", Print, exec, screenshot area"
+          "SHIFT, Print, exec, screenshot screen"
+          "ALT, Print, exec, screenshot active"
         ];
 
         bindm = [

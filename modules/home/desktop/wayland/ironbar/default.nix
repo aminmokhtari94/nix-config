@@ -63,6 +63,13 @@ let
           length = 40;
         };
       }
+      {
+        type = "launcher";
+        show_names = false;
+        show_icons = true;
+        icon_size = 12;
+        favorites = [ ];
+      }
     ];
 
     center = [
@@ -204,12 +211,55 @@ in
         padding: 0 2px;
       }
 
+      .launcher .item {
+        padding: 0 4px;
+        margin: 0 1px;
+        border-radius: ${toString theme.rounding}px;
+        border-bottom: 2px solid transparent;
+        opacity: 0.6;
+      }
+
+      .launcher .item.open {
+        opacity: 1.0;
+      }
+
+      .launcher .item.focused {
+        border-bottom-color: ${hex p.accent};
+      }
+
+      .launcher .item.urgent {
+        border-bottom-color: ${hex p.urgent};
+      }
+
       popup {
         background-color: ${hex p.bg};
         color: ${hex p.fg};
         border: 1px solid ${hex p.surfaceAlt};
         border-radius: ${toString theme.rounding}px;
         padding: 6px 10px;
+      }
+
+      popup box,
+      popup .container,
+      popup scrolledwindow,
+      popup viewport,
+      popup list,
+      popup row,
+      popup button,
+      popup frame,
+      popup image {
+        border-radius: ${toString theme.rounding}px;
+      }
+
+      popup row,
+      popup button {
+        padding: 4px 8px;
+        margin: 1px 0;
+      }
+
+      popup row:hover,
+      popup button:hover {
+        background-color: ${hex p.surfaceAlt};
       }
     '';
 
