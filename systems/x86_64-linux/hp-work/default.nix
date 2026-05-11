@@ -216,6 +216,10 @@
   services.udev.extraRules = ''
     # Logic Analyzer
     SUBSYSTEM=="usb", ATTR{idVendor}=="0925", ATTR{idProduct}=="3881", MODE="0666"
+
+    # Allow flashing the Quectel EC200U via QDloader without sudo.
+    SUBSYSTEM=="usb", ATTR{idVendor}=="2c7c", ATTR{idProduct}=="0901", GROUP="dialout", MODE="0660"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="0525", ATTR{idProduct}=="a4a7", GROUP="dialout", MODE="0660"
   '';
 
   # networking.proxy.default = "http://localhost:2080";
@@ -233,6 +237,19 @@
     27017
     5201
     5202
+    # Fonoster (SIP signaling + dashboard/API via Envoy)
+    5060
+    5061
+    5062
+    5063
+    8449
+  ];
+  # Fonoster SIP (UDP) + RTPEngine media range
+  networking.firewall.allowedUDPPorts = [
+    5060
+  ];
+  networking.firewall.allowedUDPPortRanges = [
+    { from = 10000; to = 10100; }
   ];
   #networking.enableIPv4Forwarding = true;
   networking.nat = {
