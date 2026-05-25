@@ -8,7 +8,8 @@ final: prev: {
     formats
     vimPlugins
     throne
-    claude-code-bin
+    claude
+    codex
     openspec
     telegram-desktop
     ;

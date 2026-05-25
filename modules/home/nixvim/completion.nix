@@ -18,7 +18,7 @@
       blink-cmp-copilot.enable = false;
       blink-cmp-dictionary.enable = true;
       blink-cmp-git.enable = true;
-      blink-cmp-spell.enable = true;
+      # blink-cmp-spell.enable = true;
       blink-copilot.enable = false;
       blink-emoji.enable = true;
       blink-ripgrep.enable = true;

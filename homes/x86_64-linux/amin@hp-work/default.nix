@@ -39,9 +39,9 @@
       browser.enable = true;
       kitty.enable = true;
       gtk.enable = true;
-      wayland.waybar.enable = false;
+      wayland.waybar.enable = true;
       wayland.ironbar = {
-        enable = true;
+        enable = false;
         desktop = true; # drop battery/network modules
       };
       wayland.launcher = {
@@ -58,10 +58,11 @@
         vscode.enable = true;
         cursor.enable = false;
       };
-      wine.enable = true;
+      wine.enable = false;
     };
     agent = {
       claude.enable = true;
+      codex.enable = true;
     };
   };
 

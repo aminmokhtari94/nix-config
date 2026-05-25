@@ -49,8 +49,7 @@
     ];
   };
 
-  systemd.services.NetworkManager.environment.STRONGSWAN_DISABLE_INTEGRITY_CHECK = "1";
-
+  services.resolved.enable = false;
   services.dnsmasq = {
     enable = true;
 
@@ -249,7 +248,10 @@
     5060
   ];
   networking.firewall.allowedUDPPortRanges = [
-    { from = 10000; to = 10100; }
+    {
+      from = 10000;
+      to = 10100;
+    }
   ];
   #networking.enableIPv4Forwarding = true;
   networking.nat = {
