@@ -6,6 +6,7 @@ keys:
       - &n550 age1dk40kh8vwhk7lf5qhwmsfh2twmj7gdrkynx20lh4lmar0z4kvqgshkm289
       - &hp_work age19ntyr90hwka356y4malera78wytrl6wr6eacwqppyu86eh4p6pdst4qkn4
       - &remote_work age1w9wfp2z6hnnt3yjy733eejy5qv894ml243z4ywyp3txpwvcfmdhqr4rnz5
+      - &hp_elite age1dq7usx7kqvdvnjtlmr4dx5rzfuphncddnrnnjyrft7mt70d8sehsj2pusd
 creation_rules:
   - path_regex: secrets/default.yaml$
     key_groups:
@@ -15,3 +16,4 @@ creation_rules:
           - *hp_work
           - *remote_work
           - *amin_remote_work
+          - *hp_elite

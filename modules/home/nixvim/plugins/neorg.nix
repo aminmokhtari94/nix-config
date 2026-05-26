@@ -1,6 +1,8 @@
 {
   programs.nixvim = {
     files."after/ftplugin/norg.lua" = {
+      version.enableNixpkgsReleaseCheck = false;
+
       localOpts.conceallevel = 1;
 
       keymaps = [
