@@ -10,6 +10,8 @@
   # Nicely reload system units when changing configs
   #systemd.user.startServices = "sd-switch";
 
+  xdg.configFile."hypr/hyprland.conf".force = true;
+
   default = {
     theme.name = "embarl";
     gpg.enable = false;
