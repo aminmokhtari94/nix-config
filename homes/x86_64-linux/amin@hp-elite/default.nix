@@ -28,7 +28,7 @@
       ];
       wayland = {
         hyprland = {
-          enable = false;
+          enable = true;
           autostart = [ "Throne" ];
         };
       };
