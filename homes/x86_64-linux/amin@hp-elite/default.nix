@@ -33,6 +33,10 @@
           enable = true;
           autostart = [ "Throne" ];
         };
+        niri = {
+          enable = true;
+          autostart = [ "Throne" ];
+        };
       };
       browser.enable = true;
       kitty.enable = true;
