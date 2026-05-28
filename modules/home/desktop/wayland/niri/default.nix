@@ -4,53 +4,44 @@
   pkgs,
   ...
 }:
-
-with lib;
-let
+with lib; let
   cfg = config.default.desktop.wayland.niri;
   theme = config.default.theme;
   p = theme.palette;
 
-  kdlString =
-    value:
-    "\"${replaceStrings [ "\\" "\"" "\n" ] [ "\\\\" "\\\"" "\\n" ] (toString value)}\"";
+  kdlString = value: "\"${replaceStrings ["\\" "\"" "\n"] ["\\\\" "\\\"" "\\n"] (toString value)}\"";
 
-  transformName =
-    transform:
-    let
-      transforms = {
-        "0" = "normal";
-        "1" = "90";
-        "2" = "180";
-        "3" = "270";
-        "4" = "flipped";
-        "5" = "flipped-90";
-        "6" = "flipped-180";
-        "7" = "flipped-270";
-      };
-    in
+  transformName = transform: let
+    transforms = {
+      "0" = "normal";
+      "1" = "90";
+      "2" = "180";
+      "3" = "270";
+      "4" = "flipped";
+      "5" = "flipped-90";
+      "6" = "flipped-180";
+      "7" = "flipped-270";
+    };
+  in
     transforms.${toString transform} or (toString transform);
 
-  outputConfig =
-    m:
-    ''
-      output ${kdlString m.name} {
-          ${
-            if m.enabled then
-              ''
-                mode ${kdlString "${toString m.width}x${toString m.height}@${toString m.refreshRate}"}
-                scale ${m.scale}
-                transform ${kdlString (transformName m.transform)}
-                position x=${toString m.x} y=${toString m.y}
-              ''
-            else
-              "off"
-          }
-      }
-    '';
+  outputConfig = m: ''
+    output ${kdlString m.name} {
+        ${
+      if m.enabled
+      then ''
+        mode ${kdlString "${toString m.width}x${toString m.height}@${toString m.refreshRate}"}
+        scale ${m.scale}
+        transform ${kdlString (transformName m.transform)}
+        position x=${toString m.x} y=${toString m.y}
+      ''
+      else "off"
+    }
+    }
+  '';
 
   startupCommands =
-    (optionals (config.monitors != [ ]) [
+    (optionals (config.monitors != []) [
       "swaybg -i ${(head config.monitors).wallpaper} -m fill"
     ])
     ++ [
@@ -64,14 +55,13 @@ let
     "notes"
     "term"
   ];
-in
-{
+in {
   options.default.desktop.wayland.niri = with types; {
     enable = mkEnableOption "niri";
 
     autostart = mkOption {
       type = listOf str;
-      default = [ ];
+      default = [];
       description = "List of shell commands to start at niri startup";
     };
   };
@@ -133,9 +123,10 @@ in
         ${workspaceConfig}
 
         layout {
-            gaps 8
+            gaps 4
             center-focused-column "on-overflow"
             always-center-single-column
+            background-color "#${p.bg}"
 
             preset-column-widths {
                 proportion 0.33333
@@ -146,11 +137,40 @@ in
 
             default-column-width { proportion 0.5; }
 
+            focus-ring {
+                off
+            }
+
             border {
-                width 2
-                active-gradient from="#${p.accent}" to="#${p.accent2}" angle=45
+                width 1.5
+                active-gradient from="#${p.accent}" to="#${p.accent2}" angle=45 relative-to="workspace-view"
                 inactive-color "#${p.surfaceAlt}aa"
                 urgent-color "#${p.urgent}"
+            }
+
+            tab-indicator {
+                hide-when-single-tab
+                place-within-column
+                gap 4
+                width 2
+                length total-proportion=1.0
+                position "top"
+                gaps-between-tabs 2
+                corner-radius ${toString theme.rounding}
+                active-gradient from="#${p.accent}" to="#${p.accent2}" angle=45 relative-to="workspace-view"
+                inactive-color "#${p.surfaceAlt}aa"
+                urgent-color "#${p.urgent}"
+            }
+
+            insert-hint {
+                gradient from="#${p.accent}80" to="#${p.accent2}80" angle=45 relative-to="workspace-view"
+            }
+
+            struts {
+                left 4
+                right 4
+                top 4
+                bottom 4
             }
         }
 
@@ -160,6 +180,11 @@ in
 
         screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
         prefer-no-csd
+
+        window-rule {
+            geometry-corner-radius ${toString theme.rounding}
+            clip-to-geometry true
+        }
 
         window-rule {
             match title="^kitty-float$"
