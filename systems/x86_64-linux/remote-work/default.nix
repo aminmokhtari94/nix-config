@@ -31,6 +31,7 @@
     pkgs.curl
     pkgs.gitMinimal
     pkgs.corkscrew
+    pkgs.openssl
   ];
 
   programs.nix-ld.enable = true;
@@ -39,13 +40,11 @@
   environment.localBinInPath = true;
   programs.zsh.enable = true;
 
-  # networking.proxy.default = "http://172.16.100.59:2081";
-  # networking.proxy.noProxy =
-  #   "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
+  # networking.proxy.default = "http://127.0.0.1:2080";
+  # networking.proxy.noProxy = "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
   # environment.variables = {
-  #   https_proxy = "http://172.16.100.59:2081";
-  #   no_proxy =
-  #     "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
+  #   https_proxy = "http://127.0.0.1:2080";
+  #   no_proxy = "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
   # };
 
   services.dnsmasq = {
@@ -55,13 +54,14 @@
       address = [
         "/cluster.local/127.0.0.1"
         "/kiz.local/172.18.0.9"
+        "/amin.local/172.18.0.10"
         "/panel.kiz.ir/172.18.0.9"
-        "/wenex.tech/10.16.1.200"
       ];
       no-resolv = true;
       server = [
         "5.202.100.100"
         "172.16.100.1"
+        "1.1.1.1"
       ];
     };
   };
@@ -69,14 +69,14 @@
   networking.networkmanager.enable = true;
   networking.resolvconf.enable = true;
   networking.firewall.enable = false;
-  networking.firewall.allowedTCPPorts = [
-    22
-    2080
-    2081
-    3000
-    8081
-    5027
-  ];
+  # networking.firewall.allowedTCPPorts = [
+  #   22
+  #   2080
+  #   2081
+  #   3000
+  #   8081
+  #   5027
+  # ];
 
   networking.extraHosts = ''
     172.16.100.205 k8s.c02.kiz.ir
@@ -97,6 +97,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsmJzyqZ3jvdz0C8AyMzkBwAXxcLAk12+P0+5Su1n/h phone_termius"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINby0+z+P0CzDer9jtyW6ppjTXwYV4g7pIum4MPsWkkZ phone_termux"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG1ldhcO45HmHAgGyi7KQkTetKdBCqlrtifK37Ez726A amin@worklaptop"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPNS3mrfcmerOvSvDkBWQDnz4N6pre99w4RQtOdNee47 amin@hp-elite"
     ];
   };
 
@@ -104,6 +105,7 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAGlj5STbxgr0chPN3kzTPjSZYLBixUoEoBRWCwHqA8z amin@n550jv"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5LdF5nCTvyc7vVkcBo+KLdPChPjccy4735AfKKfSaC work301"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINby0+z+P0CzDer9jtyW6ppjTXwYV4g7pIum4MPsWkkZ phone_termux"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPNS3mrfcmerOvSvDkBWQDnz4N6pre99w4RQtOdNee47 amin@hp-elite"
   ];
 
   nix.settings.trusted-users = [ "amin" ];

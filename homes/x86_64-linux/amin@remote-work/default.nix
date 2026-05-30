@@ -14,6 +14,7 @@
     kube.enable = true;
     lang = {
       go.enable = true;
+      nodejs.enable = true;
       python.enable = false;
     };
     desktop = {
@@ -21,6 +22,7 @@
     };
     agent = {
       claude.enable = true;
+      codex.enable = true;
     };
   };
 }
