@@ -1,5 +1,8 @@
-{ inputs, ... }:
 {
+  inputs,
+  pkgs,
+  ...
+}: {
   imports = [
     inputs.nixvim.homeModules.nixvim
     ./autocommands.nix
@@ -18,6 +21,8 @@
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
+    nixpkgs.pkgs = inputs.unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+    version.enableNixpkgsReleaseCheck = false;
 
     #  performance = {
     #    combinePlugins = {

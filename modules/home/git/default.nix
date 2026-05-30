@@ -61,7 +61,7 @@
       commit = {
         verbose = true;
       };
-      url."ssh://git@github.com/".insteadOf = "https://github.com/";
+      url."ssh://git@github.com/rahkarsanat".insteadOf = "https://github.com/rahkarsanat";
       url."ssh://git@git.kiz.ir/".insteadOf = [
         "https://git.kiz.ir/"
         "http://git.kiz.ir/"
