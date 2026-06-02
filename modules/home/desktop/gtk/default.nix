@@ -35,6 +35,7 @@ in
           tweaks = [ "black" ];
         };
       };
+      gtk4.theme = config.gtk.theme;
 
       cursorTheme = {
         name = "Bibata-Modern-Ice";

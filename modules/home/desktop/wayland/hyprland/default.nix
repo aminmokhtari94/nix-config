@@ -77,7 +77,7 @@ in
       grim
       screenshot
 
-      neofetch
+      fastfetch
       libnotify
       playerctl
       pavucontrol
@@ -177,6 +177,7 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
+      configType = "hyprlang";
       xwayland.enable = true;
       # set the Hyprland and XDPH packages to null to use the ones from the NixOS module
       package = null;

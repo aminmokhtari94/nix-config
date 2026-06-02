@@ -75,7 +75,7 @@ in {
       swaylock
       xwayland-satellite
 
-      neofetch
+      fastfetch
       libnotify
       playerctl
       pavucontrol
