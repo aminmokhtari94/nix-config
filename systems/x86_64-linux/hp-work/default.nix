@@ -175,6 +175,9 @@
   environment.systemPackages = with pkgs; [
     wget
     corkscrew
+    pavucontrol
+    pulseaudio
+    alsa-utils
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
