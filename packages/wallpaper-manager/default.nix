@@ -1,6 +1,8 @@
 {
   writeShellScriptBin,
   curl,
+  hyprland,
+  hyprpaper,
   jq,
   wofi,
 }:
@@ -9,8 +11,16 @@ let
   wallpaperDir = "$HOME/Pictures";
 in
 writeShellScriptBin "wallpaper-manager" ''
+  HYPRCTL=${hyprland}/bin/hyprctl
+  HYPRPAPER=${hyprpaper}/bin/hyprpaper
+
   mkdir -p ${wallpaperDir}
-  DP=$(hyprctl monitors | awk '/Monitor/{monitor=$2} /focused: yes/{print monitor}')
+  DP=$("$HYPRCTL" monitors -j | ${jq}/bin/jq -r '.[] | select(.focused) | .name')
+  if [[ -z "$DP" ]]; then
+    echo "Could not find focused Hyprland monitor" >&2
+    exit 1
+  fi
+
   if [[ "$1" == "download" ]]; then
     echo "Downloading Bing 4K wallpaper..."
     # Bing exposes the last 8 daily images via HPImageArchive; pick one at random.
@@ -49,9 +59,19 @@ writeShellScriptBin "wallpaper-manager" ''
 
     mv "$TMP_FILE" "$OUTPUT_FILE"
     echo "Wallpaper saved to $OUTPUT_FILE"
-    hyprctl hyprpaper unload "$OUTPUT_FILE"
-    hyprctl hyprpaper preload "$OUTPUT_FILE"
-    hyprctl hyprpaper wallpaper "$DP,$OUTPUT_FILE"
+
+    set_wallpaper() {
+      "$HYPRCTL" hyprpaper wallpaper "$DP,$OUTPUT_FILE"
+    }
+
+    if ! set_wallpaper; then
+      "$HYPRPAPER" >/dev/null 2>&1 &
+      sleep 0.5
+      if ! set_wallpaper; then
+        echo "Wallpaper update failed: hyprpaper IPC is unavailable" >&2
+        exit 1
+      fi
+    fi
 
   elif [[ "$1" == "catalog" ]]; then
     echo "Opening wallpaper catalog..."

@@ -96,7 +96,6 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN5LdF5nCTvyc7vVkcBo+KLdPChPjccy4735AfKKfSaC work301"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsmJzyqZ3jvdz0C8AyMzkBwAXxcLAk12+P0+5Su1n/h phone_termius"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINby0+z+P0CzDer9jtyW6ppjTXwYV4g7pIum4MPsWkkZ phone_termux"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG1ldhcO45HmHAgGyi7KQkTetKdBCqlrtifK37Ez726A amin@worklaptop"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPNS3mrfcmerOvSvDkBWQDnz4N6pre99w4RQtOdNee47 amin@hp-elite"
     ];
   };

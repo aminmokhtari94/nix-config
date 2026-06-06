@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   home = {
     enableNixpkgsReleaseCheck = false;
     username = "amin";
@@ -10,20 +9,20 @@
   # Nicely reload system units when changing configs
   #systemd.user.startServices = "sd-switch";
 
-  xdg.configFile."hypr/hyprland.conf".force = true;
+  xdg.configFile."hypr/hyprland.lua".force = true;
 
   default = {
     theme.name = "embarl";
     gpg.enable = false;
-   # kube.enable = true;
-   # vpn.enable = true;
-   # lang = {
-   #   go.enable = true;
-   #   nodejs.enable = true;
-   #   python.enable = true;
-   #   cpp.enable = true;
-   #   esp-idf.enable = true;
-   # };
+    # kube.enable = true;
+    # vpn.enable = true;
+    # lang = {
+    #   go.enable = true;
+    #   nodejs.enable = true;
+    #   python.enable = true;
+    #   cpp.enable = true;
+    #   esp-idf.enable = true;
+    # };
     desktop = {
       enable = true;
       apps = with pkgs; [
@@ -31,11 +30,11 @@
       wayland = {
         hyprland = {
           enable = true;
-          autostart = [ "Throne" ];
+          autostart = ["Throne"];
         };
         niri = {
           enable = true;
-          autostart = [ "Throne" ];
+          autostart = ["Throne"];
         };
       };
       browser.enable = true;
@@ -90,5 +89,4 @@
       wallpaper = "~/Pictures/wallpaper.jpg";
     }
   ];
-
 }

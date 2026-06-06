@@ -4,12 +4,71 @@
   pkgs,
   ...
 }:
-
 with lib;
 let
   cfg = config.default.desktop.wayland.hyprland;
   theme = config.default.theme;
   p = theme.palette;
+
+  lua = lib.generators.mkLuaInline;
+  luaQuote = builtins.toJSON;
+  luaKey =
+    parts:
+    lua (
+      lib.concatStringsSep ''.. " + " .. '' (
+        map (part: if part == "mainMod" then "mainMod" else luaQuote part) parts
+      )
+    );
+  mkBind = keys: dispatcher: {
+    _args = [
+      (luaKey keys)
+      (lua dispatcher)
+    ];
+  };
+  mkBindWith = keys: dispatcher: options: {
+    _args = [
+      (luaKey keys)
+      (lua dispatcher)
+      options
+    ];
+  };
+  exec = command: "hl.dsp.exec_cmd(${luaQuote command})";
+  focusWorkspace = workspace: "hl.dsp.focus({ workspace = ${luaQuote workspace} })";
+  moveToWorkspace =
+    workspace: "hl.dsp.window.move({ workspace = ${luaQuote workspace}, follow = false })";
+  focusDirection = direction: "hl.dsp.focus({ direction = ${luaQuote direction} })";
+  moveDirection = direction: "hl.dsp.window.move({ direction = ${luaQuote direction} })";
+  moveIntoGroup = direction: "hl.dsp.window.move({ into_group = ${luaQuote direction} })";
+  focusMonitor = monitor: "hl.dsp.focus({ monitor = ${luaQuote monitor} })";
+  hyprctl = "${pkgs.hyprland}/bin/hyprctl";
+  hyprlock = "${pkgs.hyprlock}/bin/hyprlock";
+  loginctl = "${pkgs.systemd}/bin/loginctl";
+  pidof = "${pkgs.procps}/bin/pidof";
+  sleep = "${pkgs.coreutils}/bin/sleep";
+  systemctl = "${pkgs.systemd}/bin/systemctl";
+  hyprDispatch = dispatcher: "${hyprctl} dispatch ${lib.escapeShellArg dispatcher}";
+  dpms = action: hyprDispatch ''hl.dsp.dpms({ action = "${action}" })'';
+  dpmsOn = dpms "enable";
+  dpmsOff = dpms "disable";
+  expandHome =
+    path:
+    if lib.hasPrefix "~/" path then config.home.homeDirectory + lib.removePrefix "~" path else path;
+  wallpaperPath = monitor: expandHome monitor.wallpaper;
+  bezierPoints =
+    coords:
+    let
+      values = map (s: builtins.fromJSON (lib.strings.trim s)) (lib.splitString "," coords);
+    in
+    [
+      [
+        (builtins.elemAt values 0)
+        (builtins.elemAt values 1)
+      ]
+      [
+        (builtins.elemAt values 2)
+        (builtins.elemAt values 3)
+      ]
+    ];
 
   screenshot = pkgs.writeShellApplication {
     name = "screenshot";
@@ -67,7 +126,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
     home.packages = with pkgs; [
       wl-clipboard
       wtype
@@ -84,6 +142,14 @@ in
       #hyprland-qtutils
     ];
 
+    xdg.configFile."hypr/hyprland.conf" = {
+      force = true;
+      text = ''
+        # Managed by Home Manager.
+        # Hyprland 0.55+ config is generated at ~/.config/hypr/hyprland.lua.
+      '';
+    };
+
     programs.wofi.enable = true;
     services.playerctld.enable = true;
     services.cliphist.enable = true;
@@ -91,21 +157,23 @@ in
       enable = true;
       settings = {
         general = {
-          after_sleep_cmd = "hyprctl dispatch dpms on";
-          before_sleep_cmd = "hypr-kbd-layout-reset ; hyprlock --immediate";
+          after_sleep_cmd = dpmsOn;
+          before_sleep_cmd = "hypr-kbd-layout-reset ; ${loginctl} lock-session";
           ignore_dbus_inhibit = false;
-          lock_cmd = "pidof hyprlock || hyprlock";
+          lock_cmd = "${pidof} hyprlock || ${hyprlock}";
+          on_lock_cmd = "${pkgs.runtimeShell} -c ${lib.escapeShellArg "${sleep} 60; ${pidof} hyprlock >/dev/null && ${dpmsOff}"}";
+          on_unlock_cmd = dpmsOn;
         };
 
         listener = [
           {
             timeout = 300;
-            on-timeout = "hyprlock --grace 15";
+            on-timeout = "${hyprlock} --grace 15";
           }
           {
             timeout = 360;
-            on-timeout = "hyprctl dispatch dpms off";
-            on-resume = "hyprctl dispatch dpms on";
+            on-timeout = dpmsOff;
+            on-resume = dpmsOn;
           }
         ];
       };
@@ -163,9 +231,9 @@ in
         splash = false;
         splash_offset = 2.0;
 
-        preload = (map (m: m.wallpaper) config.monitors);
+        preload = map wallpaperPath config.monitors;
 
-        wallpaper = (map (m: "${m.name},${m.wallpaper}") config.monitors);
+        wallpaper = map (m: "${m.name},${wallpaperPath m}") config.monitors;
       };
     };
 
@@ -177,296 +245,465 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
-      configType = "hyprlang";
+      configType = "lua";
       xwayland.enable = true;
       # set the Hyprland and XDPH packages to null to use the ones from the NixOS module
       package = null;
       portalPackage = null;
-      settings = {
-        exec-once = [
-          "hyprpaper"
-          "hyprctl setcursor Bibata-Modern-Ice 22"
-          "kitty"
-        ]
-        ++ cfg.autostart;
-
-        workspace = lib.lists.flatten (
-          map (m: map (w: "${w}, monitor:${m.name}") (m.workspaces)) (config.monitors)
-        );
-
-        env = [
-          "XCURSOR_SIZE,24"
-          "XDG_CURRENT_DESKTOP,Hyprland"
-          "XDG_SESSION_TYPE,wayland"
-          "XDG_SESSION_DESKTOP,Hyprland"
-          "QT_QPA_PLATFORM,wayland;xcb"
-          "QT_QPA_PLATFORMTHEME,qt6ct"
-          "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-          "QT_AUTO_SCREEN_SCALE_FACTOR,1"
-          "MOZ_ENABLE_WAYLAND,1"
-          "GDK_SCALE,1"
-          "GDK_BACKEND,wayland,x11"
-          "DEFAULT_FILE_MANAGER,thunar"
-          "XDG_FILE_MANAGER,thunar"
-        ];
-
-        general = {
-          gaps_in = 4;
-          gaps_out = 8;
-          border_size = 2;
-          "col.active_border" = "rgb(${p.accent}) rgb(${p.accent2}) 45deg";
-          "col.inactive_border" = "rgba(${p.surfaceAlt}aa)";
-          layout = "dwindle";
-          resize_on_border = true;
-        };
-
-        dwindle = {
-          pseudotile = true;
-          preserve_split = true;
-        };
-
-        master = {
-          orientation = "master";
-        };
-
-        decoration = {
-          rounding = theme.rounding;
-          blur = {
-            enabled = true;
-            size = 6;
-            passes = 2;
-            new_optimizations = true;
-            ignore_opacity = false;
-            xray = true;
+      settings =
+        let
+          startupCommands = [
+            "hyprpaper"
+            "hyprctl setcursor Bibata-Modern-Ice 22"
+            "kitty"
+          ]
+          ++ cfg.autostart;
+          env = name: value: {
+            _args = [
+              name
+              value
+            ];
           };
-          #drop_shadow = true;
-          #shadow_range = 4;
-          #shadow_render_power = 3;
-          #"col.shadow" = "rgba(1a1a1aee)";
-        };
-
-        group = {
-          "col.border_active" = "rgba(63F2F1aa)";
-          "col.border_inactive" = "rgba(585272aa)";
-
-          groupbar = {
-            font_family = "Iosevka";
-            font_size = 13;
-            "col.active" = "rgba(63F2F1aa)";
-            "col.inactive" = "rgba(585272aa)";
+        in
+        {
+          mainMod = {
+            _var = "SUPER";
           };
-        };
 
-        misc = {
-          disable_hyprland_logo = true;
-          disable_splash_rendering = true;
-          mouse_move_enables_dpms = true;
-          key_press_enables_dpms = true;
-        };
-
-        xwayland = {
-          force_zero_scaling = true;
-        };
-
-        input = {
-          kb_layout = "us,ir";
-          kb_variant = config.keyboard.variant;
-          kb_options = config.keyboard.options;
-          numlock_by_default = true;
-          sensitivity = 0.15;
-          follow_mouse = 1;
-          touchpad = {
-            natural_scroll = true;
-            drag_lock = true;
+          on = {
+            _args = [
+              "hyprland.start"
+              (lua ''
+                function()
+                ${lib.concatMapStrings (command: "  hl.exec_cmd(${luaQuote command})\n") startupCommands}end
+              '')
+            ];
           };
-        };
 
-        gestures = {
-          # TODO fix swipe
-          # workspace_swipe = true;
-          # workspace_swipe_distance = 200;
-          # workspace_swipe_forever = true;
-        };
-
-        device = [
-          {
-            name = "getech-huge-trackball-1";
-            "scroll_method" = "on_button_down";
-            "scroll_button" = 279;
-            "natural_scroll" = true;
-          }
-          {
-            name = "ploopy-corporation-ploopy-adept-trackball-mouse";
-            natural_scroll = true;
-          }
-        ];
-
-        monitor = map (
-          m:
-          let
-            resolution = "${toString m.width}x${toString m.height}@${toString m.refreshRate}";
-            position = "${toString m.x}x${toString m.y}";
-            transform = "transform, ${m.transform}";
-          in
-          "${m.name},${
-            if m.enabled then "${resolution},${position},${toString m.scale},${transform}" else "disable"
-          }"
-        ) (config.monitors);
-
-        animations = {
-          enabled = true;
-          bezier = [
-            "overshot, ${theme.animationsBezier}"
-            "smooth, 0.13, 0.99, 0.29, 1"
-            "wind, 0.05, 0.9, 0.1, 1.05"
+          env = [
+            (env "XCURSOR_SIZE" "24")
+            (env "XDG_CURRENT_DESKTOP" "Hyprland")
+            (env "XDG_SESSION_TYPE" "wayland")
+            (env "XDG_SESSION_DESKTOP" "Hyprland")
+            (env "QT_QPA_PLATFORM" "wayland;xcb")
+            (env "QT_QPA_PLATFORMTHEME" "qt6ct")
+            (env "QT_WAYLAND_DISABLE_WINDOWDECORATION" "1")
+            (env "QT_AUTO_SCREEN_SCALE_FACTOR" "1")
+            (env "MOZ_ENABLE_WAYLAND" "1")
+            (env "GDK_SCALE" "1")
+            (env "GDK_BACKEND" "wayland,x11")
+            (env "DEFAULT_FILE_MANAGER" "thunar")
+            (env "XDG_FILE_MANAGER" "thunar")
           ];
+
+          config = {
+            general = {
+              gaps_in = 4;
+              gaps_out = 8;
+              border_size = 2;
+              "col.active_border" = {
+                colors = [
+                  "rgb(${p.accent})"
+                  "rgb(${p.accent2})"
+                ];
+                angle = 45;
+              };
+              "col.inactive_border" = "rgba(${p.surfaceAlt}aa)";
+              layout = "dwindle";
+              resize_on_border = true;
+            };
+
+            dwindle = {
+              preserve_split = true;
+            };
+
+            master = {
+              orientation = "master";
+            };
+
+            decoration = {
+              rounding = theme.rounding;
+              blur = {
+                enabled = true;
+                size = 6;
+                passes = 2;
+                new_optimizations = true;
+                ignore_opacity = false;
+                xray = true;
+              };
+            };
+
+            group = {
+              "col.border_active" = "rgba(63F2F1aa)";
+              "col.border_inactive" = "rgba(585272aa)";
+
+              groupbar = {
+                font_family = "Iosevka";
+                font_size = 13;
+                "col.active" = "rgba(63F2F1aa)";
+                "col.inactive" = "rgba(585272aa)";
+              };
+            };
+
+            misc = {
+              disable_hyprland_logo = true;
+              disable_splash_rendering = true;
+              mouse_move_enables_dpms = true;
+              key_press_enables_dpms = true;
+            };
+
+            xwayland = {
+              force_zero_scaling = true;
+            };
+
+            input = {
+              kb_layout = "us,ir";
+              kb_variant = config.keyboard.variant;
+              kb_options = config.keyboard.options;
+              numlock_by_default = true;
+              sensitivity = 0.15;
+              follow_mouse = 1;
+              touchpad = {
+                natural_scroll = true;
+                drag_lock = true;
+              };
+            };
+
+            animations = {
+              enabled = true;
+            };
+          };
+
+          device = [
+            {
+              name = "getech-huge-trackball-1";
+              scroll_method = "on_button_down";
+              scroll_button = 279;
+              natural_scroll = true;
+            }
+            {
+              name = "ploopy-corporation-ploopy-adept-trackball-mouse";
+              natural_scroll = true;
+            }
+          ];
+
+          monitor = map (
+            m:
+            if m.enabled then
+              {
+                output = m.name;
+                mode = "${toString m.width}x${toString m.height}@${toString m.refreshRate}";
+                position = "${toString m.x}x${toString m.y}";
+                scale = m.scale;
+                transform = builtins.fromJSON m.transform;
+              }
+            else
+              {
+                output = m.name;
+                disabled = true;
+              }
+          ) config.monitors;
+
+          workspace_rule = lib.lists.flatten (
+            map (
+              m:
+              map (w: {
+                workspace = w;
+                monitor = m.name;
+              }) m.workspaces
+            ) config.monitors
+          );
+
+          curve = [
+            {
+              _args = [
+                "overshot"
+                {
+                  type = "bezier";
+                  points = bezierPoints theme.animationsBezier;
+                }
+              ];
+            }
+            {
+              _args = [
+                "smooth"
+                {
+                  type = "bezier";
+                  points = [
+                    [
+                      0.13
+                      0.99
+                    ]
+                    [
+                      0.29
+                      1
+                    ]
+                  ];
+                }
+              ];
+            }
+            {
+              _args = [
+                "wind"
+                {
+                  type = "bezier";
+                  points = [
+                    [
+                      0.05
+                      0.9
+                    ]
+                    [
+                      0.1
+                      1.05
+                    ]
+                  ];
+                }
+              ];
+            }
+          ];
+
           animation = [
-            "windows, 1, 6, wind, slide"
-            "windowsIn, 1, 6, wind, slide"
-            "windowsOut, 1, 5, smooth, popin 80%"
-            "border, 1, 10, default"
-            "borderangle, 1, 30, smooth, loop"
-            "fade, 1, 8, smooth"
-            "workspaces, 1, 6, overshot, slidevert"
+            {
+              leaf = "windows";
+              enabled = true;
+              speed = 6;
+              bezier = "wind";
+              style = "slide";
+            }
+            {
+              leaf = "windowsIn";
+              enabled = true;
+              speed = 6;
+              bezier = "wind";
+              style = "slide";
+            }
+            {
+              leaf = "windowsOut";
+              enabled = true;
+              speed = 5;
+              bezier = "smooth";
+              style = "popin 80%";
+            }
+            {
+              leaf = "border";
+              enabled = true;
+              speed = 10;
+              bezier = "default";
+            }
+            {
+              leaf = "borderangle";
+              enabled = true;
+              speed = 30;
+              bezier = "smooth";
+              style = "loop";
+            }
+            {
+              leaf = "fade";
+              enabled = true;
+              speed = 8;
+              bezier = "smooth";
+            }
+            {
+              leaf = "workspaces";
+              enabled = true;
+              speed = 6;
+              bezier = "overshot";
+              style = "slidevert";
+            }
+          ];
+
+          window_rule = [
+            {
+              match.title = "^(kitty-default)";
+              workspace = "special:notes";
+            }
+            {
+              match.title = "^(kitty-scratch)";
+              workspace = "special:term";
+            }
+            {
+              match.class = "^(kitty)$";
+              opacity = "0.9 0.9";
+            }
+
+            {
+              match.title = "Calculator";
+              float = true;
+            }
+            {
+              match.title = "kitty-float";
+              float = true;
+            }
+            {
+              match.class = "^(org.kde.dolphin)$";
+              match.title = "^(Progress Dialog — Dolphin)$";
+              float = true;
+            }
+            {
+              match.class = "^(org.kde.dolphin)$";
+              match.title = "^(Copying — Dolphin)$";
+              float = true;
+            }
+            {
+              match.title = "(Firefox — Sharing Indicator)";
+              float = true;
+            }
+            {
+              match.class = "^(firefox)$";
+              match.title = "^(Picture-in-Picture)$";
+              float = true;
+            }
+            {
+              match.class = "^(firefox)$";
+              match.title = "^(Library)$";
+              float = true;
+            }
+            {
+              match.class = "^(vlc)$";
+              float = true;
+            }
+            {
+              match.class = "^(org.pulseaudio.pavucontrol)$";
+              float = true;
+            }
+            {
+              match.class = "^(blueman-manager)$";
+              float = true;
+            }
+            {
+              match.class = "^(nm-applet)$";
+              float = true;
+            }
+            {
+              match.class = "^(nm-connection-editor)$";
+              float = true;
+            }
+            {
+              match.class = "^(org.kde.polkit-kde-authentication-agent-1)$";
+              float = true;
+            }
+            {
+              match.class = "org.telegram.desktop";
+              float = true;
+            }
+            {
+              match.class = "org.telegram.desktop";
+              size = [
+                500
+                900
+              ];
+            }
+          ];
+
+          bind = [
+            (mkBind [ "mainMod" "Return" ] (exec "kitty"))
+            (mkBind [ "mainMod" "q" ] "hl.dsp.window.close()")
+            (mkBind [ "mainMod" "SHIFT" "q" ] "hl.dsp.exit()")
+            (mkBind [ "mainMod" "SHIFT" "b" ] (
+              exec "${pkgs.procps}/bin/pkill -SIGUSR1 -x .waybar-wrapped || ${pkgs.procps}/bin/pkill -SIGUSR1 -x ironbar"
+            ))
+            (mkBind [ "mainMod" "f" ] ''hl.dsp.window.fullscreen({ mode = "fullscreen" })'')
+            (mkBind [ "mainMod" "m" ] ''hl.dsp.window.fullscreen({ mode = "maximized" })'')
+            (mkBind [ "mainMod" "SHIFT" "t" ] ''hl.dsp.window.float({ action = "toggle" })'')
+            (mkBind [ "mainMod" "d" ] (exec "fuzzel"))
+            (mkBind [ "ALT" "e" ] (exec "wofi-emoji"))
+
+            (mkBind [ "mainMod" "r" ] (
+              exec "kitty --title='kitty-float' --override initial_window_width=100c --override initial_window_height=1c --hold"
+            ))
+            (mkBind [ "mainMod" "CTRL" "r" ] (
+              exec "kitty --title='kitty-float' --override initial_window_width=100c --override initial_window_height=40c --hold"
+            ))
+            (mkBind [ "mainMod" "o" ] (
+              exec "kitty --title='kitty-float' --override initial_window_width=150c --override initial_window_height=42c zsh -ic 'zk edit --interactive'"
+            ))
+            (mkBind [ "mainMod" "e" ] (
+              exec "kitty --title='kitty-float' --override initial_window_width=80c --override initial_window_height=20c qke"
+            ))
+
+            (mkBind [ "mainMod" "n" ] (exec "nautilus"))
+            (mkBind [ "mainMod" "t" ] (exec "Telegram"))
+            (mkBind [ "mainMod" "P" ] "hl.dsp.window.pseudo()")
+            (mkBind [ "mainMod" "s" ] ''hl.dsp.workspace.toggle_special("notes")'')
+            (mkBind [ "mainMod" "SHIFT" "S" ] (moveToWorkspace "special:notes"))
+            (mkBind [ "mainMod" "CTRL" "t" ] ''hl.dsp.workspace.toggle_special("term")'')
+            (mkBind [ "mainMod" "g" ] "hl.dsp.group.toggle()")
+            (mkBind [ "mainMod" "TAB" ] "hl.dsp.group.next()")
+            (mkBind [ "mainMod" "SHIFT" "TAB" ] "hl.dsp.group.prev()")
+            (mkBind [ "mainMod" "z" ] ''hl.dsp.focus({ window = "title:kitty-journal" })'')
+            (mkBind [ "mainMod" "period" ] (
+              exec ''zsh -c 'wl-paste >> $JOURNALS/$(date +%Y-%m-%d).md && notify-send "pasted into $(date +%Y-%m-%d).md!"''
+            ))
+            (mkBind [ "mainMod" "v" ] (exec "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"))
+
+            (mkBind [ "mainMod" "h" ] (focusDirection "l"))
+            (mkBind [ "mainMod" "l" ] (focusDirection "r"))
+            (mkBind [ "mainMod" "k" ] (focusDirection "u"))
+            (mkBind [ "mainMod" "j" ] (focusDirection "d"))
+
+            (mkBind [ "mainMod" "SHIFT" "h" ] (moveDirection "l"))
+            (mkBind [ "mainMod" "SHIFT" "l" ] (moveDirection "r"))
+            (mkBind [ "mainMod" "SHIFT" "k" ] (moveDirection "u"))
+            (mkBind [ "mainMod" "SHIFT" "j" ] (moveDirection "d"))
+
+            (mkBind [ "mainMod" "CTRL" "h" ] (focusWorkspace "r-1"))
+            (mkBind [ "mainMod" "CTRL" "k" ] (focusWorkspace "r-1"))
+            (mkBind [ "mainMod" "CTRL" "l" ] (focusWorkspace "r+1"))
+            (mkBind [ "mainMod" "CTRL" "j" ] (focusWorkspace "r+1"))
+            (mkBind [ "mainMod" "CTRL" "SHIFT" "h" ] (moveToWorkspace "r-1"))
+            (mkBind [ "mainMod" "CTRL" "SHIFT" "k" ] (moveToWorkspace "r-1"))
+            (mkBind [ "mainMod" "CTRL" "SHIFT" "l" ] (moveToWorkspace "r+1"))
+            (mkBind [ "mainMod" "CTRL" "SHIFT" "j" ] (moveToWorkspace "r+1"))
+
+            (mkBind [ "mainMod" "ALT" "h" ] (moveIntoGroup "l"))
+            (mkBind [ "mainMod" "ALT" "l" ] (moveIntoGroup "r"))
+            (mkBind [ "mainMod" "ALT" "k" ] (moveIntoGroup "u"))
+            (mkBind [ "mainMod" "ALT" "j" ] (moveIntoGroup "d"))
+          ]
+          ++ lib.lists.flatten (
+            map (
+              n:
+              let
+                key = if n == 10 then "0" else toString n;
+                workspace = toString n;
+              in
+              [
+                (mkBind [ "mainMod" key ] (focusWorkspace workspace))
+                (mkBind [ "mainMod" "SHIFT" key ] (moveToWorkspace workspace))
+              ]
+            ) (lib.range 1 10)
+          )
+          ++ [
+            (mkBind [ "XF86AudioLowerVolume" ] (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"))
+            (mkBind [ "XF86AudioRaiseVolume" ] (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"))
+            (mkBind [ "XF86AudioMute" ] (exec "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
+            (mkBind [ "XF86AudioPrev" ] (exec "playerctl previous"))
+            (mkBind [ "XF86AudioNext" ] (exec "playerctl next"))
+            (mkBind [ "XF86AudioPlay" ] (exec "playerctl play-pause"))
+            (mkBind [ "XF86Calculator" ] (exec "gnome-calculator"))
+            (mkBind [ "mainMod" "KP_ENTER" ] (exec "gnome-calculator"))
+
+            (mkBind [ "XF86MonBrightnessDown" ] (exec "${pkgs.brightnessctl}/bin/brightnessctl set 10-"))
+            (mkBind [ "XF86MonBrightnessUp" ] (exec "${pkgs.brightnessctl}/bin/brightnessctl set +10"))
+
+            (mkBind [ "mainMod" "CTRL" "w" ] (exec "wallpaper-manager download"))
+
+            (mkBind [ "mainMod" "bracketright" ] (focusMonitor "r"))
+            (mkBind [ "mainMod" "bracketleft" ] (focusMonitor "l"))
+
+            (mkBind [ "Pause" ] (exec "${hyprlock} --grace 5"))
+            (mkBind [ "CTRL" "SHIFT" "Pause" ] (exec "${loginctl} lock-session & ${systemctl} suspend"))
+            (mkBind [ "mainMod" "ALT" "CTRL" "equal" ] (exec "dunstctl set-paused toggle"))
+            (mkBind [ "mainMod" "ALT" "CTRL" "bracketright" ] (exec "systemctl reboot"))
+
+            (mkBind [ "Print" ] (exec "screenshot area"))
+            (mkBind [ "SHIFT" "Print" ] (exec "screenshot screen"))
+            (mkBind [ "ALT" "Print" ] (exec "screenshot active"))
+
+            (mkBindWith [ "mainMod" "mouse:272" ] "hl.dsp.window.drag()" { mouse = true; })
+            (mkBindWith [ "mainMod" "mouse:273" ] "hl.dsp.window.resize()" { mouse = true; })
           ];
         };
-
-        windowrulev2 = [
-          "workspace special:notes,title:^(kitty-default)"
-          "workspace special:term,title:^(kitty-scratch)"
-
-          "opacity 0.9 0.9,class:^(kitty)$"
-
-          "float,title:Calculator"
-          "float,title:kitty-float"
-          "float,class:^(org.kde.dolphin)$,title:^(Progress Dialog — Dolphin)$"
-          "float,class:^(org.kde.dolphin)$,title:^(Copying — Dolphin)$"
-          "float,title:(Firefox — Sharing Indicator)"
-          "float,class:^(firefox)$,title:^(Picture-in-Picture)$"
-          "float,class:^(firefox)$,title:^(Library)$"
-          "float,class:^(vlc)$"
-          "float,class:^(org.pulseaudio.pavucontrol)$"
-          "float,class:^(blueman-manager)$"
-          "float,class:^(nm-applet)$"
-          "float,class:^(nm-connection-editor)$"
-          "float,class:^(org.kde.polkit-kde-authentication-agent-1)$"
-          "float,class:org.telegram.desktop"
-
-          "size 500 900, class:org.telegram.desktop"
-        ];
-
-        "$mainMod" = "SUPER";
-        bind = [
-          "$mainMod, Return, exec, kitty"
-          "$mainMod, q, killactive,"
-          "$mainMod SHIFT, q, exit,"
-          "$mainMod SHIFT, b, exec, ${pkgs.procps}/bin/pkill -SIGUSR1 -x .waybar-wrapped || ${pkgs.procps}/bin/pkill -SIGUSR1 -x ironbar"
-          "$mainMod, f, fullscreen, 0"
-          "$mainMod, m, fullscreen, 1"
-          "$mainMod SHIFT, t, togglefloating,"
-          "$mainMod, d, exec, fuzzel"
-          "ALT, e, exec, wofi-emoji"
-
-          "$mainMod, r, exec, kitty --title='kitty-float' --override initial_window_width=100c --override initial_window_height=1c --hold"
-          "$mainMod CTRL, r, exec, kitty --title='kitty-float' --override initial_window_width=100c --override initial_window_height=40c --hold"
-          "$mainMod, o, exec, kitty --title='kitty-float' --override initial_window_width=150c --override initial_window_height=42c zsh -ic 'zk edit --interactive'"
-          "$mainMod, e, exec, kitty --title='kitty-float' --override initial_window_width=80c --override initial_window_height=20c qke"
-
-          "$mainMod, n, exec, nautilus"
-          "$mainMod, t, exec, Telegram"
-          "$mainMod, P, pseudo, # dwindle"
-          "$mainMod, s, togglespecialworkspace, notes"
-          "$mainMod SHIFT, S, movetoworkspace, special:notes"
-          "$mainMod CTRL, t, togglespecialworkspace, term"
-          "$mainMod, g, togglegroup"
-          "$mainMod, TAB, changegroupactive, f"
-          "$mainMod SHIFT, TAB, changegroupactive, b"
-          "$mainMod, z, focuswindow, title:kitty-journal"
-          "$mainMod, period, exec, zsh -c 'wl-paste >> $JOURNALS/$(date +%Y-%m-%d).md && notify-send \"pasted into $(date +%Y-%m-%d).md!\"'"
-          "$mainMod, v, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
-
-          "$mainMod, h, movefocus, l"
-          "$mainMod, l, movefocus, r"
-          "$mainMod, k, movefocus, u"
-          "$mainMod, j, movefocus, d"
-
-          "$mainMod SHIFT, h, movewindow, l"
-          "$mainMod SHIFT, l, movewindow, r"
-          "$mainMod SHIFT, k, movewindow, u"
-          "$mainMod SHIFT, j, movewindow, d"
-
-          "$mainMod CTRL, h, workspace, r-1"
-          "$mainMod CTRL, k, workspace, r-1"
-          "$mainMod CTRL, l, workspace, r+1"
-          "$mainMod CTRL, j, workspace, r+1"
-          "$mainMod CTRL SHIFT, h, movetoworkspace, r-1"
-          "$mainMod CTRL SHIFT, k, movetoworkspace, r-1"
-          "$mainMod CTRL SHIFT, l, movetoworkspace, r+1"
-          "$mainMod CTRL SHIFT, j, movetoworkspace, r+1"
-
-          #"$mainMod CTRL, k, swapwindow, u"
-          #"$mainMod CTRL, j, swapwindow, d"
-
-          "$mainMod ALT, h, moveintogroup, l"
-          "$mainMod ALT, l, moveintogroup, r"
-          "$mainMod ALT, k, moveintogroup, u"
-          "$mainMod ALT, j, moveintogroup, d"
-
-          "$mainMod, 1, workspace, 1"
-          "$mainMod, 2, workspace, 2"
-          "$mainMod, 3, workspace, 3"
-          "$mainMod, 4, workspace, 4"
-          "$mainMod, 5, workspace, 5"
-          "$mainMod, 6, workspace, 6"
-          "$mainMod, 7, workspace, 7"
-          "$mainMod, 8, workspace, 8"
-          "$mainMod, 9, workspace, 9"
-          "$mainMod, 0, workspace, 10"
-
-          "$mainMod SHIFT, 1, movetoworkspace, 1"
-          "$mainMod SHIFT, 2, movetoworkspace, 2"
-          "$mainMod SHIFT, 3, movetoworkspace, 3"
-          "$mainMod SHIFT, 4, movetoworkspace, 4"
-          "$mainMod SHIFT, 5, movetoworkspace, 5"
-          "$mainMod SHIFT, 6, movetoworkspace, 6"
-          "$mainMod SHIFT, 7, movetoworkspace, 7"
-          "$mainMod SHIFT, 8, movetoworkspace, 8"
-          "$mainMod SHIFT, 9, movetoworkspace, 9"
-          "$mainMod SHIFT, 0, movetoworkspace, 10"
-
-          ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-          ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-          ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-          ", XF86AudioPrev, exec, playerctl previous"
-          ", XF86AudioNext, exec, playerctl next"
-          ", XF86AudioPlay, exec, playerctl play-pause"
-          ", XF86Calculator, exec, gnome-calculator"
-          "$mainMod, KP_ENTER, exec, gnome-calculator"
-
-          ", XF86MonBrightnessDown, exec, ${pkgs.brightnessctl}/bin/brightnessctl set 10-"
-          ", XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +10"
-          ", XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +10"
-
-          "$mainMod CTRL, w, exec, wallpaper-manager download"
-
-          "$mainMod, bracketright, focusmonitor, r"
-          "$mainMod, bracketleft, focusmonitor, l"
-
-          ", Pause, exec, hyprlock --grace 5"
-          "CTRL SHIFT, Pause, exec, hyprlock --immediate & systemctl suspend"
-          "$mainMod ALT CTRL, equal, exec, dunstctl set-paused toggle"
-          "$mainMod ALT CTRL, bracketright, exec, systemctl reboot"
-
-          ", Print, exec, screenshot area"
-          "SHIFT, Print, exec, screenshot screen"
-          "ALT, Print, exec, screenshot active"
-        ];
-
-        bindm = [
-          "$mainMod, mouse:272, movewindow"
-          "$mainMod, mouse:273, resizewindow"
-        ];
-      };
     };
   };
 }
