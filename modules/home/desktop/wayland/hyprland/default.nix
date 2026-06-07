@@ -123,6 +123,17 @@ in
       default = [ ];
       description = "List of applications to start at hyprland startup";
     };
+
+    layout = mkOption {
+      type = enum [
+        "dwindle"
+        "master"
+        "scrolling"
+        "monocle"
+      ];
+      default = "dwindle";
+      description = "Hyprland tiling layout.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -309,7 +320,7 @@ in
                 angle = 45;
               };
               "col.inactive_border" = "rgba(${p.surfaceAlt}aa)";
-              layout = "dwindle";
+              layout = cfg.layout;
               resize_on_border = true;
             };
 
@@ -319,6 +330,14 @@ in
 
             master = {
               orientation = "master";
+            };
+
+            scrolling = {
+              column_width = 0.5;
+              fullscreen_on_one_column = true;
+              focus_fit_method = 1;
+              follow_focus = true;
+              direction = "right";
             };
 
             decoration = {

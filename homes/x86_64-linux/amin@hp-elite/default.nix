@@ -31,6 +31,7 @@
         hyprland = {
           enable = true;
           autostart = ["Throne"];
+          layout = "scrolling";
         };
         niri = {
           enable = true;
