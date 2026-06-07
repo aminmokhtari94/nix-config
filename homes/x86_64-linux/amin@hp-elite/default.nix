@@ -88,7 +88,7 @@ in
     desktop = {
       enable = true;
       apps = with pkgs; [
-        postman
+        # postman
       ];
       wayland = {
         hyprland = {

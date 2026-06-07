@@ -70,6 +70,24 @@
         };
       }
   ) {};
+
+  wwanToggle = pkgs.writeShellScriptBin "wwan-toggle" ''
+    set -eu
+    unit=xmm7360-connect.service
+    case "''${1:-toggle}" in
+      on|start)   exec /run/wrappers/bin/sudo -n systemctl start "$unit" ;;
+      off|stop)   exec /run/wrappers/bin/sudo -n systemctl stop  "$unit" ;;
+      status)     systemctl is-active "$unit" ;;
+      toggle|"")
+        if systemctl is-active --quiet "$unit"; then
+          exec /run/wrappers/bin/sudo -n systemctl stop  "$unit"
+        else
+          exec /run/wrappers/bin/sudo -n systemctl start "$unit"
+        fi
+        ;;
+      *) echo "usage: wwan-toggle [on|off|toggle|status]" >&2; exit 2 ;;
+    esac
+  '';
 in {
   imports = [
     # Include the results of the hardware scan.
@@ -95,11 +113,11 @@ in {
   };
   # This modem is driven through xmm7360-pci RPC. ModemManager probes the
   # ttyXMM ports as a generic AT modem and can leave it in a failed state.
+  # The in-tree iosm driver also exposes the device but ModemManager refuses
+  # to drive XMM7360 in RPC mode, so we stick with xmm7360-pci.
   networking.modemmanager.enable = false;
   hardware.usb-modeswitch.enable = true;
 
-  # Experimental Intel XMM7360/Fibocom L850-GL support. The stock iosm driver
-  # exposes this card, but ModemManager cannot use it in RPC mode.
   boot.kernelParams = ["iommu=off"];
   boot.blacklistedKernelModules = ["iosm"];
   boot.extraModulePackages = [xmm7360Pci];
@@ -116,6 +134,7 @@ in {
   systemd.services.xmm7360-connect.path = [
     pkgs.coreutils
     pkgs.kmod
+    pkgs.procps
   ];
 
   systemd.services.xmm7360-connect = {
@@ -141,6 +160,8 @@ in {
             exit 1
           fi
 
+          pkill -9 -f open_xdatachannel || true
+
           echo 0 > "$device/d3cold_allowed" || true
           echo on > "$device/power/control" || true
 
@@ -165,6 +186,26 @@ in {
       ExecStart = "${xmm7360Pci}/bin/xmm7360-up";
     };
   };
+
+  security.sudo.extraRules = [
+    {
+      groups = ["wheel"];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/systemctl start xmm7360-connect.service";
+          options = ["NOPASSWD"];
+        }
+        {
+          command = "/run/current-system/sw/bin/systemctl stop xmm7360-connect.service";
+          options = ["NOPASSWD"];
+        }
+        {
+          command = "/run/current-system/sw/bin/systemctl restart xmm7360-connect.service";
+          options = ["NOPASSWD"];
+        }
+      ];
+    }
+  ];
 
   services.resolved.enable = false;
   services.dnsmasq = {
@@ -320,6 +361,7 @@ in {
     wget
     corkscrew
     xmm7360Pci
+    wwanToggle
   ];
 
   nix.settings.trusted-users = ["amin"];
