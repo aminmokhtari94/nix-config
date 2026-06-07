@@ -10,6 +10,7 @@ final: prev: {
     throne
     claude
     codex
+    rtk
     openspec
     telegram-desktop
     ;

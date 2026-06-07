@@ -71,7 +71,7 @@ in
     Install.WantedBy = [ "timers.target" ];
   };
 
-  xdg.configFile."hypr/hyprland.conf".force = true;
+  xdg.configFile."hypr/hyprland.lua".force = true;
 
   default = {
     theme.name = "embarl";
@@ -94,6 +94,7 @@ in
         hyprland = {
           enable = true;
           autostart = [ "Throne" ];
+          layout = "scrolling";
         };
         niri = {
           enable = true;

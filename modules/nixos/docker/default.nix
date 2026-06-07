@@ -16,9 +16,9 @@
   ];
   systemd.services.docker = {
     environment = {
-      HTTP_PROXY = "http://192.168.1.228:2080";
-      HTTPS_PROXY = "http://192.168.1.228:2080";
-      NO_PROXY = "localhost,127.0.0.1,::1";
+      # HTTP_PROXY = "http://192.168.1.228:2080";
+      # HTTPS_PROXY = "http://192.168.1.228:2080";
+      # NO_PROXY = "localhost,127.0.0.1,::1";
     };
   };
 }

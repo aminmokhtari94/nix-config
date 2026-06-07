@@ -61,8 +61,11 @@
       commit = {
         verbose = true;
       };
-      url."git@github.com:rahkarsanat".insteadOf = "https://github.com/rahkarsanat/";
-      url."git@git.kiz.ir:".insteadOf = "https://git.kiz.ir/";
+      url."ssh://git@github.com/rahkarsanat".insteadOf = "https://github.com/rahkarsanat";
+      url."ssh://git@git.kiz.ir/".insteadOf = [
+        "https://git.kiz.ir/"
+        "http://git.kiz.ir/"
+      ];
       credential.helper = "store";
     };
 
