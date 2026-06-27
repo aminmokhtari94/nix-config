@@ -138,6 +138,12 @@
         action = "<cmd>DiffviewFileHistory<CR>";
         options.desc = "Git file history";
       }
+      {
+        mode = "n";
+        key = "<leader>gf";
+        action = "<cmd>DiffviewFileHistory %<CR>";
+        options.desc = "Git current file history";
+      }
 
       # =======================
       # LazyGit

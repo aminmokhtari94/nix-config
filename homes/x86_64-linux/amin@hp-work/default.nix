@@ -42,7 +42,7 @@
       };
       browser.enable = true;
       kitty.enable = true;
-      gtk.enable = true;
+      gtk.enable = false;
       wayland.waybar.enable = true;
       wayland.ironbar = {
         enable = false;

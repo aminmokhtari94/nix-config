@@ -7,7 +7,6 @@ final: prev: {
     vscode
     formats
     vimPlugins
-    throne
     claude
     codex
     rtk

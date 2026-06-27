@@ -68,9 +68,23 @@
     };
   };
 
+  networking.hosts = {
+    "127.0.0.1" = [
+      "api.anthropic.com"
+      "claude.ai"
+      "platform.claude.com"
+      "downloads.claude.ai"
+      "raw.githubusercontent.com"
+      "storage.googleapis.com"
+      "bridge.claudeusercontent.com"
+      "*.claudeusercontent.com"
+    ];
+  };
+
   networking.extraHosts = ''
     172.16.100.205 k8s.c02.kiz.ir
     172.16.100.40 grafana.prometheus.cluster.local
+    172.16.100.205 k8s.c02.kiz.ir
 
     172.16.100.49 redpanda-0
     172.16.100.56 redpanda-1
@@ -231,6 +245,7 @@
   # networking.proxy.noProxy =
   #   "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
 
+  networking.firewall.enable = false;
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
     22
@@ -248,6 +263,7 @@
     5062
     5063
     8449
+    9080
   ];
   # Fonoster SIP (UDP) + RTPEngine media range
   networking.firewall.allowedUDPPorts = [
