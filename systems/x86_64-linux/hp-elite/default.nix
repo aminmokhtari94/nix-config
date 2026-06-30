@@ -34,6 +34,14 @@
                            "static ssize_t xmm7360_tty_write(struct tty_struct *tty," \
             --replace-fail "const unsigned char *buffer, int count)" \
                            "const unsigned char *buffer, size_t count)"
+
+          # Linux 6.16+ removed hrtimer_init() (use hrtimer_setup, which takes the
+          # callback) and made struct hrtimer's .function field private.
+          substituteInPlace xmm7360.c \
+            --replace-fail "hrtimer_init(&xn->deadline, CLOCK_MONOTONIC, HRTIMER_MODE_REL);" \
+                           "hrtimer_setup(&xn->deadline, xmm7360_net_deadline_cb, CLOCK_MONOTONIC, HRTIMER_MODE_REL);" \
+            --replace-fail "xn->deadline.function = xmm7360_net_deadline_cb;" \
+                           ""
         '';
 
         makeFlags = [
