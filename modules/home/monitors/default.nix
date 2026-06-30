@@ -52,6 +52,11 @@ in
             ];
             default = [ ];
           };
+          scrollLayout = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Use the Hyprland scrolling layout for this monitor's workspaces.";
+          };
           wallpaper = mkOption { type = types.str; };
         };
       }

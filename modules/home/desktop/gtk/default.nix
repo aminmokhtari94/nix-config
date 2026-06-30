@@ -5,56 +5,35 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.default.desktop.gtk;
 in
 {
-  options.default.desktop.gtk = with types; {
-    enable = mkEnableOption "gtk";
-  };
+  options.default.desktop.gtk.enable = lib.mkEnableOption "GTK configuration";
 
-  config = mkIf cfg.enable {
-    dconf.settings = {
-      "org/gnome/desktop/interface" = {
-        color-scheme = "prefer-dark";
-      };
+  config = lib.mkIf cfg.enable {
+    dconf.settings."org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
     };
 
     gtk = {
       enable = true;
+
       theme = {
-        name = "Colloid-Teal-Dark";
-        package = pkgs.colloid-gtk-theme.override {
-          themeVariants = [
-            "purple"
-            "teal"
-            "grey"
-            "green"
-          ];
-          tweaks = [ "black" ];
-        };
+        package = pkgs.colloid-gtk-theme;
+        name = "Colloid-Dark";
       };
+
       gtk4.theme = config.gtk.theme;
 
-      cursorTheme = {
-        name = "Bibata-Modern-Ice";
-        package = pkgs.bibata-cursors;
+      iconTheme = {
+        package = pkgs.colloid-icon-theme;
+        name = "Colloid-Dark";
       };
 
-      iconTheme = {
-        name = "Colloid-dracula-dark";
-        package = pkgs.colloid-icon-theme.override {
-          colorVariants = [
-            "default"
-            "purple"
-            "teal"
-            "grey"
-            "green"
-            "pink"
-          ];
-          schemeVariants = [ "dracula" ];
-        };
+      cursorTheme = {
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Ice";
       };
     };
   };

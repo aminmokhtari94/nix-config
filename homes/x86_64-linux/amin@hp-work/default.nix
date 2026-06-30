@@ -42,7 +42,7 @@
       };
       browser.enable = true;
       kitty.enable = true;
-      gtk.enable = false;
+      gtk.enable = true;
       wayland.waybar.enable = true;
       wayland.ironbar = {
         enable = false;
@@ -115,6 +115,7 @@
         "5"
         "6"
       ];
+      scrollLayout = true;
       wallpaper = "~/Pictures/wallpaper-DP-2.jpg";
     }
   ];

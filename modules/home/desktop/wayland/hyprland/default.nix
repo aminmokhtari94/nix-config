@@ -240,11 +240,13 @@ in
       settings = {
         ipc = "on";
         splash = false;
-        splash_offset = 2.0;
 
-        preload = map wallpaperPath config.monitors;
-
-        wallpaper = map (m: "${m.name},${wallpaperPath m}") config.monitors;
+        # hyprpaper >=0.8 removed `preload` and the inline `wallpaper=mon,path`
+        # syntax; wallpapers are now `wallpaper { monitor=..; path=..; }` blocks.
+        wallpaper = map (m: {
+          monitor = m.name;
+          path = wallpaperPath m;
+        }) config.monitors;
       };
     };
 
@@ -426,10 +428,14 @@ in
           workspace_rule = lib.lists.flatten (
             map (
               m:
-              map (w: {
-                workspace = w;
-                monitor = m.name;
-              }) m.workspaces
+              map (
+                w:
+                {
+                  workspace = w;
+                  monitor = m.name;
+                }
+                // lib.optionalAttrs m.scrollLayout { layout = "scrolling"; }
+              ) m.workspaces
             ) config.monitors
           );
 

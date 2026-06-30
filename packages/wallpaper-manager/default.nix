@@ -60,18 +60,28 @@ writeShellScriptBin "wallpaper-manager" ''
     mv "$TMP_FILE" "$OUTPUT_FILE"
     echo "Wallpaper saved to $OUTPUT_FILE"
 
-    set_wallpaper() {
-      "$HYPRCTL" hyprpaper wallpaper "$DP,$OUTPUT_FILE"
-    }
-
-    if ! set_wallpaper; then
-      "$HYPRPAPER" >/dev/null 2>&1 &
-      sleep 0.5
-      if ! set_wallpaper; then
-        echo "Wallpaper update failed: hyprpaper IPC is unavailable" >&2
-        exit 1
-      fi
+    # hyprpaper >=0.8 dropped preloading and loads images on demand, so the
+    # `wallpaper` IPC request shows the freshly written file without touching
+    # the other monitors. Only the focused monitor is changed.
+    if "$HYPRCTL" hyprpaper wallpaper "$DP,$OUTPUT_FILE" >/dev/null 2>&1; then
+      echo "Wallpaper set on $DP"
+      exit 0
     fi
+
+    # hyprpaper isn't reachable; start it (it loads all monitors from its config)
+    # and wait for the IPC socket, then assert the new file on the focused one.
+    if ! systemctl --user start hyprpaper.service >/dev/null 2>&1; then
+      "$HYPRPAPER" >/dev/null 2>&1 &
+    fi
+    for _ in $(seq 1 50); do
+      sleep 0.1
+      if "$HYPRCTL" hyprpaper wallpaper "$DP,$OUTPUT_FILE" >/dev/null 2>&1; then
+        echo "Wallpaper set on $DP"
+        exit 0
+      fi
+    done
+    echo "Wallpaper update failed: hyprpaper IPC is unavailable" >&2
+    exit 1
 
   elif [[ "$1" == "catalog" ]]; then
     echo "Opening wallpaper catalog..."
