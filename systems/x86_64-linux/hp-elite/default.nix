@@ -266,6 +266,19 @@ in {
   services.dbus.enable = true;
   programs.dconf.enable = true;
 
+  fonts = {
+    packages = with pkgs; [
+      noto-fonts
+    ];
+    fontconfig = {
+      defaultFonts = {
+        sansSerif = [ "Noto Sans" "Noto Sans Arabic" ];
+        serif = [ "Noto Serif" "Noto Naskh Arabic" ];
+        monospace = [ "DejaVu Sans Mono" "Noto Sans Arabic" ];
+      };
+    };
+  };
+
   # needs to be install on NixOS Module
   # Without this, you may have issues with XDG Portals, or missing session files in your Display Manager.
   programs.hyprland.enable = true;
