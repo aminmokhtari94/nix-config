@@ -19,6 +19,8 @@
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = false;
+    settings.ClientAliveInterval = 30;
+    settings.ClientAliveCountMax = 3;
   };
 
   # Set your time zone.
@@ -98,6 +100,8 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINby0+z+P0CzDer9jtyW6ppjTXwYV4g7pIum4MPsWkkZ phone_termux"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG1ldhcO45HmHAgGyi7KQkTetKdBCqlrtifK37Ez726A amin@worklaptop"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPNS3mrfcmerOvSvDkBWQDnz4N6pre99w4RQtOdNee47 amin@hp-elite"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINUvO0xxYlpaUU4OCZalkZzOZ7jyjhG8CKLx5LHx7rLD root@asrok"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPd845dClkKLs2TBDkTI20FWGd1jTKLFiqKzW0tswYMz root@biostar"
     ];
   };
 

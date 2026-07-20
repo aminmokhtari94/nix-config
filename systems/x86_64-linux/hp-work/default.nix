@@ -209,6 +209,8 @@
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = true;
+    settings.ClientAliveInterval = 30;
+    settings.ClientAliveCountMax = 3;
     # I'll disable this once I can connect.
   };
 
