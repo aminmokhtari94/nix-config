@@ -4,9 +4,7 @@
   pkgs,
   ...
 }:
-
-with lib;
-let
+with lib; let
   cfg = config.default.desktop.wayland.shaders;
 
   shaders = {
@@ -69,13 +67,12 @@ let
       }
     '';
   };
-in
-{
+in {
   options.default.desktop.wayland.shaders = with types; {
     enable = mkEnableOption "Hyprland screen shader (post-process)";
 
     style = mkOption {
-      type = enum [ "vignette" "crt" "warm" ];
+      type = enum ["vignette" "crt" "warm"];
       default = "vignette";
       description = "Which built-in shader to apply";
     };
@@ -88,7 +85,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    wayland.windowManager.hyprland.settings.decoration.screen_shader =
-      toString (if cfg.custom != null then cfg.custom else shaders.${cfg.style});
+    wayland.windowManager.hyprland.settings.config.decoration.screen_shader = toString (
+      if cfg.custom != null
+      then cfg.custom
+      else shaders.${cfg.style}
+    );
   };
 }

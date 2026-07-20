@@ -68,9 +68,23 @@
     };
   };
 
+  networking.hosts = {
+    "127.0.0.1" = [
+      "api.anthropic.com"
+      "claude.ai"
+      "platform.claude.com"
+      "downloads.claude.ai"
+      "raw.githubusercontent.com"
+      "storage.googleapis.com"
+      "bridge.claudeusercontent.com"
+      "*.claudeusercontent.com"
+    ];
+  };
+
   networking.extraHosts = ''
     172.16.100.205 k8s.c02.kiz.ir
     172.16.100.40 grafana.prometheus.cluster.local
+    172.16.100.205 k8s.c02.kiz.ir
 
     172.16.100.49 redpanda-0
     172.16.100.56 redpanda-1
@@ -158,6 +172,9 @@
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAGlj5STbxgr0chPN3kzTPjSZYLBixUoEoBRWCwHqA8z amin@n550jv"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsmJzyqZ3jvdz0C8AyMzkBwAXxcLAk12+P0+5Su1n/h phone_termius"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINby0+z+P0CzDer9jtyW6ppjTXwYV4g7pIum4MPsWkkZ phone_termux"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPNS3mrfcmerOvSvDkBWQDnz4N6pre99w4RQtOdNee47 amin@hp-elite"
     ];
   };
 
@@ -172,6 +189,9 @@
   environment.systemPackages = with pkgs; [
     wget
     corkscrew
+    pavucontrol
+    pulseaudio
+    alsa-utils
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -227,6 +247,7 @@
   # networking.proxy.noProxy =
   #   "127.0.0.1,::1,localhost,192.168.1.0/24,192.168.111.0/24,172.16.100.0/24";
 
+  networking.firewall.enable = false;
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
     22
@@ -244,6 +265,7 @@
     5062
     5063
     8449
+    9080
   ];
   # Fonoster SIP (UDP) + RTPEngine media range
   networking.firewall.allowedUDPPorts = [

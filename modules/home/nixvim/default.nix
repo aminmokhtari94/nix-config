@@ -21,7 +21,10 @@
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
-    nixpkgs.pkgs = inputs.unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+    nixpkgs.pkgs = import inputs.unstable {
+      system = pkgs.stdenv.hostPlatform.system;
+      config.allowUnfree = true;
+    };
     version.enableNixpkgsReleaseCheck = false;
 
     #  performance = {

@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   programs.nixvim = {
     opts.completeopt = [
       "menu"
@@ -18,7 +17,7 @@
       blink-cmp-copilot.enable = false;
       blink-cmp-dictionary.enable = true;
       blink-cmp-git.enable = true;
-      # blink-cmp-spell.enable = true;
+      blink-cmp-spell.enable = true;
       blink-copilot.enable = false;
       blink-emoji.enable = true;
       blink-ripgrep.enable = true;
@@ -162,15 +161,15 @@
               border = "none";
               draw = {
                 gap = 1;
-                treesitter = [ "lsp" ];
+                treesitter = ["lsp"];
                 columns = [
-                  { __unkeyed-1 = "label"; }
+                  {__unkeyed-1 = "label";}
                   {
                     __unkeyed-1 = "kind_icon";
                     __unkeyed-2 = "kind";
                     gap = 1;
                   }
-                  { __unkeyed-1 = "source_name"; }
+                  {__unkeyed-1 = "source_name";}
                 ];
               };
             };
@@ -191,10 +190,8 @@
           };
         };
       };
-    };
 
-    # ================ cmp plugin (disabled) ==============
-    plugins = {
+      # ================ cmp plugin (disabled) ==============
 
       cmp-spell = {
         enable = false;
@@ -235,16 +232,16 @@
           };
 
           sources = [
-            { name = "path"; }
-            { name = "nvim_lsp"; }
-            { name = "luasnip"; }
+            {name = "path";}
+            {name = "nvim_lsp";}
+            {name = "luasnip";}
             {
               name = "buffer";
               # Words from other open buffers can also be suggested.
               option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
             }
-            { name = "neorg"; }
-            { name = "nixpkgs_maintainers"; }
+            {name = "neorg";}
+            {name = "nixpkgs_maintainers";}
           ];
         };
       };

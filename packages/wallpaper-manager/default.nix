@@ -1,6 +1,8 @@
 {
   writeShellScriptBin,
   curl,
+  hyprland,
+  hyprpaper,
   jq,
   wofi,
 }:
@@ -9,8 +11,16 @@ let
   wallpaperDir = "$HOME/Pictures";
 in
 writeShellScriptBin "wallpaper-manager" ''
+  HYPRCTL=${hyprland}/bin/hyprctl
+  HYPRPAPER=${hyprpaper}/bin/hyprpaper
+
   mkdir -p ${wallpaperDir}
-  DP=$(hyprctl monitors | awk '/Monitor/{monitor=$2} /focused: yes/{print monitor}')
+  DP=$("$HYPRCTL" monitors -j | ${jq}/bin/jq -r '.[] | select(.focused) | .name')
+  if [[ -z "$DP" ]]; then
+    echo "Could not find focused Hyprland monitor" >&2
+    exit 1
+  fi
+
   if [[ "$1" == "download" ]]; then
     echo "Downloading Bing 4K wallpaper..."
     # Bing exposes the last 8 daily images via HPImageArchive; pick one at random.
@@ -49,9 +59,29 @@ writeShellScriptBin "wallpaper-manager" ''
 
     mv "$TMP_FILE" "$OUTPUT_FILE"
     echo "Wallpaper saved to $OUTPUT_FILE"
-    hyprctl hyprpaper unload "$OUTPUT_FILE"
-    hyprctl hyprpaper preload "$OUTPUT_FILE"
-    hyprctl hyprpaper wallpaper "$DP,$OUTPUT_FILE"
+
+    # hyprpaper >=0.8 dropped preloading and loads images on demand, so the
+    # `wallpaper` IPC request shows the freshly written file without touching
+    # the other monitors. Only the focused monitor is changed.
+    if "$HYPRCTL" hyprpaper wallpaper "$DP,$OUTPUT_FILE" >/dev/null 2>&1; then
+      echo "Wallpaper set on $DP"
+      exit 0
+    fi
+
+    # hyprpaper isn't reachable; start it (it loads all monitors from its config)
+    # and wait for the IPC socket, then assert the new file on the focused one.
+    if ! systemctl --user start hyprpaper.service >/dev/null 2>&1; then
+      "$HYPRPAPER" >/dev/null 2>&1 &
+    fi
+    for _ in $(seq 1 50); do
+      sleep 0.1
+      if "$HYPRCTL" hyprpaper wallpaper "$DP,$OUTPUT_FILE" >/dev/null 2>&1; then
+        echo "Wallpaper set on $DP"
+        exit 0
+      fi
+    done
+    echo "Wallpaper update failed: hyprpaper IPC is unavailable" >&2
+    exit 1
 
   elif [[ "$1" == "catalog" ]]; then
     echo "Opening wallpaper catalog..."

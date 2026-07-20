@@ -115,6 +115,7 @@
         "5"
         "6"
       ];
+      scrollLayout = true;
       wallpaper = "~/Pictures/wallpaper-DP-2.jpg";
     }
   ];

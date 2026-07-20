@@ -1,15 +1,13 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   programs.nixvim = {
-
-    # plugins.barbar = {
-    #   enable = true;
-    #   keymaps = {
-    #     next.key = "<TAB>";
-    #     previous.key = "<S-TAB>";
-    #     close.key = "<C-w>";
-    #   };
-    # };
+    plugins.barbar = {
+      enable = true;
+      keymaps = {
+        next.key = "<TAB>";
+        previous.key = "<S-TAB>";
+        close.key = "<C-w>";
+      };
+    };
 
     extraPlugins = [
       (pkgs.vimUtils.buildVimPlugin {
