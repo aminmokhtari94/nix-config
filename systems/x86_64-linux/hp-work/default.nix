@@ -55,11 +55,11 @@
 
     settings = {
       address = [
-        "/cluster.local/127.0.0.1"
         "/kiz.local/172.18.0.90"
       ];
       no-resolv = true;
       server = [
+        "/cluster.local/10.96.0.10"
         "217.218.127.127"
         "217.218.155.155"
         "5.202.100.100"
@@ -184,6 +184,15 @@
     enable = true;
   };
 
+  default.netbird = {
+    enable = false;
+    ui.enable = true;
+  };
+
+  default.wireguard = {
+    enable = true;
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -192,6 +201,8 @@
     pavucontrol
     pulseaudio
     alsa-utils
+
+    dig
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

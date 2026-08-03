@@ -71,6 +71,11 @@
   networking.networkmanager.enable = true;
   networking.resolvconf.enable = true;
   networking.firewall.enable = false;
+
+  default.wireguard = {
+    enable = true;
+  };
+
   # networking.firewall.allowedTCPPorts = [
   #   22
   #   2080
