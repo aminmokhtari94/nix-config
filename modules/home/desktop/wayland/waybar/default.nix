@@ -22,28 +22,7 @@ with lib; let
     jdate +"%Y/%m/%d"
   '';
 
-  dunstScript = pkgs.writeShellScript "waybar-dunst" ''
-    export PATH=${
-      lib.makeBinPath [
-        pkgs.dunst
-        pkgs.gnugrep
-      ]
-    }:$PATH
-
-    COUNT=$(dunstctl count waiting)
-    ENABLED="󰂚 "
-    DISABLED="󰂛 "
-
-    if [ "$COUNT" != 0 ]; then
-      DISABLED="󱅫 "
-    fi
-
-    if dunstctl is-paused | grep -q "false"; then
-      echo "$ENABLED"
-    else
-      echo "$DISABLED"
-    fi
-  '';
+  swayncClient = "${pkgs.swaynotificationcenter}/bin/swaync-client";
 
   baseConfig = {
     start_hidden = false;
@@ -175,10 +154,23 @@ with lib; let
     };
 
     "custom/notification" = {
-      exec = "${dunstScript}";
+      format = "{icon}";
+      format-icons = {
+        notification = "󱅫";
+        none = "󰂚";
+        dnd-notification = "󰂛";
+        dnd-none = "󰂛";
+        inhibited-notification = "󱅫";
+        inhibited-none = "󰂚";
+        dnd-inhibited-notification = "󰂛";
+        dnd-inhibited-none = "󰂛";
+      };
+      return-type = "json";
+      exec = "${swayncClient} -swb";
+      on-click = "${swayncClient} -t -sw";
+      on-click-right = "${swayncClient} -d -sw";
       tooltip = false;
-      on-click = "dunstctl set-paused toggle";
-      restart-interval = 1;
+      escape = true;
     };
 
     wireplumber = {
@@ -266,6 +258,17 @@ with lib; let
       color: ${hex p.accent2};
     }
 
+    #custom-notification.notification,
+    #custom-notification.inhibited-notification,
+    #custom-notification.dnd-notification {
+      color: ${hex p.accent};
+    }
+
+    #custom-notification.dnd-none,
+    #custom-notification.dnd-inhibited-none {
+      color: ${hex p.fgMuted};
+    }
+
     #battery {
       color: ${hex p.ok};
     }
@@ -294,7 +297,6 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = [
-      pkgs.dunst
       pkgs.jcal
       pkgs.noto-fonts
       pkgs.pavucontrol

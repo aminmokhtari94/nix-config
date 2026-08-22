@@ -56,7 +56,7 @@
         enable = true;
         style = "vignette"; # try "crt" or "warm"
       };
-      dunst.enable = true;
+      swaync.enable = true;
       nm-applet.enable = true;
       editor = {
         vscode.enable = true;

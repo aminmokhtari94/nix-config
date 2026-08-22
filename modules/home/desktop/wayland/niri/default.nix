@@ -324,7 +324,9 @@ in {
 
             Pause { spawn "swaylock" "-f"; }
             Ctrl+Shift+Pause { spawn-sh "swaylock -f & systemctl suspend"; }
-            Mod+Alt+Ctrl+Equal { spawn "dunstctl" "set-paused" "toggle"; }
+            Mod+Alt+Ctrl+Equal { spawn "swaync-client" "-d" "-sw"; }
+            Mod+Alt+Ctrl+N { spawn "swaync-client" "-t" "-sw"; }
+            Mod+Alt+Ctrl+BackSpace { spawn "swaync-client" "-C"; }
             Mod+Alt+Ctrl+BracketRight { spawn "systemctl" "reboot"; }
 
             Print { screenshot; }

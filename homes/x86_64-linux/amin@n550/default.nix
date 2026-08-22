@@ -30,7 +30,7 @@
       kitty.enable = true;
       gtk.enable = true;
       wayland.waybar.enable = true;
-      dunst.enable = true;
+      swaync.enable = true;
       nm-applet.enable = true;
       editor = {
         vscode.enable = true;

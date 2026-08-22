@@ -718,7 +718,9 @@ in
 
             (mkBind [ "Pause" ] (exec "${hyprlock} --grace 5"))
             (mkBind [ "CTRL" "SHIFT" "Pause" ] (exec "${loginctl} lock-session & ${systemctl} suspend"))
-            (mkBind [ "mainMod" "ALT" "CTRL" "equal" ] (exec "dunstctl set-paused toggle"))
+            (mkBind [ "mainMod" "ALT" "CTRL" "equal" ] (exec "swaync-client -d -sw"))
+            (mkBind [ "mainMod" "ALT" "CTRL" "n" ] (exec "swaync-client -t -sw"))
+            (mkBind [ "mainMod" "ALT" "CTRL" "backspace" ] (exec "swaync-client -C"))
             (mkBind [ "mainMod" "ALT" "CTRL" "bracketright" ] (exec "systemctl reboot"))
 
             (mkBind [ "Print" ] (exec "screenshot area"))
