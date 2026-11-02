@@ -76,7 +76,7 @@ in
   default = {
     theme.name = "embarl";
     gpg.enable = false;
-    # kube.enable = true;
+    kube.enable = true;
     # vpn.enable = true;
     # lang = {
     #   go.enable = true;
@@ -89,6 +89,8 @@ in
       enable = true;
       apps = with pkgs; [
         # postman
+        prismlauncher
+        default.twindesk
       ];
       wayland = {
         hyprland = {

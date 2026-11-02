@@ -109,20 +109,15 @@ in {
   networking.networkmanager = {
     enable = true;
     plugins = with pkgs; [
-      networkmanager-fortisslvpn
       networkmanager-iodine
       networkmanager-l2tp
       networkmanager-openconnect
       networkmanager-openvpn
-      networkmanager-sstp
       networkmanager-strongswan
-      networkmanager-vpnc
     ];
   };
-  # This modem is driven through xmm7360-pci RPC. ModemManager probes the
-  # ttyXMM ports as a generic AT modem and can leave it in a failed state.
-  # The in-tree iosm driver also exposes the device but ModemManager refuses
-  # to drive XMM7360 in RPC mode, so we stick with xmm7360-pci.
+  # This modem uses the XMM7360 RPC protocol.  The in-tree IOSM driver exposes
+  # its AT ports, but ModemManager explicitly rejects this modem in RPC mode.
   networking.modemmanager.enable = false;
   hardware.usb-modeswitch.enable = true;
 
@@ -132,6 +127,8 @@ in {
   boot.kernelModules = ["xmm7360"];
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x8086", ATTR{device}=="0x7360", ATTR{d3cold_allowed}="0", ATTR{power/control}="on"
+    # Wake-on-LAN keeps the NIC powered in S3 and can wake the laptop in a bag.
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10ec", ATTR{device}=="0x8168", ATTR{power/wakeup}="disabled"
   '';
   environment.etc."xmm7360".text = ''
     apn=mtnirancell
@@ -157,7 +154,7 @@ in {
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      TimeoutStartSec = "300s";
+      TimeoutStartSec = "90s";
       ExecStartPre = [
         "${pkgs.writeShellScript "reset-xmm7360-modem" ''
           set -u
@@ -217,7 +214,7 @@ in {
 
   services.resolved.enable = false;
   services.dnsmasq = {
-    enable = true;
+    enable = false;
 
     settings = {
       address = [
@@ -303,10 +300,25 @@ in {
     percentageLow = 20;
     percentageCritical = 10;
     percentageAction = 3;
-    criticalPowerAction = "Suspend";
-    allowRiskyCriticalPowerAction = true;
+    criticalPowerAction = "Hibernate";
   };
 
+  # In S3 the EC wakes the machine when the battery drops to ~10%; logind then
+  # re-suspends every ~30s because the lid is still closed, and that wake loop
+  # drains the rest of the battery. Hibernate instead of sleeping forever.
+  # systemd-in-initrd resumes via the HibernateLocation EFI var, so no
+  # resume_offset is needed for the swapfile.
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16 * 1024;
+    }
+  ];
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend-then-hibernate";
+    HandleLidSwitchExternalPower = "suspend";
+  };
+  systemd.sleep.settings.Sleep.HibernateDelaySec = "2h";
   services.tlp = {
     enable = true;
     settings = {
@@ -314,6 +326,10 @@ in {
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
       CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+      # Short boost bursts to ~3.7GHz spike Tctl and make the EC-controlled fan
+      # pulse fast/slow in a loop.
+      CPU_BOOST_ON_AC = 0;
+      CPU_BOOST_ON_BAT = 0;
       PLATFORM_PROFILE_ON_AC = "balanced";
       PLATFORM_PROFILE_ON_BAT = "low-power";
       RUNTIME_PM_ON_AC = "auto";
@@ -365,6 +381,8 @@ in {
       "docker"
       "dialout"
       "networkmanager"
+      "input" # TwinDesk: evdev capture
+      "uinput" # TwinDesk: input injection
     ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
@@ -373,6 +391,10 @@ in {
   };
 
   default.v2ray = {
+    enable = true;
+  };
+
+  default.wireguard = {
     enable = true;
   };
 
@@ -417,9 +439,13 @@ in {
     # I'll disable this once I can connect.
   };
 
+  # TwinDesk injects input through uinput on Wayland.
+  hardware.uinput.enable = true;
+
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [2080];
-  networking.firewall.allowedUDPPorts = [];
+  # 47800/tcp + 47801/udp: TwinDesk control link and discovery.
+  networking.firewall.allowedTCPPorts = [2080 47800];
+  networking.firewall.allowedUDPPorts = [47801];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
