@@ -41,9 +41,10 @@ with lib; let
   '';
 
   startupCommands =
-    (optionals (config.monitors != []) [
-      "swaybg -i ${(head config.monitors).wallpaper} -m fill"
-    ])
+    # One swaybg per output so `wallpaper-manager download` can replace a single
+    # output's wallpaper; prefer the last downloaded one over the configured path.
+    (map (m: ''f="$HOME/Pictures/wallpaper-${m.name}.jpg"; [ -f "$f" ] || f=${m.wallpaper}; exec swaybg -o ${m.name} -i "$f" -m fill'')
+      (filter (m: m.enabled) config.monitors))
     ++ [
       "kitty"
     ]
@@ -184,6 +185,11 @@ in {
         window-rule {
             geometry-corner-radius ${toString theme.rounding}
             clip-to-geometry true
+        }
+
+        window-rule {
+            match app-id="^kitty$"
+            opacity 0.9
         }
 
         window-rule {

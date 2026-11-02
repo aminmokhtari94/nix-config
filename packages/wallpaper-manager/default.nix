@@ -4,6 +4,8 @@
   hyprland,
   hyprpaper,
   jq,
+  swaybg,
+  util-linux,
   wofi,
 }:
 
@@ -15,9 +17,15 @@ writeShellScriptBin "wallpaper-manager" ''
   HYPRPAPER=${hyprpaper}/bin/hyprpaper
 
   mkdir -p ${wallpaperDir}
-  DP=$("$HYPRCTL" monitors -j | ${jq}/bin/jq -r '.[] | select(.focused) | .name')
+  if [[ -n "$NIRI_SOCKET" ]]; then
+    COMPOSITOR=niri
+    DP=$(niri msg -j focused-output | ${jq}/bin/jq -r '.name // empty')
+  else
+    COMPOSITOR=hyprland
+    DP=$("$HYPRCTL" monitors -j | ${jq}/bin/jq -r '.[] | select(.focused) | .name')
+  fi
   if [[ -z "$DP" ]]; then
-    echo "Could not find focused Hyprland monitor" >&2
+    echo "Could not find focused $COMPOSITOR monitor" >&2
     exit 1
   fi
 
@@ -59,6 +67,18 @@ writeShellScriptBin "wallpaper-manager" ''
 
     mv "$TMP_FILE" "$OUTPUT_FILE"
     echo "Wallpaper saved to $OUTPUT_FILE"
+
+    if [[ "$COMPOSITOR" == "niri" ]]; then
+      # niri runs one swaybg per output (see the niri module's startup
+      # commands). Start the new one before killing the old one so the output
+      # never flashes blank.
+      OLD_PIDS=$(pgrep -f "swaybg -o $DP " || true)
+      ${util-linux}/bin/setsid -f ${swaybg}/bin/swaybg -o "$DP" -i "$OUTPUT_FILE" -m fill >/dev/null 2>&1
+      sleep 0.5
+      [[ -n "$OLD_PIDS" ]] && kill $OLD_PIDS 2>/dev/null
+      echo "Wallpaper set on $DP"
+      exit 0
+    fi
 
     # hyprpaper >=0.8 dropped preloading and loads images on demand, so the
     # `wallpaper` IPC request shows the freshly written file without touching
